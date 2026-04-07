@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-Ultiphoton Solar Power OPC - AI Chatbot for Facebook Messenger
-Powered by OpenAI GPT and Facebook Messenger API
+Ultiphoton Solar Power OPC - AI Chatbot for Facebook Messenger (Simplified)
+Powered by OpenAI API (via HTTP requests) and Facebook Messenger API
 This chatbot answers all queries about solar energy and Ultiphoton's services.
 """
 
@@ -9,7 +9,6 @@ from flask import Flask, request
 import requests
 import json
 import os
-from openai import OpenAI
 
 # ==================== CONFIGURATION ====================
 app = Flask(__name__)
@@ -19,6 +18,10 @@ PAGE_ACCESS_TOKEN = os.getenv("PAGE_ACCESS_TOKEN", "")
 VERIFY_TOKEN = "ultiphoton_solar_verify_2026"
 PAGE_ID = "516699488185698"
 
+# OpenAI Configuration
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "")
+OPENAI_API_URL = "https://api.openai.com/v1/chat/completions"
+
 # Debug logging
 print(f"\n🔐 PAGE_ACCESS_TOKEN loaded: {bool(PAGE_ACCESS_TOKEN)}")
 if PAGE_ACCESS_TOKEN:
@@ -27,18 +30,11 @@ if PAGE_ACCESS_TOKEN:
 else:
     print("🔐 WARNING: PAGE_ACCESS_TOKEN is empty!")
 
-# OpenAI Configuration
-api_key = os.getenv("OPENAI_API_KEY")
-if api_key:
-    try:
-        client = OpenAI(api_key=api_key)
-        print(f"✅ OpenAI client initialized successfully")
-    except Exception as e:
-        print(f"⚠️ Warning: OpenAI client initialization failed: {e}")
-        client = None
+print(f"\n🔑 OPENAI_API_KEY loaded: {bool(OPENAI_API_KEY)}")
+if OPENAI_API_KEY:
+    print(f"🔑 API Key length: {len(OPENAI_API_KEY)} characters")
 else:
-    print("⚠️ Warning: OPENAI_API_KEY not set")
-    client = None
+    print("🔑 WARNING: OPENAI_API_KEY is empty!")
 
 # ==================== SYSTEM PROMPT ====================
 SYSTEM_PROMPT = """You are the official AI assistant for Ultiphoton Solar Power OPC, a leading solar energy provider in the Philippines.
@@ -149,26 +145,41 @@ def webhook():
 
 def get_ai_response(user_message):
     """
-    Generate an AI response using OpenAI GPT
+    Generate an AI response using OpenAI API via HTTP requests
     """
-    if not client or not PAGE_ACCESS_TOKEN:
+    if not OPENAI_API_KEY or not PAGE_ACCESS_TOKEN:
         return "Sorry po, may technical issue kami ngayon. Please try again or message us directly. Salamat! 😊"
     
     try:
-        response = client.chat.completions.create(
-            model="gpt-4.1-mini",
-            messages=[
+        headers = {
+            "Authorization": f"Bearer {OPENAI_API_KEY}",
+            "Content-Type": "application/json"
+        }
+        
+        payload = {
+            "model": "gpt-4.1-mini",
+            "messages": [
                 {"role": "system", "content": SYSTEM_PROMPT},
                 {"role": "user", "content": user_message}
             ],
-            temperature=0.7,
-            max_tokens=500
-        )
+            "temperature": 0.7,
+            "max_tokens": 500
+        }
         
-        ai_response = response.choices[0].message.content
-        print(f"🤖 AI Response: {ai_response}")
-        return ai_response
+        response = requests.post(OPENAI_API_URL, headers=headers, json=payload, timeout=10)
         
+        if response.status_code == 200:
+            result = response.json()
+            ai_response = result['choices'][0]['message']['content']
+            print(f"🤖 AI Response: {ai_response}")
+            return ai_response
+        else:
+            print(f"❌ OpenAI API error: {response.status_code} - {response.text}")
+            return "Sorry po, may technical issue kami ngayon. Please try again or message us directly. Salamat! 😊"
+        
+    except requests.exceptions.Timeout:
+        print("❌ OpenAI API timeout")
+        return "Sorry po, ang response ay tumatagal. Please try again. Salamat! 😊"
     except Exception as e:
         print(f"❌ Error getting AI response: {e}")
         return "Sorry po, may technical issue kami ngayon. Please try again or message us directly. Salamat! 😊"
@@ -187,11 +198,11 @@ def send_message(recipient_id, message_text):
     }
     
     try:
-        response = requests.post(url, json=payload)
+        response = requests.post(url, json=payload, timeout=10)
         if response.status_code == 200:
             print(f"✅ Message sent to {recipient_id}")
         else:
-            print(f"❌ Failed to send message: {response.text}")
+            print(f"❌ Failed to send message: {response.status_code} - {response.text}")
     except Exception as e:
         print(f"❌ Error sending message: {e}")
 
@@ -210,7 +221,7 @@ def send_quick_reply(recipient_id, message_text, quick_replies):
     }
     
     try:
-        response = requests.post(url, json=payload)
+        response = requests.post(url, json=payload, timeout=10)
         if response.status_code == 200:
             print(f"✅ Quick reply sent to {recipient_id}")
         else:
@@ -282,7 +293,7 @@ def health():
 # ==================== MAIN ====================
 
 if __name__ == '__main__':
-    print("🚀 Starting Ultiphoton AI Chatbot Server...")
+    print("🚀 Starting Ultiphoton AI Chatbot Server (Simplified)...")
     print(f"📍 Page ID: {PAGE_ID}")
     print(f"🔐 Verify Token: {VERIFY_TOKEN}")
     print("⏳ Listening for messages...\n")
