@@ -15,7 +15,7 @@ from openai import OpenAI
 app = Flask(__name__)
 
 # Facebook Configuration
-PAGE_ACCESS_TOKEN = "EAAXyC6Cg0rwBRMXijCeAV8JjzpkZC5MuvRSbYWKAW3VbEiMuEmyWRNQF8DqGu0jPDRAKxwALL7O8ZBAeR8LqeHo2nFn0GZCkjlzqbFFSOUlxTqQ89sRJvfuZAQbJmFAGMZAHZAkTJyqHwE0z4y6E4OJ8CfKcZAjTZAuy5ZAZBB7LM5dA8wg6OsVOGK4VZC9WX1tZArNwtJJHBuGLDsQ4SlOZAM71XZCwJp02dZCzY4K1qQjqPC5jYxc9vzZCE3IlHJpMV0j6AWZApZAigVR7RYHOK5lZCmFp0EorBHG"
+PAGE_ACCESS_TOKEN = os.getenv("PAGE_ACCESS_TOKEN", "")
 VERIFY_TOKEN = "ultiphoton_solar_verify_2026"
 PAGE_ID = "516699488185698"
 
@@ -142,7 +142,7 @@ def get_ai_response(user_message):
     """
     Generate an AI response using OpenAI GPT
     """
-    if not client:
+    if not client or not PAGE_ACCESS_TOKEN:
         return "Sorry po, may technical issue kami ngayon. Please try again or message us directly. Salamat! 😊"
     
     try:
