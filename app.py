@@ -17,7 +17,7 @@ app = Flask(__name__)
 # Facebook Configuration
 PAGE_ACCESS_TOKEN = "EAAXyC6Cg0rwBRPMfQqcrItliXYZAWnhQqmBjhBZCZBYLrTBL8vwY4udFs8WZBlfDZBE1H4erMoZB0qCUvBU9yxhqLGGI1fcdc3rLzZCZBJs8H8iRJAsbwDrpIKM2GnH3Uf6s4gB8LcF8hEucZCvAxw8ifEKFu0p5KbjUV2mGeYe5FRAxge6bHlloofK1G050WyhsHjBaPfQWe2nJZApKtAjKa04krxld7sTPRBF2GD"
 VERIFY_TOKEN = "ultiphoton_solar_verify_2026"
-PAGE_ID = "960685283095385"
+PAGE_ID = "516699488185698"
 
 # OpenAI Configuration
 try:
