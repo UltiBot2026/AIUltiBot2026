@@ -1,6 +1,6 @@
 """
 Ultiphoton Solar Power OPC - AI Chatbot for Facebook Messenger
-FAQ-Aware AI System with Specific Company Information
+FAQ-Aware AI System with Specific Company Information & Pricing
 """
 
 from flask import Flask, request
@@ -31,10 +31,24 @@ print(f"✅ OpenAI Key: {'✓ SET' if OPENAI_API_KEY else '✗ NOT SET'}")
 print("="*70 + "\n")
 sys.stdout.flush()
 
-# FAQ Database
+# FAQ Database with Updated Information
 FAQS = {
+    "solar_panel_price": {
+        "keywords": ["magkano", "price", "cost", "solar panel", "talesun", "585w", "620w", "how much"],
+        "answer": """☀️ **Solar Panel Pricing:**
+
+**Talesun 585W Bifacial** ✅ (Available)
+- ₱5,750/pc (9 pieces or less)
+- ₱5,650/pc (10 pieces or more - Installer price)
+
+**Talesun 620W** ❌ (Out of stock in Batangas)
+- Available for pick-up at **Cainta Warehouse** ✅
+
+Contact us for bulk orders and special pricing! 📞"""
+    },
+    
     "location": {
-        "keywords": ["location", "located", "saan", "address", "office", "branch"],
+        "keywords": ["location", "located", "saan", "address", "office", "branch", "where"],
         "answer": """📍 **Our Locations:**
 
 **Main Office:**
@@ -49,7 +63,7 @@ Feel free to visit us! ☀️"""
     },
     
     "cod": {
-        "keywords": ["cod", "delivery", "cash on delivery", "available", "area"],
+        "keywords": ["cod", "delivery", "cash on delivery", "available", "area", "deliver"],
         "answer": """✅ **Cash on Delivery Available!**
 
 We offer COD within **Batangas City area**.
@@ -63,22 +77,23 @@ Contact us for delivery details! 🚚"""
     },
     
     "panel_specs": {
-        "keywords": ["talesun", "panel", "dimension", "size", "specs", "specifications"],
+        "keywords": ["talesun", "panel", "dimension", "size", "specs", "specifications", "sukat"],
         "answer": """📋 **Talesun Solar Panel Specifications:**
 
-**620W Bifacial:**
-- Dimensions: Check Talesun spec sheet
+**Talesun 585W Bifacial:**
 - High efficiency bifacial technology
-
-**585W Bifacial:**
-- Dimensions: Check Talesun spec sheet
 - Optimized for Philippine climate
+- [Check Talesun spec sheet for dimensions]
 
-For detailed specs, please visit Talesun's official website or contact us! 📞"""
+**Talesun 620W Bifacial:**
+- Premium bifacial technology
+- [Check Talesun spec sheet for dimensions]
+
+For detailed specifications, please visit Talesun's official website or contact us! 📞"""
     },
     
     "payment": {
-        "keywords": ["payment", "pay", "bank", "transfer", "cash", "gcash", "installment"],
+        "keywords": ["payment", "pay", "bank", "transfer", "cash", "gcash", "paano", "bayad"],
         "answer": """💳 **Payment Methods:**
 
 We accept **Bank Transfer ONLY** (No cash payments)
@@ -107,7 +122,7 @@ Please transfer and provide proof of payment! 🏦"""
     },
     
     "accessories": {
-        "keywords": ["railing", "mounting", "accessories", "breaker", "wire", "protection", "device"],
+        "keywords": ["railing", "mounting", "accessories", "breaker", "wire", "protection", "device", "meron"],
         "answer": """🔧 **Available Accessories & Mounting:**
 
 **Solar Mounting (SoEasy Brand):**
@@ -125,19 +140,21 @@ Quality protection for your inverter and battery! ⚡"""
     },
     
     "warehouse": {
-        "keywords": ["warehouse", "cainta", "batangas", "paleta", "minimum order"],
+        "keywords": ["warehouse", "cainta", "batangas", "paleta", "minimum order", "lang ba"],
         "answer": """🏭 **Warehouse Information:**
 
-We have a **Cainta Warehouse**
+We have a **Cainta Warehouse** ✅
 
 **Minimum Order:**
 1 pallet for 625W and 585W solar panels
 
-Contact us for bulk orders! 📦"""
+We serve beyond Batangas area through our warehouse! 📦
+
+Contact us for bulk orders! 📞"""
     },
     
     "inverter_brands": {
-        "keywords": ["inverter", "brand", "deye", "solis", "goodwe", "srne", "sigenergy"],
+        "keywords": ["inverter", "brand", "deye", "solis", "goodwe", "srne", "sigenergy", "ano mga"],
         "answer": """⚡ **Inverter Brands Available:**
 
 ✅ **Deye** - 5 years warranty
@@ -150,7 +167,7 @@ All brands are high-quality and reliable for Philippine climate! 🌞"""
     },
     
     "warranty": {
-        "keywords": ["warranty", "years", "guarantee", "coverage"],
+        "keywords": ["warranty", "years", "guarantee", "coverage", "ilang"],
         "answer": """✅ **Warranty Coverage:**
 
 **Solar Panels (Talesun):**
@@ -160,7 +177,7 @@ All brands are high-quality and reliable for Philippine climate! 🌞"""
 - Deye, Solis, SRNE, GoodWe: 5 years
 - Sigenergy: 10 years
 
-**Quality guaranteed!** ☀️"""
+Quality guaranteed! ☀️"""
     },
     
     "inverter_price": {
@@ -171,13 +188,13 @@ Prices vary by brand and capacity:
 - **Deye, Solis, GoodWe, SRNE:** Budget-friendly options
 - **Sigenergy:** Premium options
 
-For specific pricing on 3kW, 5kW, 7kW, 8kW, 10kW, 12kW, 16kW systems, please contact us for a quotation! 📞
+For specific pricing, please contact us for a quotation! 📞
 
 We provide competitive Philippine market prices! 💵"""
     },
     
     "package_quote": {
-        "keywords": ["quote", "3kw", "5kw", "7kw", "8kw", "10kw", "12kw", "16kw", "package", "system"],
+        "keywords": ["quote", "3kw", "5kw", "7kw", "8kw", "10kw", "12kw", "16kw", "package", "system", "pwede pa"],
         "answer": """📊 **Solar Package Quotes Available:**
 
 We offer complete systems for:
@@ -195,11 +212,11 @@ We offer complete systems for:
 - Mounting & Accessories
 - Installation & Support
 
-**Request a customized quote now!** Contact us for pricing! 📞"""
+**Request a customized quote now!** Contact us for competitive pricing! 📞"""
     },
     
     "battery": {
-        "keywords": ["battery", "storage", "backup", "energy storage"],
+        "keywords": ["battery", "storage", "backup", "energy storage", "may battery"],
         "answer": """🔋 **Battery Storage:**
 
 Yes, we offer batteries **by order only**
@@ -210,12 +227,12 @@ Contact us to discuss your battery needs! 📞"""
     },
     
     "installment": {
-        "keywords": ["installment", "instalment", "payment plan", "credit card", "visa", "mastercard"],
+        "keywords": ["installment", "instalment", "payment plan", "credit card", "visa", "mastercard", "may instalment"],
         "answer": """💳 **Installment Payment:**
 
-Currently: **Cash basis only**
+**Currently:** Cash basis only
 
-Coming Soon: **Credit Card Installment**
+**Coming Soon:** Credit Card Installment
 - Visa
 - MasterCard
 - JCB
@@ -224,7 +241,7 @@ Stay tuned for installment options! 🎯"""
     },
     
     "installation_time": {
-        "keywords": ["installation", "how long", "days", "time", "duration"],
+        "keywords": ["installation", "how long", "days", "time", "duration", "gaano katagal"],
         "answer": """⏱️ **Installation Timeline:**
 
 **Duration:** 1 day to 20 days
@@ -238,7 +255,7 @@ We'll provide a specific timeline after site inspection! 🏗️"""
     },
     
     "site_inspection": {
-        "keywords": ["site inspection", "libre", "free", "survey"],
+        "keywords": ["site inspection", "libre", "free", "survey", "inspect"],
         "answer": """🔍 **Site Inspection:**
 
 ✅ **FREE Site Inspection!**
@@ -296,8 +313,10 @@ def get_ai_response(user_message):
 Company Information:
 - Main Office: Filinvest, Muntilupa City
 - Branch: Batangas
-- Products: Talesun Solar Panels, Inverters (Deye, Solis, GoodWe, SRNE, Sigenergy)
+- Warehouse: Cainta
+- Products: Talesun Solar Panels (585W ₱5,750/pc, 620W available), Inverters (Deye, Solis, GoodWe, SRNE, Sigenergy)
 - Services: Installation, Maintenance, Consultation
+- Delivery: COD available in Batangas, Laguna, Quezon, South Luzon
 
 Available FAQ Topics: {faq_context}
 
@@ -307,7 +326,8 @@ Guidelines:
 3. Keep responses concise (under 100 words)
 4. If you don't know specific details, suggest they contact the company
 5. Always mention "Feel free to contact us!" at the end
-6. Use emojis to make responses friendly ☀️⚡💚"""
+6. Use emojis to make responses friendly ☀️⚡💚
+7. For pricing questions, refer to FAQ or suggest contacting for quote"""
                 },
                 {
                     "role": "user",
