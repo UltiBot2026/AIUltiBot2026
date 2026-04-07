@@ -13,6 +13,9 @@ app = Flask(__name__)
 
 # Configuration - Read from environment variables
 PAGE_ACCESS_TOKEN = os.getenv("PAGE_ACCESS_TOKEN", "").strip()
+if not PAGE_ACCESS_TOKEN:
+    # Fallback token for testing
+    PAGE_ACCESS_TOKEN = "EAANpvPkKM1kBREm6BZAmvRNLN7YYZBlT5Dtpqx955GZB8xUwLHU2fnI995lB4po4fE9ZCENLZBilmyJGeU8jIJYT49HDp4Ewldx10ns34SPIn3g7rIWKZCyYqQBhqfrGZAYdDiankSKMJZCFgXytKrG58EfKdKw5ZBPMLEguxQDI43ZB7zQSPhfznh1ikaNyeUZAWOob4N55cv6iyOziroC4L3IqtHNuIKEUwn4xGNYOFJ5YGGDSbKT31WY7RUQLgaweZCEDhXYov8QQB6bQPAVZAZA45Gu2U1"
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "").strip()
 PAGE_ID = "516699488185698"
 VERIFY_TOKEN = "ultiphoton_solar_verify_2026"
