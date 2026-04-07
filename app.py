@@ -15,13 +15,18 @@ from openai import OpenAI
 app = Flask(__name__)
 
 # Facebook Configuration
-PAGE_ACCESS_TOKEN = "EAAXyC6Cg0rwBRPMfQqcrItliXYZAWnhQqmBjhBZCZBYLrTBL8vwY4udFs8WZBlfDZBE1H4erMoZB0qCUvBU9yxhqLGGI1fcdc3rLzZCZBJs8H8iRJAsbwDrpIKM2GnH3Uf6s4gB8LcF8hEucZCvAxw8ifEKFu0p5KbjUV2mGeYe5FRAxge6bHlloofK1G050WyhsHjBaPfQWe2nJZApKtAjKa04krxld7sTPRBF2GD"
+PAGE_ACCESS_TOKEN = "EAAXyC6Cg0rwBRMXijCeAV8JjzpkZC5MuvRSbYWKAW3VbEiMuEmyWRNQF8DqGu0jPDRAKxwALL7O8ZBAeR8LqeHo2nFn0GZCkjlzqbFFSOUlxTqQ89sRJvfuZAQbJmFAGMZAHZAkTJyqHwE0z4y6E4OJ8CfKcZAjTZAuy5ZAZBB7LM5dA8wg6OsVOGK4VZC9WX1tZArNwtJJHBuGLDsQ4SlOZAM71XZCwJp02dZCzY4K1qQjqPC5jYxc9vzZCE3IlHJpMV0j6AWZApZAigVR7RYHOK5lZCmFp0EorBHG"
 VERIFY_TOKEN = "ultiphoton_solar_verify_2026"
 PAGE_ID = "516699488185698"
 
 # OpenAI Configuration
 try:
-    client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+    api_key = os.getenv("OPENAI_API_KEY")
+    if api_key:
+        client = OpenAI(api_key=api_key)
+    else:
+        print("⚠️ Warning: OPENAI_API_KEY not set")
+        client = None
 except Exception as e:
     print(f"⚠️ Warning: OpenAI client initialization failed: {e}")
     client = None
