@@ -102,7 +102,10 @@ def send_message(recipient_id, message_text):
             },
             "message": {
                 "text": message_text
-            },
+            }
+        }
+        
+        params = {
             "access_token": PAGE_ACCESS_TOKEN
         }
         
@@ -114,6 +117,7 @@ def send_message(recipient_id, message_text):
             url,
             headers=headers,
             json=payload,
+            params=params,
             timeout=10
         )
         
