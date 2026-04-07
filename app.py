@@ -929,15 +929,52 @@ def get_after_hours_note(language):
                 "(Mon–Sun, 8AM–6PM PH Time). You have received an automated reply. "
                 "Our team will follow up with you on the next business day! 💚")
 
+# Keywords that are specific to accessories/materials — must be checked BEFORE generic pricing keywords
+ACCESSORY_SPECIFIC_KEYWORDS = {
+    "railing", "railings", "mounting", "mountings", "l foot", "mid clamp", "end clamp",
+    "rail splicer", "grounding lug", "grounding", "mc4", "spd", "dc breaker", "ac breaker",
+    "battery breaker", "clamp", "soeasy", "chint", "chyt", "breaker", "surge protection",
+    "connector", "connectors", "dc spd", "ac spd", "aluminum railing"
+}
+
+# Keywords that are specific to solar panels — must be checked BEFORE generic pricing keywords
+SOLAR_SPECIFIC_KEYWORDS = {
+    "solar panel", "solar panels", "talesun", "585w", "620w", "panel price", "solar price",
+    "bifacial", "photovoltaic", "pv panel"
+}
+
 def find_matching_faq(user_message):
-    """Find matching FAQ based on user message keywords"""
+    """Find matching FAQ with priority: specific product keywords win over generic pricing words."""
     message_lower = user_message.lower()
-    
+
+    # --- PASS 1: Check accessories-specific keywords first ---
+    # This prevents "magkano ang railings?" from matching solar_panel_price via "magkano"
+    for kw in ACCESSORY_SPECIFIC_KEYWORDS:
+        if kw in message_lower:
+            return "accessories", FAQS["accessories"]
+
+    # --- PASS 2: Check solar-panel-specific keywords ---
+    for kw in SOLAR_SPECIFIC_KEYWORDS:
+        if kw in message_lower:
+            return "solar_panel_price", FAQS["solar_panel_price"]
+
+    # --- PASS 3: Normal FAQ loop for all other FAQs (skipping accessories & solar_panel_price
+    #             since they were already handled above) ---
+    SKIP_IN_PASS3 = {"accessories", "solar_panel_price"}
     for faq_key, faq_data in FAQS.items():
+        if faq_key in SKIP_IN_PASS3:
+            continue
         for keyword in faq_data["keywords"]:
             if keyword.lower() in message_lower:
                 return faq_key, faq_data
-    
+
+    # --- PASS 4: Fall back to accessories / solar_panel_price via generic keywords ---
+    for faq_key in ("accessories", "solar_panel_price"):
+        faq_data = FAQS[faq_key]
+        for keyword in faq_data["keywords"]:
+            if keyword.lower() in message_lower:
+                return faq_key, faq_data
+
     return None, None
 
 def get_faq_answer(faq_data, language, faq_key=None):
