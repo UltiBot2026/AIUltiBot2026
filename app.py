@@ -19,6 +19,14 @@ PAGE_ACCESS_TOKEN = os.getenv("PAGE_ACCESS_TOKEN", "")
 VERIFY_TOKEN = "ultiphoton_solar_verify_2026"
 PAGE_ID = "516699488185698"
 
+# Debug logging
+print(f"\n🔐 PAGE_ACCESS_TOKEN loaded: {bool(PAGE_ACCESS_TOKEN)}")
+if PAGE_ACCESS_TOKEN:
+    print(f"🔐 Token length: {len(PAGE_ACCESS_TOKEN)} characters")
+    print(f"🔐 Token starts with: {PAGE_ACCESS_TOKEN[:20]}...")
+else:
+    print("🔐 WARNING: PAGE_ACCESS_TOKEN is empty!")
+
 # OpenAI Configuration
 try:
     api_key = os.getenv("OPENAI_API_KEY")
