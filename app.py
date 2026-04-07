@@ -1,7 +1,6 @@
-#!/usr/bin/env python3
 """
 Ultiphoton Solar Power OPC - AI Chatbot for Facebook Messenger
-Ultra-simplified version with no problematic dependencies
+Ultra-simplified version with direct HTTP requests to OpenAI
 """
 
 from flask import Flask, request
@@ -12,7 +11,7 @@ import sys
 
 app = Flask(__name__)
 
-# Configuration
+# Configuration - Read from environment variables
 PAGE_ACCESS_TOKEN = os.getenv("PAGE_ACCESS_TOKEN", "").strip()
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "").strip()
 PAGE_ID = "516699488185698"
@@ -73,11 +72,12 @@ def get_ai_response(user_message):
         else:
             error_msg = f"OpenAI Error {response.status_code}"
             print(f"❌ {error_msg}")
+            print(f"   Response: {response.text[:200]}")
             sys.stdout.flush()
             return "Sorry, I'm having trouble processing your request. Please try again."
             
     except Exception as e:
-        print(f"❌ Error: {str(e)}")
+        print(f"❌ Error in get_ai_response: {str(e)}")
         sys.stdout.flush()
         return "Sorry, I encountered an error. Please try again later."
 
@@ -86,6 +86,7 @@ def send_message(recipient_id, message_text):
     """Send message to user via Facebook Messenger API"""
     try:
         print(f"📤 Sending to {recipient_id}...")
+        print(f"   Token length: {len(PAGE_ACCESS_TOKEN)} chars")
         sys.stdout.flush()
         
         url = f"https://graph.facebook.com/v19.0/{PAGE_ID}/messages"
@@ -109,7 +110,8 @@ def send_message(recipient_id, message_text):
             sys.stdout.flush()
             return True
         else:
-            print(f"❌ Facebook Error: {response.text[:100]}")
+            print(f"❌ Facebook Error: {response.status_code}")
+            print(f"   Response: {response.text[:200]}")
             sys.stdout.flush()
             return False
             
@@ -154,7 +156,13 @@ def webhook():
                         ai_response = get_ai_response(message_text)
                         
                         # Send response
-                        send_message(sender_id, ai_response)
+                        success = send_message(sender_id, ai_response)
+                        
+                        if success:
+                            print(f"✅ Response delivered!")
+                        else:
+                            print(f"❌ Failed to deliver response")
+                        sys.stdout.flush()
         
         return "EVENT_RECEIVED", 200
 
@@ -170,4 +178,3 @@ if __name__ == "__main__":
     print(f"🚀 Starting server on port {port}...\n")
     sys.stdout.flush()
     app.run(host="0.0.0.0", port=port, debug=False)
-
