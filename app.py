@@ -1,6 +1,6 @@
 """
 Ultiphoton Solar Power OPC - AI Chatbot for Facebook Messenger
-Ultra-simplified version with direct HTTP requests to OpenAI
+Improved version with better Facebook API handling
 """
 
 from flask import Flask, request
@@ -82,50 +82,57 @@ def get_ai_response(user_message):
         return "Sorry, I encountered an error."
 
 
-def send_message_v2(recipient_id, message_text):
-    """Send message using Facebook Send API v2"""
+def send_message(recipient_id, message_text):
+    """Send message using Facebook Send API"""
     try:
         print(f"📤 Sending to {recipient_id}...")
+        print(f"   Token length: {len(PAGE_ACCESS_TOKEN)} chars")
         sys.stdout.flush()
         
-        # Try multiple API endpoints
-        endpoints = [
-            f"https://graph.facebook.com/v19.0/{PAGE_ID}/messages",
-            f"https://graph.facebook.com/v18.0/{PAGE_ID}/messages",
-            f"https://graph.facebook.com/v17.0/{PAGE_ID}/messages"
-        ]
+        # Use the latest API version
+        url = f"https://graph.facebook.com/v19.0/{PAGE_ID}/messages"
         
-        payload = {
-            "recipient": {"id": str(recipient_id)},
-            "message": {"text": message_text}
+        headers = {
+            "Content-Type": "application/json"
         }
         
-        for endpoint in endpoints:
-            try:
-                response = requests.post(
-                    endpoint,
-                    json=payload,
-                    params={"access_token": PAGE_ACCESS_TOKEN},
-                    timeout=10
-                )
-                
-                print(f"   Endpoint: {endpoint.split('/')[-2]}")
-                print(f"   Status: {response.status_code}")
-                
-                if response.status_code == 200:
-                    print(f"✅ Message sent successfully!")
-                    sys.stdout.flush()
-                    return True
-                else:
-                    print(f"   Error: {response.status_code}")
-                    
-            except Exception as e:
-                print(f"   Failed: {str(e)}")
-                continue
+        payload = {
+            "recipient": {
+                "id": str(recipient_id)
+            },
+            "message": {
+                "text": message_text
+            },
+            "access_token": PAGE_ACCESS_TOKEN
+        }
         
-        print(f"❌ All endpoints failed")
+        print(f"   URL: {url}")
+        print(f"   Payload keys: {list(payload.keys())}")
         sys.stdout.flush()
-        return False
+        
+        response = requests.post(
+            url,
+            headers=headers,
+            json=payload,
+            timeout=10
+        )
+        
+        print(f"   Status: {response.status_code}")
+        
+        if response.status_code == 200:
+            result = response.json()
+            print(f"✅ Message sent! ID: {result.get('message_id', 'N/A')}")
+            sys.stdout.flush()
+            return True
+        else:
+            print(f"❌ Facebook Error: {response.status_code}")
+            try:
+                error_data = response.json()
+                print(f"   Response: {json.dumps(error_data, indent=2)}")
+            except:
+                print(f"   Response: {response.text}")
+            sys.stdout.flush()
+            return False
             
     except Exception as e:
         print(f"❌ Send Error: {str(e)}")
@@ -167,11 +174,11 @@ def webhook():
                         # Get AI response
                         ai_response = get_ai_response(message_text)
                         
-                        # Add small delay to ensure Facebook is ready
-                        time.sleep(0.5)
+                        # Add small delay
+                        time.sleep(0.3)
                         
                         # Send response
-                        success = send_message_v2(sender_id, ai_response)
+                        success = send_message(sender_id, ai_response)
                         
                         if success:
                             print(f"✅ Response delivered!")
