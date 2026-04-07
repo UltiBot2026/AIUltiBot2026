@@ -372,7 +372,13 @@ Nag-aalok kami ng free inspection para malaman ang perfect solar system para sa 
 Schedule ngayon! 📞"""
     },
     "website": {
-        "keywords": ["website", "web site", "online", "link", "url", "site", "page", "webpage", "ano website", "website nyo", "website ninyo"],
+        "keywords": [
+            "website", "web site", "online", "link", "url", "site nyo", "webpage",
+            "website nyo", "website ninyo", "website niyo", "website po", "website kayo",
+            "ano website", "ano po website", "may website", "meron website",
+            "your website", "your site", "your page", "your link",
+            "ultiphoton.com", "ultiphotonsolar"
+        ],
         "answer_en": """🌐 **Our Website:**
 
 Visit us online at:
@@ -659,6 +665,7 @@ Company Information:
 - Products: Talesun Solar Panels (585W ₱5,750/pc, 620W available), Inverters (Deye, Solis, GoodWe, SRNE, Sigenergy)
 - Services: Installation, Maintenance, Consultation
 - Delivery: COD available in Batangas, Laguna, Quezon, South Luzon
+- Website: https://ultiphotonsolarpoweropc.com/
 
 Guidelines:
 1. Be friendly, professional, and helpful
