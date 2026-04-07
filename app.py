@@ -557,29 +557,19 @@ You can ask about:
 Thank you for your interest! 💚"""
 
 def get_business_hours_message(language):
-    """Get message for outside business hours"""
+    """Legacy function kept for compatibility — now returns after-hours note."""
+    return get_after_hours_note(language)
+
+def get_after_hours_note(language):
+    """Brief after-hours note appended to every response outside business hours."""
     if language == "tl":
-        return """🌙 **Salamat sa inyong mensahe!**
-
-Kami ay offline ngayon. Ang aming business hours ay:
-📅 Monday - Sunday
-⏰ 8:00 AM - 6:00 PM (Philippine Time)
-
-Sumagot kami sa lalong madaling panahon pagbukas! 💚
-
-Kung kailangan ninyo ng emergency assistance, makipag-ugnayan sa amin:
-📞 Call/Text: Available sa business hours"""
+        return ("🌙 *Paunawa:* Kami ay kasalukuyang nasa labas ng aming business hours "
+                "(Mon–Sun, 8AM–6PM PH Time). Nakatanggap ka ng automated na sagot. "
+                "Ang aming team ay mag-follow up sa iyo sa susunod na araw ng trabaho! 💚")
     else:
-        return """🌙 **Thank you for your message!**
-
-We're currently offline. Our business hours are:
-📅 Monday - Sunday
-⏰ 8:00 AM - 6:00 PM (Philippine Time)
-
-We'll respond as soon as possible! 💚
-
-For urgent inquiries, please reach out during business hours:
-📞 Call/Text: Available during business hours"""
+        return ("🌙 *Note:* We are currently outside our business hours "
+                "(Mon–Sun, 8AM–6PM PH Time). You have received an automated reply. "
+                "Our team will follow up with you on the next business day! 💚")
 
 def find_matching_faq(user_message):
     """Find matching FAQ based on user message keywords"""
@@ -839,12 +829,10 @@ def webhook():
                                 mark_first_message_sent(sender_id)
                                 time.sleep(1)
                             
-                            # Check business hours
+                            # 24/7 mode: always respond, but append after-hours note if outside business hours
+                            after_hours_note = None
                             if not is_business_hours():
-                                offline_msg = get_business_hours_message(language)
-                                send_message(sender_id, offline_msg)
-                                save_conversation(sender_id, message, offline_msg, language, False)
-                                continue
+                                after_hours_note = get_after_hours_note(language)
                             
                             # Send typing indicator
                             send_typing_indicator(sender_id)
@@ -862,6 +850,11 @@ def webhook():
                             
                             # Send response with quick replies
                             send_message_with_quick_replies(sender_id, response_text, language)
+                            
+                            # If outside business hours, send a brief follow-up note
+                            if after_hours_note:
+                                time.sleep(0.5)
+                                send_message(sender_id, after_hours_note)
             
             return "EVENT_RECEIVED", 200
             
