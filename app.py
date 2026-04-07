@@ -370,6 +370,21 @@ Nag-aalok kami ng free inspection para malaman ang perfect solar system para sa 
 **Condition:** Sana kami ang pipiliin ninyo! 😊
 
 Schedule ngayon! 📞"""
+    },
+    "website": {
+        "keywords": ["website", "web site", "online", "link", "url", "site", "page", "webpage", "ano website", "website nyo", "website ninyo"],
+        "answer_en": """🌐 **Our Website:**
+
+Visit us online at:
+👉 https://ultiphotonsolarpoweropc.com/
+
+You can find more information about our products, services, and solar solutions on our website! ☀️""",
+        "answer_tl": """🌐 **Ang Aming Website:**
+
+Bisitahin kami online sa:
+👉 https://ultiphotonsolarpoweropc.com/
+
+Makikita ninyo doon ang lahat ng impormasyon tungkol sa aming mga produkto at serbisyo! ☀️"""
     }
 }
 
