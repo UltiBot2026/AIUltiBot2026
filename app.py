@@ -1072,7 +1072,7 @@ Guidelines:
             system_message += "\n7. Respond in English"
         
         payload = {
-            "model": "gpt-4.1-mini",
+            "model": "gpt-4o-mini",
             "messages": [
                 {"role": "system", "content": system_message},
                 {"role": "user", "content": user_message}
@@ -1106,7 +1106,7 @@ Guidelines:
 def send_typing_indicator(recipient_id):
     """Send typing indicator to show bot is processing"""
     try:
-        url = f"https://graph.facebook.com/v19.0/{PAGE_ID}/messages"
+        url = f"https://graph.facebook.com/v21.0/{PAGE_ID}/messages"
         
         payload = {
             "recipient": {"id": recipient_id},
@@ -1126,7 +1126,7 @@ def send_message_with_quick_replies(recipient_id, message_text, language):
         print(f"📤 Sending message with quick replies to {recipient_id}...")
         sys.stdout.flush()
         
-        url = f"https://graph.facebook.com/v19.0/{PAGE_ID}/messages"
+        url = f"https://graph.facebook.com/v21.0/{PAGE_ID}/messages"
         
         quick_replies = get_quick_reply_buttons(language)
         
@@ -1169,10 +1169,11 @@ def send_message(recipient_id, message_text):
         print(f"📤 Sending to {recipient_id}...")
         sys.stdout.flush()
         
-        url = f"https://graph.facebook.com/v19.0/{PAGE_ID}/messages"
+        url = f"https://graph.facebook.com/v21.0/{PAGE_ID}/messages"
         
         payload = {
             "recipient": {"id": recipient_id},
+            "messaging_type": "RESPONSE",
             "message": {"text": message_text}
         }
         
