@@ -28,15 +28,16 @@ else:
     print("🔐 WARNING: PAGE_ACCESS_TOKEN is empty!")
 
 # OpenAI Configuration
-try:
-    api_key = os.getenv("OPENAI_API_KEY")
-    if api_key:
+api_key = os.getenv("OPENAI_API_KEY")
+if api_key:
+    try:
         client = OpenAI(api_key=api_key)
-    else:
-        print("⚠️ Warning: OPENAI_API_KEY not set")
+        print(f"✅ OpenAI client initialized successfully")
+    except Exception as e:
+        print(f"⚠️ Warning: OpenAI client initialization failed: {e}")
         client = None
-except Exception as e:
-    print(f"⚠️ Warning: OpenAI client initialization failed: {e}")
+else:
+    print("⚠️ Warning: OPENAI_API_KEY not set")
     client = None
 
 # ==================== SYSTEM PROMPT ====================
