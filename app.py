@@ -687,6 +687,27 @@ Contact us for bulk orders & inverter pricing! 📞""",
 
 Makipag-ugnayan para sa bulk orders at inverter pricing! 📞"""
     },
+    "products_and_price": {
+        "keywords": [
+            # English phrasings
+            "what are your products", "what products", "products and price",
+            "products and how much", "what do you sell", "what do you offer",
+            "available products", "list of products", "product list",
+            "what can i buy", "what items", "what materials",
+            "show me your products", "show products", "your products",
+            "anong products", "anong meron", "anong available",
+            # Tagalog phrasings
+            "ano ang mga produkto", "ano ang products", "ano ang ibinebenta",
+            "ano ang meron kayo", "anong meron kayo", "ano ang available",
+            "mga produkto at presyo", "produkto at presyo", "produkto at magkano",
+            "ano ang binebenta", "ano ang ibinebenta ninyo", "anong binebenta",
+            "ipakita ang products", "ipakita ang presyo", "lahat ng produkto",
+            "mga available na produkto", "anong solar", "anong panels"
+        ],
+        # answer is built dynamically from Excel via get_faq_answer
+        "answer_en": "[excel:full_pricelist]",
+        "answer_tl": "[excel:full_pricelist]"
+    },
     "website": {
         "keywords": [
             "website", "web site", "online", "link", "url", "site nyo", "webpage",
@@ -930,7 +951,7 @@ def get_faq_answer(faq_data, language, faq_key=None):
         excel_answer = build_accessories_answer(language)
         if excel_answer:
             return excel_answer
-    elif faq_key == "full_pricelist":
+    elif faq_key in ("full_pricelist", "products_and_price"):
         excel_answer = build_pricelist_answer(language)
         if excel_answer:
             return excel_answer
