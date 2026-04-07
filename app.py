@@ -1195,6 +1195,10 @@ def send_message(recipient_id, message_text):
         sys.stdout.flush()
         return False
 
+@app.route("/health", methods=["GET"])
+def health():
+    return {"status": "ok", "service": "Ultiphoton Chatbot"}, 200
+
 @app.route("/", methods=["GET"])
 def home():
     return "🤖 Ultiphoton Solar Power OPC Advanced Chatbot is running!", 200
@@ -1241,7 +1245,7 @@ def webhook():
                                 greeting = get_greeting_message(language)
                                 send_message_with_quick_replies(sender_id, greeting, language)
                                 mark_first_message_sent(sender_id)
-                                time.sleep(1)
+                                time.sleep(0.3)
                             
                             # 24/7 mode: always respond, but append after-hours note if outside business hours
                             after_hours_note = None
@@ -1250,7 +1254,7 @@ def webhook():
                             
                             # Send typing indicator
                             send_typing_indicator(sender_id)
-                            time.sleep(1)
+                            time.sleep(0.3)
                             
                             # Get AI response (with FAQ checking)
                             response_text, faq_matched, faq_key = get_ai_response(message, language)
@@ -1267,7 +1271,7 @@ def webhook():
                             
                             # If outside business hours, send a brief follow-up note
                             if after_hours_note:
-                                time.sleep(0.5)
+                                time.sleep(0.2)
                                 send_message(sender_id, after_hours_note)
             
             return "EVENT_RECEIVED", 200
