@@ -1,6 +1,7 @@
 """
-Ultiphoton Solar Power OPC - AI Chatbot for Facebook Messenger
-FAQ-Aware AI System with Specific Company Information & Pricing
+Ultiphoton Solar Power OPC - Advanced AI Chatbot for Facebook Messenger
+Features: Language Detection, Conversation Memory, Typing Indicator, Quick Replies, 
+Analytics, Auto-Greeting, Business Hours Response
 """
 
 from flask import Flask, request
@@ -10,6 +11,10 @@ import os
 import sys
 import time
 import re
+from datetime import datetime
+from collections import defaultdict
+import sqlite3
+from threading import Lock
 
 app = Flask(__name__)
 
@@ -22,20 +27,84 @@ OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "").strip()
 PAGE_ID = "516699488185698"
 VERIFY_TOKEN = "ultiphoton_solar_verify_2026"
 
+# Business Hours (Philippine Time - PST/PHT)
+BUSINESS_HOURS = {
+    "start": 8,      # 8 AM
+    "end": 18,       # 6 PM
+    "days": [0, 1, 2, 3, 4, 5, 6]  # All days (0=Monday, 6=Sunday)
+}
+
+# Database lock for thread safety
+db_lock = Lock()
+
 print("\n" + "="*70)
-print("🤖 ULTIPHOTON SOLAR POWER OPC - AI CHATBOT (FAQ-AWARE)")
+print("🤖 ULTIPHOTON SOLAR POWER OPC - ADVANCED AI CHATBOT")
 print("="*70)
 print(f"✅ Page ID: {PAGE_ID}")
 print(f"✅ Access Token: {'✓ SET' if PAGE_ACCESS_TOKEN else '✗ NOT SET'}")
 print(f"✅ OpenAI Key: {'✓ SET' if OPENAI_API_KEY else '✗ NOT SET'}")
+print("✅ Features: Language Detection | Conversation Memory | Typing Indicator")
+print("✅ Features: Quick Replies | Analytics | Auto-Greeting | Business Hours")
 print("="*70 + "\n")
 sys.stdout.flush()
+
+# Initialize Database
+def init_database():
+    """Initialize SQLite database for conversation history and analytics"""
+    try:
+        with db_lock:
+            conn = sqlite3.connect('/tmp/ultiphoton_chatbot.db')
+            cursor = conn.cursor()
+            
+            # Conversation history table
+            cursor.execute('''
+                CREATE TABLE IF NOT EXISTS conversations (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    user_id TEXT NOT NULL,
+                    message TEXT NOT NULL,
+                    response TEXT NOT NULL,
+                    language TEXT,
+                    timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
+                    faq_matched BOOLEAN DEFAULT 0
+                )
+            ''')
+            
+            # Analytics table
+            cursor.execute('''
+                CREATE TABLE IF NOT EXISTS analytics (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    user_id TEXT NOT NULL,
+                    faq_key TEXT,
+                    keyword TEXT,
+                    timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
+                )
+            ''')
+            
+            # User preferences table
+            cursor.execute('''
+                CREATE TABLE IF NOT EXISTS user_preferences (
+                    user_id TEXT PRIMARY KEY,
+                    language TEXT DEFAULT 'auto',
+                    first_message_sent BOOLEAN DEFAULT 0,
+                    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+                )
+            ''')
+            
+            conn.commit()
+            conn.close()
+            print("✅ Database initialized successfully")
+            sys.stdout.flush()
+    except Exception as e:
+        print(f"❌ Database init error: {str(e)}")
+        sys.stdout.flush()
+
+init_database()
 
 # FAQ Database with Updated Information
 FAQS = {
     "solar_panel_price": {
-        "keywords": ["magkano", "price", "cost", "solar panel", "talesun", "585w", "620w", "how much"],
-        "answer": """☀️ **Solar Panel Pricing:**
+        "keywords": ["magkano", "price", "cost", "solar panel", "talesun", "585w", "620w", "how much", "presyo"],
+        "answer_en": """☀️ **Solar Panel Pricing:**
 
 **Talesun 585W Bifacial** ✅ (Available)
 - ₱5,750/pc (9 pieces or less)
@@ -44,12 +113,22 @@ FAQS = {
 **Talesun 620W** ❌ (Out of stock in Batangas)
 - Available for pick-up at **Cainta Warehouse** ✅
 
-Contact us for bulk orders and special pricing! 📞"""
+Contact us for bulk orders and special pricing! 📞""",
+        "answer_tl": """☀️ **Presyo ng Solar Panels:**
+
+**Talesun 585W Bifacial** ✅ (Available)
+- ₱5,750/pc (9 piraso o mas kaunti)
+- ₱5,650/pc (10 piraso o higit pa - Installer price)
+
+**Talesun 620W** ❌ (Out of stock sa Batangas)
+- Available para sa pick-up sa **Cainta Warehouse** ✅
+
+Makipag-ugnayan sa amin para sa bulk orders! 📞"""
     },
     
     "location": {
-        "keywords": ["location", "located", "saan", "address", "office", "branch", "where"],
-        "answer": """📍 **Our Locations:**
+        "keywords": ["location", "located", "saan", "address", "office", "branch", "where", "lokasyon"],
+        "answer_en": """📍 **Our Locations:**
 
 **Main Office:**
 Filinvest, Muntilupa City
@@ -59,12 +138,23 @@ Filinvest, Muntilupa City
 UltiPhoton Solar Power Batangas
 [Google Map: UltiPhoton Solar Power Batangas]
 
-Feel free to visit us! ☀️"""
+Feel free to visit us! ☀️""",
+        "answer_tl": """📍 **Aming Mga Lokasyon:**
+
+**Main Office:**
+Filinvest, Muntilupa City
+[Google Map: UltiPhoton Solar Power OPC]
+
+**Branch:**
+UltiPhoton Solar Power Batangas
+[Google Map: UltiPhoton Solar Power Batangas]
+
+Bisitahin kami anumang oras! ☀️"""
     },
     
     "cod": {
-        "keywords": ["cod", "delivery", "cash on delivery", "available", "area", "deliver"],
-        "answer": """✅ **Cash on Delivery Available!**
+        "keywords": ["cod", "delivery", "cash on delivery", "available", "area", "deliver", "delivery"],
+        "answer_en": """✅ **Cash on Delivery Available!**
 
 We offer COD within **Batangas City area**.
 
@@ -73,28 +163,22 @@ We can also deliver to:
 • Quezon Province
 • Whole South Luzon
 
-Contact us for delivery details! 🚚"""
-    },
-    
-    "panel_specs": {
-        "keywords": ["talesun", "panel", "dimension", "size", "specs", "specifications", "sukat"],
-        "answer": """📋 **Talesun Solar Panel Specifications:**
+Contact us for delivery details! 🚚""",
+        "answer_tl": """✅ **Cash on Delivery Available!**
 
-**Talesun 585W Bifacial:**
-- High efficiency bifacial technology
-- Optimized for Philippine climate
-- [Check Talesun spec sheet for dimensions]
+Available ang COD sa loob ng **Batangas City area**.
 
-**Talesun 620W Bifacial:**
-- Premium bifacial technology
-- [Check Talesun spec sheet for dimensions]
+Maaari din kaming magdeliver sa:
+• Laguna
+• Quezon Province
+• Buong South Luzon
 
-For detailed specifications, please visit Talesun's official website or contact us! 📞"""
+Makipag-ugnayan para sa delivery details! 🚚"""
     },
     
     "payment": {
-        "keywords": ["payment", "pay", "bank", "transfer", "cash", "gcash", "paano", "bayad"],
-        "answer": """💳 **Payment Methods:**
+        "keywords": ["payment", "pay", "bank", "transfer", "cash", "gcash", "paano", "bayad", "magbayad"],
+        "answer_en": """💳 **Payment Methods:**
 
 We accept **Bank Transfer ONLY** (No cash payments)
 
@@ -118,12 +202,37 @@ Account: 200064679316
 **GCash:**
 0997-369-7123 (J. GAPUZ)
 
-Please transfer and provide proof of payment! 🏦"""
+Please transfer and provide proof of payment! 🏦""",
+        "answer_tl": """💳 **Paraan ng Pagbabayad:**
+
+Tumatanggap lang kami ng **Bank Transfer** (Walang cash)
+
+**Bank Details:**
+
+**BDO:**
+Account Name: JERWIN JEFFREY GAPUZ
+Savings Account: 0081 9600 1660
+
+**UnionBank:**
+Account Name: JERWIN JEFFREY GAPUZ
+Savings Account: 1094 2921 2487
+
+**BPI:**
+Account Name: JERWIN JEFFREY GAPUZ
+Savings Account: 065 6925 517
+
+**EastWest:**
+Account: 200064679316
+
+**GCash:**
+0997-369-7123 (J. GAPUZ)
+
+Magpadala ng proof of payment! 🏦"""
     },
     
     "accessories": {
         "keywords": ["railing", "mounting", "accessories", "breaker", "wire", "protection", "device", "meron"],
-        "answer": """🔧 **Available Accessories & Mounting:**
+        "answer_en": """🔧 **Available Accessories & Mounting:**
 
 **Solar Mounting (SoEasy Brand):**
 - 2.4m Railing: ₱600/pc
@@ -136,26 +245,26 @@ Please transfer and provide proof of payment! 🏦"""
 - DC Breaker: ₱700/pc
 - DC SPD: ₱845/pc
 
-Quality protection for your inverter and battery! ⚡"""
-    },
-    
-    "warehouse": {
-        "keywords": ["warehouse", "cainta", "batangas", "paleta", "minimum order", "lang ba"],
-        "answer": """🏭 **Warehouse Information:**
+Quality protection for your inverter and battery! ⚡""",
+        "answer_tl": """🔧 **Available Accessories & Mounting:**
 
-We have a **Cainta Warehouse** ✅
+**Solar Mounting (SoEasy Brand):**
+- 2.4m Railing: ₱600/pc
+- L-ft: ₱90/pc
+- Mid: ₱85/pc
+- End: ₱85/pc
 
-**Minimum Order:**
-1 pallet for 625W and 585W solar panels
+**AC & DC Breakers (Chint Brand):**
+- AC Breaker: ₱600-₱1,000/pc
+- DC Breaker: ₱700/pc
+- DC SPD: ₱845/pc
 
-We serve beyond Batangas area through our warehouse! 📦
-
-Contact us for bulk orders! 📞"""
+Quality protection para sa inverter at battery! ⚡"""
     },
     
     "inverter_brands": {
         "keywords": ["inverter", "brand", "deye", "solis", "goodwe", "srne", "sigenergy", "ano mga"],
-        "answer": """⚡ **Inverter Brands Available:**
+        "answer_en": """⚡ **Inverter Brands Available:**
 
 ✅ **Deye** - 5 years warranty
 ✅ **Solis** - 5 years warranty
@@ -163,12 +272,21 @@ Contact us for bulk orders! 📞"""
 ✅ **SRNE** - 5 years warranty
 ✅ **Sigenergy** - 10 years warranty
 
-All brands are high-quality and reliable for Philippine climate! 🌞"""
+All brands are high-quality and reliable for Philippine climate! 🌞""",
+        "answer_tl": """⚡ **Available Inverter Brands:**
+
+✅ **Deye** - 5 taong warranty
+✅ **Solis** - 5 taong warranty
+✅ **GoodWe** - 5 taong warranty
+✅ **SRNE** - 5 taong warranty
+✅ **Sigenergy** - 10 taong warranty
+
+Lahat ay high-quality at reliable! 🌞"""
     },
     
     "warranty": {
         "keywords": ["warranty", "years", "guarantee", "coverage", "ilang"],
-        "answer": """✅ **Warranty Coverage:**
+        "answer_en": """✅ **Warranty Coverage:**
 
 **Solar Panels (Talesun):**
 10 years warranty
@@ -177,72 +295,40 @@ All brands are high-quality and reliable for Philippine climate! 🌞"""
 - Deye, Solis, SRNE, GoodWe: 5 years
 - Sigenergy: 10 years
 
-Quality guaranteed! ☀️"""
-    },
-    
-    "inverter_price": {
-        "keywords": ["inverter price", "cost", "how much", "inverter", "price"],
-        "answer": """💰 **Inverter Pricing:**
+Quality guaranteed! ☀️""",
+        "answer_tl": """✅ **Warranty Coverage:**
 
-Prices vary by brand and capacity:
-- **Deye, Solis, GoodWe, SRNE:** Budget-friendly options
-- **Sigenergy:** Premium options
+**Solar Panels (Talesun):**
+10 taong warranty
 
-For specific pricing, please contact us for a quotation! 📞
+**Inverters:**
+- Deye, Solis, SRNE, GoodWe: 5 taon
+- Sigenergy: 10 taon
 
-We provide competitive Philippine market prices! 💵"""
-    },
-    
-    "package_quote": {
-        "keywords": ["quote", "3kw", "5kw", "7kw", "8kw", "10kw", "12kw", "16kw", "package", "system", "pwede pa"],
-        "answer": """📊 **Solar Package Quotes Available:**
-
-We offer complete systems for:
-✅ 3kW Single Phase
-✅ 5kW Single Phase
-✅ 7kW Single Phase
-✅ 8kW Single Phase
-✅ 10kW Single Phase
-✅ 12kW Single Phase
-✅ 16kW Single Phase
-
-**Each package includes:**
-- Talesun Solar Panels
-- Quality Inverter (Deye/Solis/GoodWe/SRNE/Sigenergy)
-- Mounting & Accessories
-- Installation & Support
-
-**Request a customized quote now!** Contact us for competitive pricing! 📞"""
+Garantisadong kalidad! ☀️"""
     },
     
     "battery": {
         "keywords": ["battery", "storage", "backup", "energy storage", "may battery"],
-        "answer": """🔋 **Battery Storage:**
+        "answer_en": """🔋 **Battery Storage:**
 
 Yes, we offer batteries **by order only**
 
 We don't keep batteries in stock, but we can source them for you based on your requirements.
 
-Contact us to discuss your battery needs! 📞"""
-    },
-    
-    "installment": {
-        "keywords": ["installment", "instalment", "payment plan", "credit card", "visa", "mastercard", "may instalment"],
-        "answer": """💳 **Installment Payment:**
+Contact us to discuss your battery needs! 📞""",
+        "answer_tl": """🔋 **Battery Storage:**
 
-**Currently:** Cash basis only
+Oo, nag-aalok kami ng batteries **by order lang**
 
-**Coming Soon:** Credit Card Installment
-- Visa
-- MasterCard
-- JCB
+Walang stock kami pero maaari naming kumuha para sa inyo.
 
-Stay tuned for installment options! 🎯"""
+Makipag-ugnayan para sa battery needs! 📞"""
     },
     
     "installation_time": {
         "keywords": ["installation", "how long", "days", "time", "duration", "gaano katagal"],
-        "answer": """⏱️ **Installation Timeline:**
+        "answer_en": """⏱️ **Installation Timeline:**
 
 **Duration:** 1 day to 20 days
 
@@ -251,12 +337,22 @@ Stay tuned for installment options! 🎯"""
 - System complexity
 - Weather conditions
 
-We'll provide a specific timeline after site inspection! 🏗️"""
+We'll provide a specific timeline after site inspection! 🏗️""",
+        "answer_tl": """⏱️ **Installation Timeline:**
+
+**Duration:** 1 hanggang 20 araw
+
+**Depende sa:**
+- Site conditions
+- System complexity
+- Weather conditions
+
+Magbibigay kami ng specific timeline pagkatapos ng inspection! 🏗️"""
     },
     
     "site_inspection": {
         "keywords": ["site inspection", "libre", "free", "survey", "inspect"],
-        "answer": """🔍 **Site Inspection:**
+        "answer_en": """🔍 **Site Inspection:**
 
 ✅ **FREE Site Inspection!**
 
@@ -264,9 +360,226 @@ We provide complimentary site inspection to assess your property and design the 
 
 **Condition:** We hope you'll choose us for installation! 😊
 
-Schedule your free inspection today! 📞"""
+Schedule your free inspection today! 📞""",
+        "answer_tl": """🔍 **Site Inspection:**
+
+✅ **LIBRE ang Site Inspection!**
+
+Nag-aalok kami ng free inspection para malaman ang perfect solar system para sa inyo.
+
+**Condition:** Sana kami ang pipiliin ninyo! 😊
+
+Schedule ngayon! 📞"""
     }
 }
+
+def detect_language(text):
+    """Detect if message is in Tagalog or English"""
+    tagalog_words = ["ang", "sa", "ng", "ko", "mo", "nyo", "kami", "tayo", "sila", "po", "ba", "kayo", "magkano", "saan", "paano", "ano", "ito", "yan", "dito", "doon", "nandito", "nandoon"]
+    
+    words = text.lower().split()
+    tagalog_count = sum(1 for word in words if any(tl_word in word for tl_word in tagalog_words))
+    
+    # If more than 30% of words are Tagalog indicators, it's Tagalog
+    if len(words) > 0 and tagalog_count / len(words) > 0.3:
+        return "tl"
+    return "en"
+
+def save_user_language(user_id, language):
+    """Save user's language preference"""
+    try:
+        with db_lock:
+            conn = sqlite3.connect('/tmp/ultiphoton_chatbot.db')
+            cursor = conn.cursor()
+            cursor.execute('INSERT OR REPLACE INTO user_preferences (user_id, language) VALUES (?, ?)', (user_id, language))
+            conn.commit()
+            conn.close()
+    except Exception as e:
+        print(f"❌ Error saving language: {str(e)}")
+        sys.stdout.flush()
+
+def get_user_language(user_id):
+    """Get user's saved language preference"""
+    try:
+        with db_lock:
+            conn = sqlite3.connect('/tmp/ultiphoton_chatbot.db')
+            cursor = conn.cursor()
+            cursor.execute('SELECT language FROM user_preferences WHERE user_id = ?', (user_id,))
+            result = cursor.fetchone()
+            conn.close()
+            return result[0] if result else "auto"
+    except:
+        return "auto"
+
+def is_first_message(user_id):
+    """Check if this is user's first message"""
+    try:
+        with db_lock:
+            conn = sqlite3.connect('/tmp/ultiphoton_chatbot.db')
+            cursor = conn.cursor()
+            cursor.execute('SELECT first_message_sent FROM user_preferences WHERE user_id = ?', (user_id,))
+            result = cursor.fetchone()
+            conn.close()
+            return not result or not result[0]
+    except:
+        return True
+
+def mark_first_message_sent(user_id):
+    """Mark that first message has been sent to user"""
+    try:
+        with db_lock:
+            conn = sqlite3.connect('/tmp/ultiphoton_chatbot.db')
+            cursor = conn.cursor()
+            cursor.execute('INSERT OR REPLACE INTO user_preferences (user_id, first_message_sent) VALUES (?, 1)', (user_id,))
+            conn.commit()
+            conn.close()
+    except Exception as e:
+        print(f"❌ Error marking first message: {str(e)}")
+        sys.stdout.flush()
+
+def save_conversation(user_id, message, response, language, faq_matched):
+    """Save conversation to database for analytics"""
+    try:
+        with db_lock:
+            conn = sqlite3.connect('/tmp/ultiphoton_chatbot.db')
+            cursor = conn.cursor()
+            cursor.execute('''
+                INSERT INTO conversations (user_id, message, response, language, faq_matched)
+                VALUES (?, ?, ?, ?, ?)
+            ''', (user_id, message, response, language, faq_matched))
+            conn.commit()
+            conn.close()
+    except Exception as e:
+        print(f"❌ Error saving conversation: {str(e)}")
+        sys.stdout.flush()
+
+def log_analytics(user_id, faq_key, keyword):
+    """Log analytics for FAQ usage"""
+    try:
+        with db_lock:
+            conn = sqlite3.connect('/tmp/ultiphoton_chatbot.db')
+            cursor = conn.cursor()
+            cursor.execute('INSERT INTO analytics (user_id, faq_key, keyword) VALUES (?, ?, ?)', (user_id, faq_key, keyword))
+            conn.commit()
+            conn.close()
+    except Exception as e:
+        print(f"❌ Error logging analytics: {str(e)}")
+        sys.stdout.flush()
+
+def get_analytics_summary():
+    """Get analytics summary for dashboard"""
+    try:
+        with db_lock:
+            conn = sqlite3.connect('/tmp/ultiphoton_chatbot.db')
+            cursor = conn.cursor()
+            
+            # Total conversations
+            cursor.execute('SELECT COUNT(*) FROM conversations')
+            total_conversations = cursor.fetchone()[0]
+            
+            # FAQ matches
+            cursor.execute('SELECT COUNT(*) FROM conversations WHERE faq_matched = 1')
+            faq_matches = cursor.fetchone()[0]
+            
+            # Most popular FAQs
+            cursor.execute('''
+                SELECT faq_key, COUNT(*) as count FROM analytics 
+                GROUP BY faq_key ORDER BY count DESC LIMIT 5
+            ''')
+            popular_faqs = cursor.fetchall()
+            
+            # Language distribution
+            cursor.execute('''
+                SELECT language, COUNT(*) as count FROM conversations 
+                GROUP BY language
+            ''')
+            language_dist = cursor.fetchall()
+            
+            conn.close()
+            
+            return {
+                "total_conversations": total_conversations,
+                "faq_matches": faq_matches,
+                "popular_faqs": popular_faqs,
+                "language_distribution": language_dist
+            }
+    except Exception as e:
+        print(f"❌ Error getting analytics: {str(e)}")
+        sys.stdout.flush()
+        return {}
+
+def is_business_hours():
+    """Check if current time is within business hours (Philippine Time)"""
+    from datetime import datetime, timezone, timedelta
+    
+    # Philippine Time is UTC+8
+    ph_tz = timezone(timedelta(hours=8))
+    current_time = datetime.now(ph_tz)
+    current_hour = current_time.hour
+    current_day = current_time.weekday()
+    
+    return (BUSINESS_HOURS["start"] <= current_hour < BUSINESS_HOURS["end"] and 
+            current_day in BUSINESS_HOURS["days"])
+
+def get_greeting_message(language):
+    """Get auto-greeting message"""
+    if language == "tl":
+        return """👋 **Maligayang pagdating sa Ultiphoton Solar Power OPC!** ☀️
+
+Kami ay nandito upang sagutin ang lahat ng inyong mga tanong tungkol sa solar panels at renewable energy solutions.
+
+Paano namin kayo matutulungan ngayong araw? 🌞
+
+Maaari kayong magtanong tungkol sa:
+• 💰 Presyo ng Solar Panels
+• 📍 Aming Lokasyon
+• 💳 Paraan ng Pagbabayad
+• 🔧 Accessories at Mounting
+• ⚡ Inverter Brands
+• 📦 Delivery at Installation
+
+Salamat sa inyong interes! 💚"""
+    else:
+        return """👋 **Welcome to Ultiphoton Solar Power OPC!** ☀️
+
+We're here to answer all your questions about solar panels and renewable energy solutions.
+
+How can we help you today? 🌞
+
+You can ask about:
+• 💰 Solar Panel Pricing
+• 📍 Our Locations
+• 💳 Payment Methods
+• 🔧 Accessories & Mounting
+• ⚡ Inverter Brands
+• 📦 Delivery & Installation
+
+Thank you for your interest! 💚"""
+
+def get_business_hours_message(language):
+    """Get message for outside business hours"""
+    if language == "tl":
+        return """🌙 **Salamat sa inyong mensahe!**
+
+Kami ay offline ngayon. Ang aming business hours ay:
+📅 Monday - Sunday
+⏰ 8:00 AM - 6:00 PM (Philippine Time)
+
+Sumagot kami sa lalong madaling panahon pagbukas! 💚
+
+Kung kailangan ninyo ng emergency assistance, makipag-ugnayan sa amin:
+📞 Call/Text: Available sa business hours"""
+    else:
+        return """🌙 **Thank you for your message!**
+
+We're currently offline. Our business hours are:
+📅 Monday - Sunday
+⏰ 8:00 AM - 6:00 PM (Philippine Time)
+
+We'll respond as soon as possible! 💚
+
+For urgent inquiries, please reach out during business hours:
+📞 Call/Text: Available during business hours"""
 
 def find_matching_faq(user_message):
     """Find matching FAQ based on user message keywords"""
@@ -275,22 +588,53 @@ def find_matching_faq(user_message):
     for faq_key, faq_data in FAQS.items():
         for keyword in faq_data["keywords"]:
             if keyword.lower() in message_lower:
-                return faq_data["answer"]
+                return faq_key, faq_data
     
-    return None
+    return None, None
 
-def get_ai_response(user_message):
+def get_faq_answer(faq_data, language):
+    """Get FAQ answer in appropriate language"""
+    if language == "tl" and "answer_tl" in faq_data:
+        return faq_data["answer_tl"]
+    elif "answer_en" in faq_data:
+        return faq_data["answer_en"]
+    else:
+        return faq_data.get("answer", "")
+
+def get_quick_reply_buttons(language):
+    """Get quick reply buttons for common questions"""
+    if language == "tl":
+        buttons = [
+            {"title": "💰 Presyo", "payload": "presyo"},
+            {"title": "📍 Lokasyon", "payload": "lokasyon"},
+            {"title": "💳 Pagbabayad", "payload": "pagbabayad"},
+            {"title": "⚡ Inverter", "payload": "inverter"},
+            {"title": "🔧 Accessories", "payload": "accessories"},
+            {"title": "📞 Makipag-ugnayan", "payload": "contact"}
+        ]
+    else:
+        buttons = [
+            {"title": "💰 Pricing", "payload": "pricing"},
+            {"title": "📍 Location", "payload": "location"},
+            {"title": "💳 Payment", "payload": "payment"},
+            {"title": "⚡ Inverter", "payload": "inverter"},
+            {"title": "🔧 Accessories", "payload": "accessories"},
+            {"title": "📞 Contact", "payload": "contact"}
+        ]
+    return buttons
+
+def get_ai_response(user_message, language):
     """Get AI response from OpenAI with FAQ context"""
     try:
-        print(f"🤖 Processing: {user_message[:50]}...")
+        print(f"🤖 Processing: {user_message[:50]}... (Language: {language})")
         sys.stdout.flush()
         
         # Check for FAQ match first
-        faq_answer = find_matching_faq(user_message)
-        if faq_answer:
-            print(f"✅ FAQ Match Found!")
+        faq_key, faq_data = find_matching_faq(user_message)
+        if faq_key and faq_data:
+            print(f"✅ FAQ Match Found: {faq_key}")
             sys.stdout.flush()
-            return faq_answer
+            return get_faq_answer(faq_data, language), True, faq_key
         
         # If no FAQ match, use AI to generate response
         print(f"🤖 Using AI to generate response...")
@@ -301,14 +645,7 @@ def get_ai_response(user_message):
             "Content-Type": "application/json"
         }
         
-        faq_context = "\n".join([f"- {key}: {data['keywords']}" for key, data in FAQS.items()])
-        
-        payload = {
-            "model": "gpt-4.1-mini",
-            "messages": [
-                {
-                    "role": "system",
-                    "content": f"""You are a helpful AI assistant for Ultiphoton Solar Power OPC, a solar panel company in the Philippines.
+        system_message = """You are a helpful AI assistant for Ultiphoton Solar Power OPC, a solar panel company in the Philippines.
 
 Company Information:
 - Main Office: Filinvest, Muntilupa City
@@ -318,21 +655,24 @@ Company Information:
 - Services: Installation, Maintenance, Consultation
 - Delivery: COD available in Batangas, Laguna, Quezon, South Luzon
 
-Available FAQ Topics: {faq_context}
-
 Guidelines:
 1. Be friendly, professional, and helpful
-2. Answer in both English and Filipino (Tagalog) when appropriate
-3. Keep responses concise (under 100 words)
-4. If you don't know specific details, suggest they contact the company
-5. Always mention "Feel free to contact us!" at the end
-6. Use emojis to make responses friendly ☀️⚡💚
-7. For pricing questions, refer to FAQ or suggest contacting for quote"""
-                },
-                {
-                    "role": "user",
-                    "content": user_message
-                }
+2. Keep responses concise (under 100 words)
+3. If you don't know specific details, suggest they contact the company
+4. Always mention "Feel free to contact us!" at the end
+5. Use emojis to make responses friendly ☀️⚡💚
+6. For pricing questions, refer to FAQ or suggest contacting for quote"""
+        
+        if language == "tl":
+            system_message += "\n7. Respond in Tagalog/Filipino"
+        else:
+            system_message += "\n7. Respond in English"
+        
+        payload = {
+            "model": "gpt-4.1-mini",
+            "messages": [
+                {"role": "system", "content": system_message},
+                {"role": "user", "content": user_message}
             ],
             "temperature": 0.7,
             "max_tokens": 200
@@ -349,16 +689,76 @@ Guidelines:
             ai_response = response.json()["choices"][0]["message"]["content"].strip()
             print(f"✅ AI Response: {ai_response[:80]}...")
             sys.stdout.flush()
-            return ai_response
+            return ai_response, False, None
         else:
             print(f"❌ OpenAI Error: {response.status_code}")
             sys.stdout.flush()
-            return "Sorry, I'm having trouble processing your request. Please try again or contact us directly! 📞"
+            return "Sorry, I'm having trouble processing your request. Please try again or contact us directly! 📞", False, None
             
     except Exception as e:
         print(f"❌ Error: {str(e)}")
         sys.stdout.flush()
-        return "Sorry, I encountered an error. Please contact us directly! 📞"
+        return "Sorry, I encountered an error. Please contact us directly! 📞", False, None
+
+def send_typing_indicator(recipient_id):
+    """Send typing indicator to show bot is processing"""
+    try:
+        url = f"https://graph.facebook.com/v19.0/{PAGE_ID}/messages"
+        
+        payload = {
+            "recipient": {"id": recipient_id},
+            "sender_action": "typing_on"
+        }
+        
+        params = {"access_token": PAGE_ACCESS_TOKEN}
+        
+        response = requests.post(url, json=payload, params=params, timeout=5)
+        return response.status_code == 200
+    except:
+        return False
+
+def send_message_with_quick_replies(recipient_id, message_text, language):
+    """Send message with quick reply buttons"""
+    try:
+        print(f"📤 Sending message with quick replies to {recipient_id}...")
+        sys.stdout.flush()
+        
+        url = f"https://graph.facebook.com/v19.0/{PAGE_ID}/messages"
+        
+        quick_replies = get_quick_reply_buttons(language)
+        
+        payload = {
+            "recipient": {"id": recipient_id},
+            "message": {
+                "text": message_text,
+                "quick_replies": [
+                    {
+                        "content_type": "text",
+                        "title": btn["title"],
+                        "payload": btn["payload"]
+                    }
+                    for btn in quick_replies
+                ]
+            }
+        }
+        
+        params = {"access_token": PAGE_ACCESS_TOKEN}
+        
+        response = requests.post(url, json=payload, params=params, timeout=10)
+        
+        if response.status_code == 200:
+            print(f"✅ Message with quick replies sent!")
+            sys.stdout.flush()
+            return True
+        else:
+            print(f"❌ Error: {response.status_code}")
+            sys.stdout.flush()
+            return False
+            
+    except Exception as e:
+        print(f"❌ Error: {str(e)}")
+        sys.stdout.flush()
+        return False
 
 def send_message(recipient_id, message_text):
     """Send message via Facebook Messenger API"""
@@ -373,19 +773,9 @@ def send_message(recipient_id, message_text):
             "message": {"text": message_text}
         }
         
-        params = {
-            "access_token": PAGE_ACCESS_TOKEN
-        }
-        
-        print(f"   Token length: {len(PAGE_ACCESS_TOKEN)} chars")
-        print(f"   URL: {url}")
-        print(f"   Payload keys: {list(payload.keys())}")
-        sys.stdout.flush()
+        params = {"access_token": PAGE_ACCESS_TOKEN}
         
         response = requests.post(url, json=payload, params=params, timeout=10)
-        
-        print(f"   Status: {response.status_code}")
-        sys.stdout.flush()
         
         if response.status_code == 200:
             print(f"✅ Message sent successfully!")
@@ -393,7 +783,6 @@ def send_message(recipient_id, message_text):
             return True
         else:
             print(f"❌ Facebook Error: {response.status_code}")
-            print(f"   Response: {json.dumps(response.json(), indent=2)}")
             sys.stdout.flush()
             return False
             
@@ -404,7 +793,7 @@ def send_message(recipient_id, message_text):
 
 @app.route("/", methods=["GET"])
 def home():
-    return "🤖 Ultiphoton Solar Power OPC Chatbot is running!", 200
+    return "🤖 Ultiphoton Solar Power OPC Advanced Chatbot is running!", 200
 
 @app.route("/webhook", methods=["GET", "POST"])
 def webhook():
@@ -430,12 +819,49 @@ def webhook():
                             print(f"\n📨 Message from {sender_id}: {message}")
                             sys.stdout.flush()
                             
-                            # Get AI response (with FAQ checking)
-                            response_text = get_ai_response(message)
+                            # Detect language
+                            detected_lang = detect_language(message)
+                            saved_lang = get_user_language(sender_id)
                             
-                            # Send response
-                            if response_text:
-                                send_message(sender_id, response_text)
+                            if saved_lang == "auto":
+                                language = detected_lang
+                                save_user_language(sender_id, language)
+                            else:
+                                language = saved_lang
+                            
+                            print(f"🌍 Language: {language}")
+                            sys.stdout.flush()
+                            
+                            # Send auto-greeting if first message
+                            if is_first_message(sender_id):
+                                greeting = get_greeting_message(language)
+                                send_message_with_quick_replies(sender_id, greeting, language)
+                                mark_first_message_sent(sender_id)
+                                time.sleep(1)
+                            
+                            # Check business hours
+                            if not is_business_hours():
+                                offline_msg = get_business_hours_message(language)
+                                send_message(sender_id, offline_msg)
+                                save_conversation(sender_id, message, offline_msg, language, False)
+                                continue
+                            
+                            # Send typing indicator
+                            send_typing_indicator(sender_id)
+                            time.sleep(1)
+                            
+                            # Get AI response (with FAQ checking)
+                            response_text, faq_matched, faq_key = get_ai_response(message, language)
+                            
+                            # Log analytics
+                            if faq_matched and faq_key:
+                                log_analytics(sender_id, faq_key, message)
+                            
+                            # Save conversation
+                            save_conversation(sender_id, message, response_text, language, faq_matched)
+                            
+                            # Send response with quick replies
+                            send_message_with_quick_replies(sender_id, response_text, language)
             
             return "EVENT_RECEIVED", 200
             
@@ -443,6 +869,15 @@ def webhook():
             print(f"❌ Webhook Error: {str(e)}")
             sys.stdout.flush()
             return "ERROR", 500
+
+@app.route("/analytics", methods=["GET"])
+def analytics():
+    """Analytics dashboard endpoint"""
+    try:
+        analytics_data = get_analytics_summary()
+        return json.dumps(analytics_data, indent=2), 200, {"Content-Type": "application/json"}
+    except Exception as e:
+        return json.dumps({"error": str(e)}), 500, {"Content-Type": "application/json"}
 
 if __name__ == "__main__":
     port = int(os.getenv("PORT", 10000))
