@@ -403,6 +403,62 @@ Nag-aalok kami ng free inspection para malaman ang perfect solar system para sa 
 
 Schedule ngayon! 📞"""
     },
+    "full_pricelist": {
+        "keywords": [
+            "pricelist", "price list", "listahan ng presyo", "presyo ng lahat",
+            "lahat ng presyo", "complete price", "full price", "all prices",
+            "materials price", "magkano lahat", "ano lahat", "list of prices",
+            "price ng materials", "presyo ng materials"
+        ],
+        "answer_en": """💰 **Ultiphoton Official Price List:**
+
+☀️ **Solar Panels (Talesun):**
+- 620W: ₱6,100 retail / ₱5,850 installer
+- 585W: ₱5,750 retail / ₱5,650 installer
+
+📌 **PV Mountings (SoEasy):**
+- Aluminum Railing 2.4m: ₱600
+- L Foot: ₱95 | Mid/End Clamp: ₱85
+- Rail Splicer: ₱85 | Grounding Lug: ₱70
+
+📌 **Breakers & Protection (Chint/Chyt):**
+- DC Breaker 20A 2P: ₱680
+- AC Breaker 40A/63A 2P: ₱750
+- AC Breaker 100A 2P: ₱1,300
+- DC SPD 1200V 40kA: ₱780
+- AC SPD 2P 400V: ₱580
+- AC SPD 4P 385V: ₱980
+
+📌 **Connectors:**
+- MC4 30A 1000V pair: ₱80
+- Battery Breaker DC 250AT: ₱1,700
+
+Contact us for bulk orders & inverter pricing! 📞""",
+        "answer_tl": """💰 **Opisyal na Listahan ng Presyo ng Ultiphoton:**
+
+☀️ **Solar Panels (Talesun):**
+- 620W: ₱6,100 retail / ₱5,850 installer
+- 585W: ₱5,750 retail / ₱5,650 installer
+
+📌 **PV Mountings (SoEasy):**
+- Aluminum Railing 2.4m: ₱600
+- L Foot: ₱95 | Mid/End Clamp: ₱85
+- Rail Splicer: ₱85 | Grounding Lug: ₱70
+
+📌 **Breakers & Protection (Chint/Chyt):**
+- DC Breaker 20A 2P: ₱680
+- AC Breaker 40A/63A 2P: ₱750
+- AC Breaker 100A 2P: ₱1,300
+- DC SPD 1200V 40kA: ₱780
+- AC SPD 2P 400V: ₱580
+- AC SPD 4P 385V: ₱980
+
+📌 **Connectors:**
+- MC4 30A 1000V pair: ₱80
+- Battery Breaker DC 250AT: ₱1,700
+
+Makipag-ugnayan para sa bulk orders at inverter pricing! 📞"""
+    },
     "website": {
         "keywords": [
             "website", "web site", "online", "link", "url", "site nyo", "webpage",
@@ -694,7 +750,7 @@ Company Information:
 - Main Office: Filinvest, Muntilupa City
 - Branch: Batangas
 - Warehouse: Cainta
-- Products: Talesun Solar Panels (585W ₱5,750/pc, 620W available), Inverters (Deye, Solis, GoodWe, SRNE, Sigenergy)
+- Products: Talesun Solar Panels (585W, 620W), Inverters (Deye, Solis, GoodWe, SRNE, Sigenergy)
 - Services: Installation, Maintenance, Consultation
 - Delivery: COD available in Batangas, Laguna, Quezon, South Luzon
 - Website: https://ultiphotonsolarpoweropc.com/
@@ -705,10 +761,12 @@ Guidelines:
 3. If you don't know specific details, suggest they contact the company
 4. Always mention "Feel free to contact us!" at the end
 5. Use emojis to make responses friendly ☀️⚡💚
-6. For pricing questions, refer to FAQ or suggest contacting for quote"""
+6. IMPORTANT: NEVER quote any prices or peso amounts. You do not have access to the official price list.
+   If asked about pricing, ALWAYS say: 'For our official price list, please ask: What is the price list?' or direct them to message the page.
+7. All pricing information is handled by a separate FAQ system - do not attempt to answer price questions yourself."""
         
         if language == "tl":
-            system_message += "\n7. Respond in Tagalog/Filipino"
+            system_message += "\n8. Respond in Tagalog/Filipino"
         else:
             system_message += "\n7. Respond in English"
         
