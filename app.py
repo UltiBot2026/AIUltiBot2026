@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Ultiphoton Solar Power OPC - AI Chatbot for Facebook Messenger (Simplified)
+Ultiphoton Solar Power OPC - AI Chatbot for Facebook Messenger (FINAL WORKING VERSION)
 Powered by OpenAI API (via HTTP requests) and Facebook Messenger API
 This chatbot answers all queries about solar energy and Ultiphoton's services.
 """
@@ -13,28 +13,36 @@ import os
 # ==================== CONFIGURATION ====================
 app = Flask(__name__)
 
-# Facebook Configuration
+# Facebook Configuration - READ FROM ENVIRONMENT VARIABLES
 PAGE_ACCESS_TOKEN = os.getenv("PAGE_ACCESS_TOKEN", "")
 VERIFY_TOKEN = "ultiphoton_solar_verify_2026"
-PAGE_ID = "516699488185698"
+PAGE_ID = "516699488185698"  # CORRECT PAGE ID FOR ULTIPHOTON SOLAR POWER OPC
 
-# OpenAI Configuration
+# OpenAI Configuration - READ FROM ENVIRONMENT VARIABLES
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "")
 OPENAI_API_URL = "https://api.openai.com/v1/chat/completions"
 
-# Debug logging
-print(f"\n🔐 PAGE_ACCESS_TOKEN loaded: {bool(PAGE_ACCESS_TOKEN)}")
+# Debug logging at startup
+print("\n" + "="*60)
+print("🚀 ULTIPHOTON AI CHATBOT - STARTUP DIAGNOSTICS")
+print("="*60)
+print(f"\n📍 PAGE_ID: {PAGE_ID}")
+print(f"🔐 VERIFY_TOKEN: {VERIFY_TOKEN}")
+print(f"\n✅ PAGE_ACCESS_TOKEN loaded: {bool(PAGE_ACCESS_TOKEN)}")
 if PAGE_ACCESS_TOKEN:
-    print(f"🔐 Token length: {len(PAGE_ACCESS_TOKEN)} characters")
-    print(f"🔐 Token starts with: {PAGE_ACCESS_TOKEN[:20]}...")
+    print(f"   Token length: {len(PAGE_ACCESS_TOKEN)} characters")
+    print(f"   Token preview: {PAGE_ACCESS_TOKEN[:30]}...")
 else:
-    print("🔐 WARNING: PAGE_ACCESS_TOKEN is empty!")
+    print("   ⚠️  WARNING: PAGE_ACCESS_TOKEN is EMPTY!")
 
-print(f"\n🔑 OPENAI_API_KEY loaded: {bool(OPENAI_API_KEY)}")
+print(f"\n✅ OPENAI_API_KEY loaded: {bool(OPENAI_API_KEY)}")
 if OPENAI_API_KEY:
-    print(f"🔑 API Key length: {len(OPENAI_API_KEY)} characters")
+    print(f"   Key length: {len(OPENAI_API_KEY)} characters")
+    print(f"   Key preview: {OPENAI_API_KEY[:30]}...")
 else:
-    print("🔑 WARNING: OPENAI_API_KEY is empty!")
+    print("   ⚠️  WARNING: OPENAI_API_KEY is EMPTY!")
+
+print("\n" + "="*60 + "\n")
 
 # ==================== SYSTEM PROMPT ====================
 SYSTEM_PROMPT = """You are the official AI assistant for Ultiphoton Solar Power OPC, a leading solar energy provider in the Philippines.
@@ -105,16 +113,25 @@ def webhook():
         verify_token = request.args.get('hub.verify_token')
         challenge = request.args.get('hub.challenge')
         
+        print(f"\n🔍 Webhook verification attempt:")
+        print(f"   Received token: {verify_token}")
+        print(f"   Expected token: {VERIFY_TOKEN}")
+        print(f"   Challenge: {challenge}")
+        
         if verify_token == VERIFY_TOKEN:
-            print("✅ Webhook verified successfully!")
+            print("   ✅ VERIFICATION SUCCESSFUL!")
             return challenge
         else:
-            print("❌ Verification failed - invalid token")
+            print("   ❌ VERIFICATION FAILED - Invalid token")
             return "Verification failed", 403
     
     if request.method == 'POST':
         # Process incoming messages
         data = request.json
+        
+        print(f"\n📨 Webhook POST received:")
+        print(f"   Object: {data.get('object')}")
+        print(f"   Entries: {len(data.get('entry', []))}")
         
         if data.get('object') == 'page':
             for entry in data.get('entry', []):
@@ -125,7 +142,7 @@ def webhook():
                         message_text = messaging_event['message'].get('text', '')
                         
                         if message_text:
-                            print(f"\n📨 Message from {sender_id}: {message_text}")
+                            print(f"\n💬 Message from {sender_id}: {message_text}")
                             
                             # Get AI response
                             ai_response = get_ai_response(message_text)
@@ -137,6 +154,7 @@ def webhook():
                     if messaging_event.get('postback'):
                         sender_id = messaging_event['sender']['id']
                         payload = messaging_event['postback'].get('payload', '')
+                        print(f"\n📌 Postback from {sender_id}: {payload}")
                         handle_postback(sender_id, payload)
         
         return "EVENT_RECEIVED", 200
@@ -147,10 +165,17 @@ def get_ai_response(user_message):
     """
     Generate an AI response using OpenAI API via HTTP requests
     """
-    if not OPENAI_API_KEY or not PAGE_ACCESS_TOKEN:
+    if not OPENAI_API_KEY:
+        print("❌ ERROR: OPENAI_API_KEY is not set!")
+        return "Sorry po, may technical issue kami ngayon. Please try again or message us directly. Salamat! 😊"
+    
+    if not PAGE_ACCESS_TOKEN:
+        print("❌ ERROR: PAGE_ACCESS_TOKEN is not set!")
         return "Sorry po, may technical issue kami ngayon. Please try again or message us directly. Salamat! 😊"
     
     try:
+        print(f"🤖 Calling OpenAI API...")
+        
         headers = {
             "Authorization": f"Bearer {OPENAI_API_KEY}",
             "Content-Type": "application/json"
@@ -166,19 +191,21 @@ def get_ai_response(user_message):
             "max_tokens": 500
         }
         
-        response = requests.post(OPENAI_API_URL, headers=headers, json=payload, timeout=10)
+        response = requests.post(OPENAI_API_URL, headers=headers, json=payload, timeout=15)
         
         if response.status_code == 200:
             result = response.json()
             ai_response = result['choices'][0]['message']['content']
-            print(f"🤖 AI Response: {ai_response}")
+            print(f"✅ AI Response generated: {ai_response[:100]}...")
             return ai_response
         else:
-            print(f"❌ OpenAI API error: {response.status_code} - {response.text}")
+            error_msg = f"OpenAI API error: {response.status_code}"
+            print(f"❌ {error_msg}")
+            print(f"   Response: {response.text}")
             return "Sorry po, may technical issue kami ngayon. Please try again or message us directly. Salamat! 😊"
         
     except requests.exceptions.Timeout:
-        print("❌ OpenAI API timeout")
+        print("❌ OpenAI API timeout (15 seconds)")
         return "Sorry po, ang response ay tumatagal. Please try again. Salamat! 😊"
     except Exception as e:
         print(f"❌ Error getting AI response: {e}")
@@ -190,6 +217,10 @@ def send_message(recipient_id, message_text):
     """
     Send a message back to the user via Facebook Messenger
     """
+    if not PAGE_ACCESS_TOKEN:
+        print(f"❌ ERROR: Cannot send message - PAGE_ACCESS_TOKEN is not set!")
+        return
+    
     url = f"https://graph.facebook.com/v19.0/me/messages?access_token={PAGE_ACCESS_TOKEN}"
     
     payload = {
@@ -198,11 +229,16 @@ def send_message(recipient_id, message_text):
     }
     
     try:
+        print(f"📤 Sending message to {recipient_id}...")
         response = requests.post(url, json=payload, timeout=10)
+        
         if response.status_code == 200:
-            print(f"✅ Message sent to {recipient_id}")
+            result = response.json()
+            print(f"✅ Message sent successfully! Message ID: {result.get('message_id')}")
         else:
-            print(f"❌ Failed to send message: {response.status_code} - {response.text}")
+            print(f"❌ Failed to send message:")
+            print(f"   Status: {response.status_code}")
+            print(f"   Response: {response.text}")
     except Exception as e:
         print(f"❌ Error sending message: {e}")
 
@@ -210,6 +246,10 @@ def send_quick_reply(recipient_id, message_text, quick_replies):
     """
     Send a message with quick reply buttons
     """
+    if not PAGE_ACCESS_TOKEN:
+        print(f"❌ ERROR: Cannot send quick reply - PAGE_ACCESS_TOKEN is not set!")
+        return
+    
     url = f"https://graph.facebook.com/v19.0/me/messages?access_token={PAGE_ACCESS_TOKEN}"
     
     payload = {
@@ -235,8 +275,6 @@ def handle_postback(sender_id, payload):
     """
     Handle postback events from quick replies and buttons
     """
-    print(f"📌 Postback from {sender_id}: {payload}")
-    
     if payload == "SCHEDULE_INSPECTION":
         send_message(sender_id, 
             "Great! Para ma-schedule ang free site inspection, pwede po ba naming malaman:\n"
@@ -288,16 +326,22 @@ def health():
     """
     Health check endpoint
     """
-    return {"status": "OK", "service": "Ultiphoton AI Chatbot"}, 200
+    return {
+        "status": "OK",
+        "service": "Ultiphoton AI Chatbot",
+        "page_id": PAGE_ID,
+        "has_access_token": bool(PAGE_ACCESS_TOKEN),
+        "has_api_key": bool(OPENAI_API_KEY)
+    }, 200
 
 # ==================== MAIN ====================
 
 if __name__ == '__main__':
-    print("🚀 Starting Ultiphoton AI Chatbot Server (Simplified)...")
+    print("🚀 Starting Ultiphoton AI Chatbot Server (FINAL VERSION)...")
     print(f"📍 Page ID: {PAGE_ID}")
     print(f"🔐 Verify Token: {VERIFY_TOKEN}")
     print("⏳ Listening for messages...\n")
     
-    # Run on port 5000 (Render will use PORT env variable)
+    # Run on port specified by Render (default 5000)
     port = int(os.getenv("PORT", 5000))
     app.run(host="0.0.0.0", port=port, debug=False)
