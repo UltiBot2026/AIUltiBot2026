@@ -8,32 +8,31 @@ import requests
 import json
 import os
 import sys
+import time
 
 app = Flask(__name__)
 
-# Configuration - Read from environment variables
+# Configuration
 PAGE_ACCESS_TOKEN = os.getenv("PAGE_ACCESS_TOKEN", "").strip()
 if not PAGE_ACCESS_TOKEN:
-    # Fallback token with proper permissions
     PAGE_ACCESS_TOKEN = "EAANpvPkKM1kBRLiEUZC3UNdaTIdwC7vOJ3r3qkCRPOvP1eZCWdlZAiXoCHqpmcaCKzKpC4QaqdZAApZB05tZCoGM33odnEAudsnWCCBq4kXU5JURCsjTZC340G5qyI9zmIQl0ouSV6FUE7hL7ZCpPZC3b0qZABhvLNllbWHpjKKaPVpHOhJYW5C3DtFZCnapbod89qGPsnLC1wZBSSSmGKEWZBTuV0csl8hJLBN2JB3Hgd987zKcZD"
+
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "").strip()
 PAGE_ID = "516699488185698"
 VERIFY_TOKEN = "ultiphoton_solar_verify_2026"
 
-# Startup logging
 print("\n" + "="*70)
 print("🤖 ULTIPHOTON SOLAR POWER OPC - AI CHATBOT")
 print("="*70)
 print(f"✅ Page ID: {PAGE_ID}")
-print(f"✅ Access Token: {'✓ SET' if PAGE_ACCESS_TOKEN else '✗ NOT SET'} ({len(PAGE_ACCESS_TOKEN)} chars)")
-print(f"✅ OpenAI Key: {'✓ SET' if OPENAI_API_KEY else '✗ NOT SET'} ({len(OPENAI_API_KEY)} chars)")
+print(f"✅ Access Token: {'✓ SET' if PAGE_ACCESS_TOKEN else '✗ NOT SET'}")
+print(f"✅ OpenAI Key: {'✓ SET' if OPENAI_API_KEY else '✗ NOT SET'}")
 print("="*70 + "\n")
-
 sys.stdout.flush()
 
 
 def get_ai_response(user_message):
-    """Get AI response from OpenAI using direct HTTP requests"""
+    """Get AI response from OpenAI"""
     try:
         print(f"🤖 Processing: {user_message[:50]}...")
         sys.stdout.flush()
@@ -48,7 +47,7 @@ def get_ai_response(user_message):
             "messages": [
                 {
                     "role": "system",
-                    "content": "You are a helpful AI assistant for Ultiphoton Solar Power OPC. Answer questions about solar panels and solar energy. Be friendly, professional, and concise (under 100 words). If unsure, suggest contacting Ultiphoton directly."
+                    "content": "You are a helpful AI assistant for Ultiphoton Solar Power OPC. Answer questions about solar panels and solar energy. Be friendly, professional, and concise (under 100 words)."
                 },
                 {
                     "role": "user",
@@ -73,50 +72,60 @@ def get_ai_response(user_message):
             sys.stdout.flush()
             return ai_message
         else:
-            error_msg = f"OpenAI Error {response.status_code}"
-            print(f"❌ {error_msg}")
-            print(f"   Response: {response.text[:200]}")
+            print(f"❌ OpenAI Error {response.status_code}")
             sys.stdout.flush()
-            return "Sorry, I'm having trouble processing your request. Please try again."
+            return "Sorry, I'm having trouble processing your request."
             
     except Exception as e:
-        print(f"❌ Error in get_ai_response: {str(e)}")
+        print(f"❌ Error: {str(e)}")
         sys.stdout.flush()
-        return "Sorry, I encountered an error. Please try again later."
+        return "Sorry, I encountered an error."
 
 
-def send_message(recipient_id, message_text):
-    """Send message to user via Facebook Messenger API"""
+def send_message_v2(recipient_id, message_text):
+    """Send message using Facebook Send API v2"""
     try:
         print(f"📤 Sending to {recipient_id}...")
-        print(f"   Token length: {len(PAGE_ACCESS_TOKEN)} chars")
         sys.stdout.flush()
         
-        url = f"https://graph.facebook.com/v19.0/{PAGE_ID}/messages"
+        # Try multiple API endpoints
+        endpoints = [
+            f"https://graph.facebook.com/v19.0/{PAGE_ID}/messages",
+            f"https://graph.facebook.com/v18.0/{PAGE_ID}/messages",
+            f"https://graph.facebook.com/v17.0/{PAGE_ID}/messages"
+        ]
         
         payload = {
-            "recipient": {"id": recipient_id},
+            "recipient": {"id": str(recipient_id)},
             "message": {"text": message_text}
         }
         
-        params = {"access_token": PAGE_ACCESS_TOKEN}
+        for endpoint in endpoints:
+            try:
+                response = requests.post(
+                    endpoint,
+                    json=payload,
+                    params={"access_token": PAGE_ACCESS_TOKEN},
+                    timeout=10
+                )
+                
+                print(f"   Endpoint: {endpoint.split('/')[-2]}")
+                print(f"   Status: {response.status_code}")
+                
+                if response.status_code == 200:
+                    print(f"✅ Message sent successfully!")
+                    sys.stdout.flush()
+                    return True
+                else:
+                    print(f"   Error: {response.status_code}")
+                    
+            except Exception as e:
+                print(f"   Failed: {str(e)}")
+                continue
         
-        response = requests.post(
-            url,
-            json=payload,
-            params=params,
-            timeout=15
-        )
-        
-        if response.status_code == 200:
-            print(f"✅ Message sent successfully!")
-            sys.stdout.flush()
-            return True
-        else:
-            print(f"❌ Facebook Error: {response.status_code}")
-            print(f"   Response: {response.text[:200]}")
-            sys.stdout.flush()
-            return False
+        print(f"❌ All endpoints failed")
+        sys.stdout.flush()
+        return False
             
     except Exception as e:
         print(f"❌ Send Error: {str(e)}")
@@ -158,8 +167,11 @@ def webhook():
                         # Get AI response
                         ai_response = get_ai_response(message_text)
                         
+                        # Add small delay to ensure Facebook is ready
+                        time.sleep(0.5)
+                        
                         # Send response
-                        success = send_message(sender_id, ai_response)
+                        success = send_message_v2(sender_id, ai_response)
                         
                         if success:
                             print(f"✅ Response delivered!")
