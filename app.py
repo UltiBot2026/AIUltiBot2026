@@ -103,25 +103,27 @@ init_database()
 # FAQ Database with Updated Information
 FAQS = {
     "solar_panel_price": {
-        "keywords": ["magkano", "price", "cost", "solar panel", "talesun", "585w", "620w", "how much", "presyo"],
-        "answer_en": """☀️ **Solar Panel Pricing:**
+        "keywords": ["magkano", "price", "cost", "solar panel", "talesun", "585w", "620w", "how much", "presyo", "panel price", "solar price", "solar panels"],
+        "answer_en": """☀️ **Solar Panel Pricing (Talesun):**
 
-**Talesun 585W Bifacial** ✅ (Available)
-- ₱5,750/pc (9 pieces or less)
-- ₱5,650/pc (10 pieces or more - Installer price)
+**620W Bifacial**
+- Retail: ₱6,100/pc
+- Installer price: ₱5,850/pc
 
-**Talesun 620W** ❌ (Out of stock in Batangas)
-- Available for pick-up at **Cainta Warehouse** ✅
+**585W Bifacial**
+- Retail: ₱5,750/pc
+- Installer price: ₱5,650/pc
 
 Contact us for bulk orders and special pricing! 📞""",
-        "answer_tl": """☀️ **Presyo ng Solar Panels:**
+        "answer_tl": """☀️ **Presyo ng Solar Panels (Talesun):**
 
-**Talesun 585W Bifacial** ✅ (Available)
-- ₱5,750/pc (9 piraso o mas kaunti)
-- ₱5,650/pc (10 piraso o higit pa - Installer price)
+**620W Bifacial**
+- Retail: ₱6,100/pc
+- Installer price: ₱5,850/pc
 
-**Talesun 620W** ❌ (Out of stock sa Batangas)
-- Available para sa pick-up sa **Cainta Warehouse** ✅
+**585W Bifacial**
+- Retail: ₱5,750/pc
+- Installer price: ₱5,650/pc
 
 Makipag-ugnayan sa amin para sa bulk orders! 📞"""
     },
@@ -231,35 +233,65 @@ Magpadala ng proof of payment! 🏦"""
     },
     
     "accessories": {
-        "keywords": ["railing", "mounting", "accessories", "breaker", "wire", "protection", "device", "meron"],
-        "answer_en": """🔧 **Available Accessories & Mounting:**
+        "keywords": ["railing", "mounting", "accessories", "breaker", "wire", "protection", "device", "meron",
+                    "l foot", "mid clamp", "end clamp", "rail splicer", "grounding", "mc4", "spd",
+                    "dc breaker", "ac breaker", "battery breaker", "clamp", "soeasy", "chint"],
+        "answer_en": """🔧 **Accessories & Materials Price List:**
 
-**Solar Mounting (SoEasy Brand):**
-- 2.4m Railing: ₱600/pc
-- L-ft: ₱90/pc
-- Mid: ₱85/pc
-- End: ₱85/pc
+📌 **PV Mountings (SoEasy Brand):**
+- Aluminum Railing 2.4m: ₱600/pc
+- L Foot: ₱95/pc
+- Mid Clamp: ₱85/pc
+- End Clamp: ₱85/pc
+- Rail Splicer: ₱85/pc
+- PV Grounding Lug: ₱70/pc
 
-**AC & DC Breakers (Chint Brand):**
-- AC Breaker: ₱600-₱1,000/pc (depends on Ampere Trip)
-- DC Breaker: ₱700/pc
-- DC SPD: ₱845/pc
+📌 **DC Breakers (Chint/Chyt):**
+- DC Breaker 20A, 2P: ₱680/pc
 
-Quality protection for your inverter and battery! ⚡""",
-        "answer_tl": """🔧 **Available Accessories & Mounting:**
+📌 **AC Breakers (Chint/Chyt):**
+- AC Breaker 40A, 2P: ₱750/pc
+- AC Breaker 63A, 2P: ₱750/pc
+- AC Breaker 100A, 2P: ₱1,300/pc
 
-**Solar Mounting (SoEasy Brand):**
-- 2.4m Railing: ₱600/pc
-- L-ft: ₱90/pc
-- Mid: ₱85/pc
-- End: ₱85/pc
+📌 **Surge Protection (SPD):**
+- DC SPD 1200VDC 40kA: ₱780/pc
+- AC SPD 2P 400V: ₱580/pc
+- AC SPD 4P 385V: ₱980/pc
 
-**AC & DC Breakers (Chint Brand):**
-- AC Breaker: ₱600-₱1,000/pc
-- DC Breaker: ₱700/pc
-- DC SPD: ₱845/pc
+📌 **Connectors & Others:**
+- MC4 30A DC 1000V (Male & Female pair): ₱80/pair
+- Battery Breaker DC 250AT: ₱1,700/pc
 
-Quality protection para sa inverter at battery! ⚡"""
+Contact us for bulk orders! ⚡""",
+        "answer_tl": """🔧 **Listahan ng Presyo ng Accessories & Materials:**
+
+📌 **PV Mountings (SoEasy Brand):**
+- Aluminum Railing 2.4m: ₱600/pc
+- L Foot: ₱95/pc
+- Mid Clamp: ₱85/pc
+- End Clamp: ₱85/pc
+- Rail Splicer: ₱85/pc
+- PV Grounding Lug: ₱70/pc
+
+📌 **DC Breakers (Chint/Chyt):**
+- DC Breaker 20A, 2P: ₱680/pc
+
+📌 **AC Breakers (Chint/Chyt):**
+- AC Breaker 40A, 2P: ₱750/pc
+- AC Breaker 63A, 2P: ₱750/pc
+- AC Breaker 100A, 2P: ₱1,300/pc
+
+📌 **Surge Protection (SPD):**
+- DC SPD 1200VDC 40kA: ₱780/pc
+- AC SPD 2P 400V: ₱580/pc
+- AC SPD 4P 385V: ₱980/pc
+
+📌 **Connectors & Others:**
+- MC4 30A DC 1000V (Male & Female pair): ₱80/pair
+- Battery Breaker DC 250AT: ₱1,700/pc
+
+Makipag-ugnayan para sa bulk orders! ⚡"""
     },
     
     "inverter_brands": {
