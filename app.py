@@ -100,6 +100,234 @@ def init_database():
 
 init_database()
 
+# ─── Excel Price Loader ───────────────────────────────────────────────────────
+import os as _os
+
+EXCEL_PATH = _os.path.join(_os.path.dirname(_os.path.abspath(__file__)), "pricelist.xlsx")
+
+def load_prices_from_excel():
+    """
+    Read pricelist.xlsx and return a dict:
+      {
+        'solar_panels': [{'item': ..., 'price': ..., 'installer_price': ...}, ...],
+        'pv_mountings': [{'item': ..., 'brand': ..., 'price': ...}, ...],
+        'dc_breakers':  [...],
+        'ac_breakers':  [...],
+        'spd':          [...],
+        'mc4':          [...],
+        'battery_breaker': [...],
+      }
+    Returns empty dict on any error.
+    """
+    try:
+        import openpyxl
+        wb = openpyxl.load_workbook(EXCEL_PATH, data_only=True)
+        data = {}
+
+        # --- Solar Panels ---
+        ws = wb["SOLAR PANEL"]
+        panels = []
+        for row in ws.iter_rows(min_row=2, values_only=True):
+            item, brand, _, price, installer = (row + (None,)*5)[:5]
+            if item and price:
+                item_clean = str(item).replace("\n", " ").strip()
+                price_clean = str(price).replace("P", "₱").strip()
+                inst_clean  = str(installer).replace("P", "₱").strip() if installer else None
+                panels.append({"item": item_clean, "brand": brand, "price": price_clean, "installer_price": inst_clean})
+        data["solar_panels"] = panels
+
+        # --- PV Mountings ---
+        ws = wb["PV MOUNTINGS"]
+        mountings = []
+        for row in ws.iter_rows(min_row=2, values_only=True):
+            item, brand, _, price = (row + (None,)*4)[:4]
+            if item and price is not None:
+                mountings.append({"item": str(item).strip(), "brand": brand, "price": f"₱{int(price):,}"})
+        data["pv_mountings"] = mountings
+
+        # --- DC Breakers ---
+        ws = wb["DC BREAKERS"]
+        dc = []
+        for row in ws.iter_rows(min_row=2, values_only=True):
+            item, brand, _, price = (row + (None,)*4)[:4]
+            if item and price is not None:
+                dc.append({"item": str(item).strip(), "brand": brand, "price": f"₱{int(price):,}"})
+        data["dc_breakers"] = dc
+
+        # --- AC Breakers ---
+        ws = wb["AC BREAKERS"]
+        ac = []
+        for row in ws.iter_rows(min_row=2, values_only=True):
+            item, brand, _, price = (row + (None,)*4)[:4]
+            if item and price is not None:
+                ac.append({"item": str(item).strip(), "brand": brand, "price": f"₱{int(price):,}"})
+        data["ac_breakers"] = ac
+
+        # --- SPD ---
+        ws = wb["AC & DC SPD"]
+        spd = []
+        for row in ws.iter_rows(min_row=2, values_only=True):
+            item, brand, _, price = (row + (None,)*4)[:4]
+            if item and price is not None:
+                spd.append({"item": str(item).strip(), "brand": brand, "price": f"₱{int(price):,}"})
+        data["spd"] = spd
+
+        # --- MC4 ---
+        ws = wb["MC4"]
+        mc4 = []
+        for row in ws.iter_rows(min_row=2, values_only=True):
+            item, brand, _, price = (row + (None,)*4)[:4]
+            if item and price is not None:
+                mc4.append({"item": str(item).strip(), "brand": brand, "price": f"₱{int(price):,}"})
+        data["mc4"] = mc4
+
+        # --- Battery Breaker ---
+        ws = wb["BATTERY BREAKER"]
+        bb = []
+        for row in ws.iter_rows(min_row=2, values_only=True):
+            item, brand, _, price = (row + (None,)*4)[:4]
+            if item and price is not None:
+                bb.append({"item": str(item).strip(), "brand": brand, "price": f"₱{int(price):,}"})
+        data["battery_breaker"] = bb
+
+        print(f"✅ Price list loaded from Excel: {sum(len(v) for v in data.values())} items")
+        sys.stdout.flush()
+        return data
+    except Exception as e:
+        print(f"⚠️  Could not load Excel price list: {e}")
+        sys.stdout.flush()
+        return {}
+
+
+def build_pricelist_answer(lang="en"):
+    """Build a formatted price list message from the Excel data."""
+    prices = load_prices_from_excel()
+    if not prices:
+        # Fallback to hardcoded if Excel unavailable
+        return None
+
+    lines = []
+    if lang == "tl":
+        lines.append("💰 *Opisyal na Listahan ng Presyo ng Ultiphoton:*")
+    else:
+        lines.append("💰 *Ultiphoton Official Price List:*")
+
+    # Solar Panels
+    if prices.get("solar_panels"):
+        lines.append("\n☀️ *Solar Panels (Talesun):*")
+        for p in prices["solar_panels"]:
+            line = f"- {p['item']}: {p['price']}"
+            if p.get("installer_price"):
+                line += f" / {p['installer_price']} (installer)"
+            lines.append(line)
+
+    # PV Mountings
+    if prices.get("pv_mountings"):
+        lines.append("\n📌 *PV Mountings (SoEasy):*")
+        for p in prices["pv_mountings"]:
+            lines.append(f"- {p['item']}: {p['price']}")
+
+    # DC Breakers
+    if prices.get("dc_breakers"):
+        lines.append("\n📌 *DC Breakers (Chint/Chyt):*")
+        for p in prices["dc_breakers"]:
+            lines.append(f"- {p['item']}: {p['price']}")
+
+    # AC Breakers
+    if prices.get("ac_breakers"):
+        lines.append("\n📌 *AC Breakers (Chint/Chyt):*")
+        for p in prices["ac_breakers"]:
+            lines.append(f"- {p['item']}: {p['price']}")
+
+    # SPD
+    if prices.get("spd"):
+        lines.append("\n📌 *Surge Protection (SPD):*")
+        for p in prices["spd"]:
+            lines.append(f"- {p['item']}: {p['price']}")
+
+    # MC4
+    if prices.get("mc4"):
+        lines.append("\n📌 *Connectors:*")
+        for p in prices["mc4"]:
+            lines.append(f"- {p['item']}: {p['price']}")
+
+    # Battery Breaker
+    if prices.get("battery_breaker"):
+        lines.append("\n📌 *Battery Breaker:*")
+        for p in prices["battery_breaker"]:
+            lines.append(f"- {p['item']}: {p['price']}")
+
+    if lang == "tl":
+        lines.append("\nMakipag-ugnayan para sa bulk orders at inverter pricing! 📞")
+    else:
+        lines.append("\nContact us for bulk orders & inverter pricing! 📞")
+
+    return "\n".join(lines)
+
+
+def build_solar_panel_answer(lang="en"):
+    """Build solar panel pricing answer from Excel."""
+    prices = load_prices_from_excel()
+    panels = prices.get("solar_panels", [])
+    if not panels:
+        return None
+
+    lines = []
+    if lang == "tl":
+        lines.append("☀️ *Presyo ng Solar Panels (Talesun):*")
+    else:
+        lines.append("☀️ *Solar Panel Pricing (Talesun):*")
+
+    for p in panels:
+        lines.append(f"\n*{p['item']}*")
+        lines.append(f"- Retail: {p['price']}")
+        if p.get("installer_price"):
+            lines.append(f"- Installer: {p['installer_price']}")
+
+    if lang == "tl":
+        lines.append("\nMakipag-ugnayan sa amin para sa bulk orders! 📞")
+    else:
+        lines.append("\nContact us for bulk orders and special pricing! 📞")
+
+    return "\n".join(lines)
+
+
+def build_accessories_answer(lang="en"):
+    """Build accessories/materials pricing answer from Excel."""
+    prices = load_prices_from_excel()
+    sections = [
+        ("pv_mountings",    "📌 *PV Mountings (SoEasy):*"),
+        ("dc_breakers",     "📌 *DC Breakers (Chint/Chyt):*"),
+        ("ac_breakers",     "📌 *AC Breakers (Chint/Chyt):*"),
+        ("spd",             "📌 *Surge Protection (SPD):*"),
+        ("mc4",             "📌 *Connectors:*"),
+        ("battery_breaker", "📌 *Battery Breaker:*"),
+    ]
+    if not any(prices.get(k) for k, _ in sections):
+        return None
+
+    lines = []
+    if lang == "tl":
+        lines.append("🔧 *Listahan ng Presyo ng Accessories & Materials:*")
+    else:
+        lines.append("🔧 *Accessories & Materials Price List:*")
+
+    for key, header in sections:
+        items = prices.get(key, [])
+        if items:
+            lines.append(f"\n{header}")
+            for p in items:
+                lines.append(f"- {p['item']}: {p['price']}")
+
+    if lang == "tl":
+        lines.append("\nMakipag-ugnayan para sa bulk orders! ⚡")
+    else:
+        lines.append("\nContact us for bulk orders! ⚡")
+
+    return "\n".join(lines)
+
+# ─────────────────────────────────────────────────────────────────────────────
+
 # FAQ Database with Updated Information
 FAQS = {
     "solar_panel_price": {
@@ -691,8 +919,23 @@ def find_matching_faq(user_message):
     
     return None, None
 
-def get_faq_answer(faq_data, language):
-    """Get FAQ answer in appropriate language"""
+def get_faq_answer(faq_data, language, faq_key=None):
+    """Get FAQ answer - uses live Excel data for pricing FAQs, static text for others."""
+    # For pricing FAQs, always build answer from the Excel file
+    if faq_key == "solar_panel_price":
+        excel_answer = build_solar_panel_answer(language)
+        if excel_answer:
+            return excel_answer
+    elif faq_key == "accessories":
+        excel_answer = build_accessories_answer(language)
+        if excel_answer:
+            return excel_answer
+    elif faq_key == "full_pricelist":
+        excel_answer = build_pricelist_answer(language)
+        if excel_answer:
+            return excel_answer
+
+    # Fallback to static FAQ text for non-pricing FAQs or if Excel unavailable
     if language == "tl" and "answer_tl" in faq_data:
         return faq_data["answer_tl"]
     elif "answer_en" in faq_data:
@@ -733,7 +976,7 @@ def get_ai_response(user_message, language):
         if faq_key and faq_data:
             print(f"✅ FAQ Match Found: {faq_key}")
             sys.stdout.flush()
-            return get_faq_answer(faq_data, language), True, faq_key
+            return get_faq_answer(faq_data, language, faq_key=faq_key), True, faq_key
         
         # If no FAQ match, use AI to generate response
         print(f"🤖 Using AI to generate response...")
