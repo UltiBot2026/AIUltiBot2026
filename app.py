@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """
-Ultiphoton Solar Power OPC - AI Chatbot for Facebook Messenger (FINAL WORKING VERSION)
-Powered by OpenAI API (via HTTP requests) and Facebook Messenger API
-This chatbot answers all queries about solar energy and Ultiphoton's services.
+Ultra-simplified Ultiphoton Solar Power OPC - AI Chatbot for Facebook Messenger
+Powered by OpenAI GPT and Facebook Messenger API
+No problematic library dependencies - uses only requests and flask
 """
 
 from flask import Flask, request
@@ -10,171 +10,29 @@ import requests
 import json
 import os
 
-# ==================== CONFIGURATION ====================
 app = Flask(__name__)
 
-# Facebook Configuration - READ FROM ENVIRONMENT VARIABLES
+# Configuration from environment variables
 PAGE_ACCESS_TOKEN = os.getenv("PAGE_ACCESS_TOKEN", "")
-VERIFY_TOKEN = "ultiphoton_solar_verify_2026"
-PAGE_ID = "516699488185698"  # CORRECT PAGE ID FOR ULTIPHOTON SOLAR POWER OPC
-
-# OpenAI Configuration - READ FROM ENVIRONMENT VARIABLES
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "")
-OPENAI_API_URL = "https://api.openai.com/v1/chat/completions"
+PAGE_ID = "516699488185698"
+VERIFY_TOKEN = "ultiphoton_solar_verify_2026"
 
-# Debug logging at startup
-print("\n" + "="*60)
-print("🚀 ULTIPHOTON AI CHATBOT - STARTUP DIAGNOSTICS")
-print("="*60)
-print(f"\n📍 PAGE_ID: {PAGE_ID}")
-print(f"🔐 VERIFY_TOKEN: {VERIFY_TOKEN}")
-print(f"\n✅ PAGE_ACCESS_TOKEN loaded: {bool(PAGE_ACCESS_TOKEN)}")
-if PAGE_ACCESS_TOKEN:
-    print(f"   Token length: {len(PAGE_ACCESS_TOKEN)} characters")
-    print(f"   Token preview: {PAGE_ACCESS_TOKEN[:30]}...")
-else:
-    print("   ⚠️  WARNING: PAGE_ACCESS_TOKEN is EMPTY!")
+print("=" * 60)
+print("🤖 Ultiphoton Solar Power OPC - AI Chatbot")
+print("=" * 60)
+print(f"✅ PAGE_ID: {PAGE_ID}")
+print(f"✅ PAGE_ACCESS_TOKEN: {'Set' if PAGE_ACCESS_TOKEN else 'NOT SET'}")
+print(f"✅ OPENAI_API_KEY: {'Set' if OPENAI_API_KEY else 'NOT SET'}")
+print("=" * 60)
 
-print(f"\n✅ OPENAI_API_KEY loaded: {bool(OPENAI_API_KEY)}")
-if OPENAI_API_KEY:
-    print(f"   Key length: {len(OPENAI_API_KEY)} characters")
-    print(f"   Key preview: {OPENAI_API_KEY[:30]}...")
-else:
-    print("   ⚠️  WARNING: OPENAI_API_KEY is EMPTY!")
-
-print("\n" + "="*60 + "\n")
-
-# ==================== SYSTEM PROMPT ====================
-SYSTEM_PROMPT = """You are the official AI assistant for Ultiphoton Solar Power OPC, a leading solar energy provider in the Philippines.
-
-COMPANY INFORMATION:
-- Main Office: Filinvest, Muntinlupa City
-- Branch: UltiPhoton Solar Power Batangas
-- Service Areas: Batangas City, Laguna, Quezon province, and South Luzon
-- Warehouse: Cainta (for bulk orders)
-
-PRODUCTS & SERVICES:
-- Solar Panels: Talesun 585W & 620W Bifacial (TOPCon technology)
-- Inverters: Deye, Solis, GoodWe, SRNE, Sigenergy
-- Mounting & Accessories: SoEasy brand railings, breakers, SPD devices
-- Systems: Grid-Tie and Hybrid (with battery) configurations
-- Free site inspection available
-
-PRICING RANGES (2026):
-- 3kW System: ₱97,500 - ₱120,000
-- 5kW System: ₱143,750 - ₱180,000
-- 7kW System: ₱194,000 - ₱240,000
-- 8kW System: ₱220,500 - ₱270,000
-- 10kW System: ₱273,500 - ₱330,000
-- 12kW System: ₱323,750 - ₱390,000
-- 16kW System: ₱429,000 - ₱520,000
-
-PAYMENT METHODS:
-- Bank Transfer (BDO, UnionBank, BPI, EastWest)
-- GCash: 0997-369-7123
-- NO CASH PAYMENTS
-- Installment via credit card coming soon
-
-INSTALLATION:
-- Timeline: 1-20 days depending on site conditions
-- Free site inspection
-- Professional installation team
-
-YOUR ROLE:
-1. Answer general questions about solar energy, benefits, how it works
-2. Explain the difference between Grid-Tie and Hybrid systems
-3. Discuss Bifacial and TOPCon technology
-4. Answer questions about maintenance and durability
-5. Encourage users to schedule a FREE site inspection
-6. Direct specific pricing/product questions to the FAQ menu or human agents
-7. Always be friendly, professional, and use natural Taglish (Tagalog-English mix)
-8. Never make up prices or promises not mentioned above
-9. Always encourage customers to contact for exact quotes
-
-TONE:
-- Friendly and professional
-- Use emojis occasionally (☀️⚡🏠)
-- Respond in Taglish naturally
-- Be concise but informative
-- Always end with a call-to-action (e.g., "Schedule your free inspection!")
-"""
-
-# ==================== WEBHOOK ROUTES ====================
-
-@app.route('/webhook', methods=['GET', 'POST'])
-def webhook():
-    """
-    Main webhook endpoint for Facebook Messenger
-    Handles both verification and incoming messages
-    """
-    
-    if request.method == 'GET':
-        # Webhook verification from Facebook
-        verify_token = request.args.get('hub.verify_token')
-        challenge = request.args.get('hub.challenge')
-        
-        print(f"\n🔍 Webhook verification attempt:")
-        print(f"   Received token: {verify_token}")
-        print(f"   Expected token: {VERIFY_TOKEN}")
-        print(f"   Challenge: {challenge}")
-        
-        if verify_token == VERIFY_TOKEN:
-            print("   ✅ VERIFICATION SUCCESSFUL!")
-            return challenge
-        else:
-            print("   ❌ VERIFICATION FAILED - Invalid token")
-            return "Verification failed", 403
-    
-    if request.method == 'POST':
-        # Process incoming messages
-        data = request.json
-        
-        print(f"\n📨 Webhook POST received:")
-        print(f"   Object: {data.get('object')}")
-        print(f"   Entries: {len(data.get('entry', []))}")
-        
-        if data.get('object') == 'page':
-            for entry in data.get('entry', []):
-                for messaging_event in entry.get('messaging', []):
-                    # Check if this is a message event
-                    if messaging_event.get('message'):
-                        sender_id = messaging_event['sender']['id']
-                        message_text = messaging_event['message'].get('text', '')
-                        
-                        if message_text:
-                            print(f"\n💬 Message from {sender_id}: {message_text}")
-                            
-                            # Get AI response
-                            ai_response = get_ai_response(message_text)
-                            
-                            # Send response back to user
-                            send_message(sender_id, ai_response)
-                    
-                    # Handle quick replies and postbacks
-                    if messaging_event.get('postback'):
-                        sender_id = messaging_event['sender']['id']
-                        payload = messaging_event['postback'].get('payload', '')
-                        print(f"\n📌 Postback from {sender_id}: {payload}")
-                        handle_postback(sender_id, payload)
-        
-        return "EVENT_RECEIVED", 200
-
-# ==================== AI RESPONSE GENERATION ====================
 
 def get_ai_response(user_message):
     """
-    Generate an AI response using OpenAI API via HTTP requests
+    Get AI response from OpenAI API using HTTP requests
     """
-    if not OPENAI_API_KEY:
-        print("❌ ERROR: OPENAI_API_KEY is not set!")
-        return "Sorry po, may technical issue kami ngayon. Please try again or message us directly. Salamat! 😊"
-    
-    if not PAGE_ACCESS_TOKEN:
-        print("❌ ERROR: PAGE_ACCESS_TOKEN is not set!")
-        return "Sorry po, may technical issue kami ngayon. Please try again or message us directly. Salamat! 😊"
-    
     try:
-        print(f"🤖 Calling OpenAI API...")
+        print(f"🤖 Generating AI response for: {user_message}")
         
         headers = {
             "Authorization": f"Bearer {OPENAI_API_KEY}",
@@ -184,164 +42,145 @@ def get_ai_response(user_message):
         payload = {
             "model": "gpt-4.1-mini",
             "messages": [
-                {"role": "system", "content": SYSTEM_PROMPT},
-                {"role": "user", "content": user_message}
+                {
+                    "role": "system",
+                    "content": """You are a helpful AI assistant for Ultiphoton Solar Power OPC, a company that sells solar panels and solar energy solutions. 
+                    
+You should:
+- Answer questions about solar panels, solar energy, and Ultiphoton's services
+- Be friendly and professional
+- Keep responses concise (under 150 words)
+- If you don't know something, suggest contacting Ultiphoton directly
+- Always be enthusiastic about renewable energy!
+
+Ultiphoton Solar Power OPC specializes in:
+- High-quality solar panels
+- Solar installation services
+- Solar energy consulting
+- Maintenance and support"""
+                },
+                {
+                    "role": "user",
+                    "content": user_message
+                }
             ],
             "temperature": 0.7,
-            "max_tokens": 500
+            "max_tokens": 200
         }
         
-        response = requests.post(OPENAI_API_URL, headers=headers, json=payload, timeout=15)
+        response = requests.post(
+            "https://api.openai.com/v1/chat/completions",
+            headers=headers,
+            json=payload,
+            timeout=10
+        )
+        
+        print(f"📊 OpenAI Response Status: {response.status_code}")
         
         if response.status_code == 200:
             result = response.json()
-            ai_response = result['choices'][0]['message']['content']
-            print(f"✅ AI Response generated: {ai_response[:100]}...")
-            return ai_response
+            ai_message = result["choices"][0]["message"]["content"]
+            print(f"✅ AI Response: {ai_message}")
+            return ai_message
         else:
-            error_msg = f"OpenAI API error: {response.status_code}"
-            print(f"❌ {error_msg}")
-            print(f"   Response: {response.text}")
-            return "Sorry po, may technical issue kami ngayon. Please try again or message us directly. Salamat! 😊"
-        
-    except requests.exceptions.Timeout:
-        print("❌ OpenAI API timeout (15 seconds)")
-        return "Sorry po, ang response ay tumatagal. Please try again. Salamat! 😊"
+            print(f"❌ OpenAI Error: {response.text}")
+            return "Sorry, I'm having trouble processing your request. Please try again later."
+            
     except Exception as e:
         print(f"❌ Error getting AI response: {e}")
-        return "Sorry po, may technical issue kami ngayon. Please try again or message us directly. Salamat! 😊"
+        return "Sorry, I encountered an error. Please try again later."
 
-# ==================== MESSAGE SENDING ====================
 
 def send_message(recipient_id, message_text):
     """
-    Send a message back to the user via Facebook Messenger
+    Send a message to a user via Facebook Messenger API
     """
-    if not PAGE_ACCESS_TOKEN:
-        print(f"❌ ERROR: Cannot send message - PAGE_ACCESS_TOKEN is not set!")
-        return
-    
-    url = f"https://graph.facebook.com/v19.0/me/messages?access_token={PAGE_ACCESS_TOKEN}"
-    
-    payload = {
-        "recipient": {"id": recipient_id},
-        "message": {"text": message_text}
-    }
-    
     try:
-        print(f"📤 Sending message to {recipient_id}...")
-        response = requests.post(url, json=payload, timeout=10)
+        print(f"📤 Sending message to {recipient_id}: {message_text}")
+        
+        url = f"https://graph.facebook.com/v19.0/{PAGE_ID}/messages"
+        
+        payload = {
+            "recipient": {"id": recipient_id},
+            "message": {"text": message_text}
+        }
+        
+        params = {
+            "access_token": PAGE_ACCESS_TOKEN
+        }
+        
+        response = requests.post(
+            url,
+            json=payload,
+            params=params,
+            timeout=10
+        )
+        
+        print(f"📊 Facebook API Response Status: {response.status_code}")
+        print(f"📝 Response: {response.text}")
         
         if response.status_code == 200:
             result = response.json()
-            print(f"✅ Message sent successfully! Message ID: {result.get('message_id')}")
+            print(f"✅ Message sent! ID: {result.get('message_id')}")
+            return True
         else:
-            print(f"❌ Failed to send message:")
-            print(f"   Status: {response.status_code}")
-            print(f"   Response: {response.text}")
+            print(f"❌ Failed to send message: {response.text}")
+            return False
+            
     except Exception as e:
         print(f"❌ Error sending message: {e}")
+        return False
 
-def send_quick_reply(recipient_id, message_text, quick_replies):
+
+@app.route("/webhook", methods=["GET", "POST"])
+def webhook():
     """
-    Send a message with quick reply buttons
+    Facebook Webhook endpoint
     """
-    if not PAGE_ACCESS_TOKEN:
-        print(f"❌ ERROR: Cannot send quick reply - PAGE_ACCESS_TOKEN is not set!")
-        return
-    
-    url = f"https://graph.facebook.com/v19.0/me/messages?access_token={PAGE_ACCESS_TOKEN}"
-    
-    payload = {
-        "recipient": {"id": recipient_id},
-        "message": {
-            "text": message_text,
-            "quick_replies": quick_replies
-        }
-    }
-    
-    try:
-        response = requests.post(url, json=payload, timeout=10)
-        if response.status_code == 200:
-            print(f"✅ Quick reply sent to {recipient_id}")
+    if request.method == "GET":
+        # Webhook verification
+        verify_token = request.args.get("hub.verify_token")
+        challenge = request.args.get("hub.challenge")
+        
+        if verify_token == VERIFY_TOKEN:
+            print("✅ Webhook verified!")
+            return challenge
         else:
-            print(f"❌ Failed to send quick reply: {response.text}")
-    except Exception as e:
-        print(f"❌ Error sending quick reply: {e}")
-
-# ==================== POSTBACK HANDLING ====================
-
-def handle_postback(sender_id, payload):
-    """
-    Handle postback events from quick replies and buttons
-    """
-    if payload == "SCHEDULE_INSPECTION":
-        send_message(sender_id, 
-            "Great! Para ma-schedule ang free site inspection, pwede po ba naming malaman:\n"
-            "1. Your name po?\n"
-            "2. Your address?\n"
-            "3. Your contact number?\n\n"
-            "Ise-send po namin ang details sa team natin para ma-coordinate ang inspection. Salamat! 😊")
+            print(f"❌ Webhook verification failed! Token: {verify_token}")
+            return "Unauthorized", 403
     
-    elif payload == "LEARN_MORE":
-        send_message(sender_id,
-            "Interested ka na sa solar? Eto po ang benefits:\n"
-            "☀️ Lower electricity bills (up to 80% savings)\n"
-            "⚡ 25+ years of energy production\n"
-            "🌍 Eco-friendly and sustainable\n"
-            "🏠 Increase home value\n\n"
-            "Ready na ba para sa free site inspection? 😊")
-    
-    elif payload == "CONTACT_US":
-        send_message(sender_id,
-            "📞 Contact Ultiphoton Solar Power OPC:\n\n"
-            "🏢 Main Office: Filinvest, Muntinlupa City\n"
-            "🏢 Branch: Batangas\n"
-            "📱 GCash: 0997-369-7123\n\n"
-            "May iba pang tanong po ba? 😊")
+    elif request.method == "POST":
+        # Handle incoming messages
+        data = request.get_json()
+        
+        if data["object"] == "page":
+            for entry in data.get("entry", []):
+                for messaging_event in entry.get("messaging", []):
+                    sender_id = messaging_event["sender"]["id"]
+                    
+                    if messaging_event.get("message"):
+                        message_text = messaging_event["message"].get("text", "")
+                        
+                        if message_text:
+                            print(f"\n📨 Message from {sender_id}: {message_text}")
+                            
+                            # Get AI response
+                            ai_response = get_ai_response(message_text)
+                            
+                            # Send response back to user
+                            send_message(sender_id, ai_response)
+        
+        return "EVENT_RECEIVED", 200
 
-# ==================== WELCOME MESSAGE ====================
 
-@app.route('/send_welcome', methods=['POST'])
-def send_welcome():
-    """
-    Send a welcome message to a specific user (for testing)
-    """
-    data = request.json
-    recipient_id = data.get('recipient_id')
-    
-    welcome_message = (
-        "Hello po! 👋 Salamat sa pag-message sa Ultiphoton Solar Power OPC.\n\n"
-        "I'm your AI assistant, ready to answer any questions about solar energy! ☀️⚡\n\n"
-        "What would you like to know?"
-    )
-    
-    send_message(recipient_id, welcome_message)
-    return {"status": "Welcome message sent"}, 200
-
-# ==================== HEALTH CHECK ====================
-
-@app.route('/health', methods=['GET'])
-def health():
+@app.route("/", methods=["GET"])
+def index():
     """
     Health check endpoint
     """
-    return {
-        "status": "OK",
-        "service": "Ultiphoton AI Chatbot",
-        "page_id": PAGE_ID,
-        "has_access_token": bool(PAGE_ACCESS_TOKEN),
-        "has_api_key": bool(OPENAI_API_KEY)
-    }, 200
+    return {"status": "ok", "message": "Ultiphoton AI Chatbot is running!"}, 200
 
-# ==================== MAIN ====================
 
-if __name__ == '__main__':
-    print("🚀 Starting Ultiphoton AI Chatbot Server (FINAL VERSION)...")
-    print(f"📍 Page ID: {PAGE_ID}")
-    print(f"🔐 Verify Token: {VERIFY_TOKEN}")
-    print("⏳ Listening for messages...\n")
-    
-    # Run on port specified by Render (default 5000)
-    port = int(os.getenv("PORT", 5000))
+if __name__ == "__main__":
+    port = int(os.getenv("PORT", 10000))
     app.run(host="0.0.0.0", port=port, debug=False)
