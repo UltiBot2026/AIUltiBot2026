@@ -461,9 +461,12 @@ Magpadala ng proof of payment! 🏦"""
     },
     
     "accessories": {
-        "keywords": ["railing", "mounting", "accessories", "breaker", "wire", "protection", "device", "meron",
-                    "l foot", "mid clamp", "end clamp", "rail splicer", "grounding", "mc4", "spd",
-                    "dc breaker", "ac breaker", "battery breaker", "clamp", "soeasy", "chint"],
+        "keywords": [
+            # Only GENERIC accessory keywords here — specific items have their own FAQ entries
+            "accessories", "mounting", "mountings", "pv mounting", "pv mountings",
+            "soeasy", "chint", "chyt", "materials", "wire", "protection", "device",
+            "meron", "mga accessories", "mga materials"
+        ],
         "answer_en": """🔧 **Accessories & Materials Price List:**
 
 📌 **PV Mountings (SoEasy Brand):**
