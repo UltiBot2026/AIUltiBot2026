@@ -11,6 +11,8 @@ import os
 import sys
 import time
 import re
+import hmac
+import hashlib
 from datetime import datetime
 from collections import defaultdict
 import sqlite3
@@ -25,6 +27,8 @@ if not PAGE_ACCESS_TOKEN:
 
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "").strip()
 GOOGLE_MAPS_API_KEY = os.getenv("GOOGLE_MAPS_API_KEY", "").strip()
+APP_SECRET = os.getenv("APP_SECRET", "").strip()          # Meta App Secret for webhook signature verification
+ANALYTICS_TOKEN = os.getenv("ANALYTICS_TOKEN", "").strip()  # Bearer token to protect /analytics endpoint
 PAGE_ID = "516699488185698"
 VERIFY_TOKEN = "ultiphoton_solar_verify_2026"
 
@@ -2380,6 +2384,23 @@ def webhook():
         return "Invalid token", 403
     
     elif request.method == "POST":
+        # ── Security: Verify X-Hub-Signature-256 (Meta HMAC) ──────────────────
+        if APP_SECRET:
+            sig_header = request.headers.get("X-Hub-Signature-256", "")
+            if not sig_header.startswith("sha256="):
+                print("⚠️  Webhook: missing X-Hub-Signature-256 header — rejecting request")
+                sys.stdout.flush()
+                return "Forbidden", 403
+            expected_sig = "sha256=" + hmac.new(
+                APP_SECRET.encode("utf-8"),
+                request.get_data(),
+                hashlib.sha256
+            ).hexdigest()
+            if not hmac.compare_digest(sig_header, expected_sig):
+                print("⚠️  Webhook: invalid signature — rejecting request")
+                sys.stdout.flush()
+                return "Forbidden", 403
+        # ──────────────────────────────────────────────────────────────────────
         try:
             data = request.get_json()
             
@@ -2440,7 +2461,19 @@ def webhook():
 
 @app.route("/analytics", methods=["GET"])
 def analytics():
-    """Analytics dashboard endpoint"""
+    """Analytics dashboard endpoint — protected by ANALYTICS_TOKEN bearer auth"""
+    # ── Security: require Bearer token when ANALYTICS_TOKEN env var is set ────────────
+    if ANALYTICS_TOKEN:
+        auth_header = request.headers.get("Authorization", "")
+        token_param = request.args.get("token", "")
+        provided = ""
+        if auth_header.startswith("Bearer "):
+            provided = auth_header[len("Bearer "):].strip()
+        elif token_param:
+            provided = token_param.strip()
+        if not hmac.compare_digest(provided, ANALYTICS_TOKEN):
+            return json.dumps({"error": "Unauthorized"}), 401, {"Content-Type": "application/json"}
+    # ──────────────────────────────────────────────────────────────────────
     try:
         analytics_data = get_analytics_summary()
         return json.dumps(analytics_data, indent=2), 200, {"Content-Type": "application/json"}
