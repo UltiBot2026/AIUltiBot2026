@@ -816,7 +816,9 @@ Makipag-ugnayan para mag-order! ☀️"""
             "3kw", "3 kw", "3kilowatt", "3 kilowatt", "3kva", "3 kva",
             "3kw system", "3kw solar", "3kw installation", "3kw setup",
             "magkano 3kw", "presyo ng 3kw", "estimate 3kw", "quote 3kw",
-            "how much 3kw", "3kw price", "3kw cost"
+            "how much 3kw", "3kw price", "3kw cost",
+            "3kw setup", "magkano 3kw setup", "how much 3kw setup",
+            "3 kw setup", "3kw package", "3kw quote"
         ],
         "answer_en": """☀️ **3 kW Solar System — Supply & Installation Estimate:**
 
@@ -852,7 +854,9 @@ Makipag-ugnayan para sa libreng site assessment! 💚"""
             "5kw", "5 kw", "5kilowatt", "5 kilowatt", "5kva", "5 kva",
             "5kw system", "5kw solar", "5kw installation", "5kw setup",
             "magkano 5kw", "presyo ng 5kw", "estimate 5kw", "quote 5kw",
-            "how much 5kw", "5kw price", "5kw cost"
+            "how much 5kw", "5kw price", "5kw cost",
+            "5kw setup", "magkano 5kw setup", "how much 5kw setup",
+            "5 kw setup", "5kw package", "5kw quote"
         ],
         "answer_en": """☀️ **5 kW Solar System — Supply & Installation Estimate:**
 
@@ -888,7 +892,9 @@ Makipag-ugnayan para sa libreng site assessment! 💚"""
             "8kw", "8 kw", "8kilowatt", "8 kilowatt", "8kva", "8 kva",
             "8kw system", "8kw solar", "8kw installation", "8kw setup",
             "magkano 8kw", "presyo ng 8kw", "estimate 8kw", "quote 8kw",
-            "how much 8kw", "8kw price", "8kw cost"
+            "how much 8kw", "8kw price", "8kw cost",
+            "8kw setup", "magkano 8kw setup", "how much 8kw setup",
+            "8 kw setup", "8kw package", "8kw quote"
         ],
         "answer_en": """☀️ **8 kW Solar System — Supply & Installation Estimate:**
 
@@ -924,7 +930,9 @@ Makipag-ugnayan para sa libreng site assessment! 💚"""
             "10kw", "10 kw", "10kilowatt", "10 kilowatt", "10kva", "10 kva",
             "10kw system", "10kw solar", "10kw installation", "10kw setup",
             "magkano 10kw", "presyo ng 10kw", "estimate 10kw", "quote 10kw",
-            "how much 10kw", "10kw price", "10kw cost"
+            "how much 10kw", "10kw price", "10kw cost",
+            "10kw setup", "magkano 10kw setup", "how much 10kw setup",
+            "10 kw setup", "10kw package", "10kw quote"
         ],
         "answer_en": """☀️ **10 kW Solar System — Supply & Installation Estimate:**
 
@@ -960,7 +968,9 @@ Makipag-ugnayan para sa libreng site assessment! 💚"""
             "12kw", "12 kw", "12kilowatt", "12 kilowatt", "12kva", "12 kva",
             "12kw system", "12kw solar", "12kw installation", "12kw setup",
             "magkano 12kw", "presyo ng 12kw", "estimate 12kw", "quote 12kw",
-            "how much 12kw", "12kw price", "12kw cost"
+            "how much 12kw", "12kw price", "12kw cost",
+            "12kw setup", "magkano 12kw setup", "how much 12kw setup",
+            "12 kw setup", "12kw package", "12kw quote"
         ],
         "answer_en": """☀️ **12 kW Solar System — Supply & Installation Estimate:**
 
@@ -998,7 +1008,9 @@ Makipag-ugnayan para sa libreng site assessment! 💚"""
             "15kw system", "15kw solar", "15kw installation", "15kw setup",
             "magkano 15kw", "presyo ng 15kw", "estimate 15kw", "quote 15kw",
             "how much 15kw", "15kw price", "15kw cost",
-            "magkano 16kw", "16kw price", "16kw cost"
+            "magkano 16kw", "16kw price", "16kw cost",
+            "15kw setup", "magkano 15kw setup", "how much 15kw setup",
+            "16kw setup", "magkano 16kw setup", "15 kw setup", "16 kw setup"
         ],
         "answer_en": """☀️ **15–16 kW Solar System — Supply & Installation Estimate:**
 
@@ -1029,6 +1041,44 @@ Contact us for a free site assessment! 💚""",
 📌 *Maaaring mag-iba ang presyo depende sa brand, uri ng bubong, at complexity ng installation.*
 Makipag-ugnayan para sa libreng site assessment! 💚"""
     },
+    "install_6kw": {
+        "keywords": [
+            "6kw", "6 kw", "6kilowatt", "6 kilowatt", "6kva", "6 kva",
+            "6kw system", "6kw solar", "6kw installation", "6kw setup",
+            "magkano 6kw", "presyo ng 6kw", "estimate 6kw", "quote 6kw",
+            "how much 6kw", "6kw price", "6kw cost",
+            "6kw setup", "magkano 6kw setup", "how much 6kw setup",
+            "6 kw setup", "6kw package", "6kw quote"
+        ],
+        "answer_en": """☀️ **6 kW Solar System — Supply & Installation Estimate:**
+
+⚡ **On-Grid (Grid-Tied, No Battery):**
+- Estimated Cost: ₱300,000 – ₱420,000
+- Best for: Lower upfront cost, faster ROI (4–7 years)
+- Includes: Solar panels, grid-tie inverter, mounting, wiring, labor & basic permits
+
+🔋 **Hybrid (With Battery Backup):**
+- Estimated Cost: ₱420,000 – ₱600,000
+- Best for: Backup during brownouts & night use
+- Includes: Solar panels, hybrid inverter, lithium battery, mounting, wiring & full installation
+
+📌 *Prices may vary depending on brand, roof type, and installation complexity.*
+Contact us for a free site assessment! 💚""",
+        "answer_tl": """☀️ **6 kW Solar System — Estimate ng Presyo (Supply & Installation):**
+
+⚡ **On-Grid (Walang Battery):**
+- Estimated na Halaga: ₱300,000 – ₱420,000
+- Para sa: Mas mababang gastos, mas mabilis na ROI (4–7 taon)
+- Kasama: Solar panels, grid-tie inverter, mounting, wiring, labor at basic permits
+
+🔋 **Hybrid (May Battery Backup):**
+- Estimated na Halaga: ₱420,000 – ₱600,000
+- Para sa: Backup tuwing may brownout at gabi
+- Kasama: Solar panels, hybrid inverter, lithium battery, mounting, wiring at buong installation
+
+📌 *Maaaring mag-iba ang presyo depende sa brand, uri ng bubong, at complexity ng installation.*
+Makipag-ugnayan para sa libreng site assessment! 💚"""
+    },
     "install_general": {
         "keywords": [
             "installation estimate", "installation cost estimate",
@@ -1044,6 +1094,7 @@ Makipag-ugnayan para sa libreng site assessment! 💚"""
 ⚡ **On-Grid (No Battery) — ₱40,000–₱60,000/kW:**
 - 3 kW:  ₱160,000 – ₱235,000
 - 5 kW:  ₱280,000 – ₱380,000
+- 6 kW:  ₱300,000 – ₱420,000
 - 8 kW:  ₱380,000 – ₱500,000
 - 10 kW: ₱420,000 – ₱600,000
 - 12 kW: ₱500,000 – ₱750,000
@@ -1052,18 +1103,20 @@ Makipag-ugnayan para sa libreng site assessment! 💚"""
 🔋 **Hybrid (With Battery) — ₱70,000–₱100,000/kW:**
 - 3 kW:  ₱290,000 – ₱380,000
 - 5 kW:  ₱375,000 – ₱480,000
+- 6 kW:  ₱420,000 – ₱600,000
 - 8 kW:  ₱400,000 – ₱700,000
 - 10 kW: ₱650,000 – ₱950,000
 - 12 kW: ₱800,000 – ₱1,100,000
 - 15–16 kW: ₱950,000 – ₱1,500,000+
 
-📌 *Ask about a specific size (e.g. "3kW", "5kW") for a detailed breakdown.*
+📌 *Ask about a specific size (e.g. "6kW", "8kW") for a detailed breakdown.*
 Contact us for a free site assessment! 💚""",
         "answer_tl": """☀️ **Estimate ng Presyo ng Solar System (Supply & Installation):**
 
 ⚡ **On-Grid (Walang Battery) — ₱40,000–₱60,000/kW:**
 - 3 kW:  ₱160,000 – ₱235,000
 - 5 kW:  ₱280,000 – ₱380,000
+- 6 kW:  ₱300,000 – ₱420,000
 - 8 kW:  ₱380,000 – ₱500,000
 - 10 kW: ₱420,000 – ₱600,000
 - 12 kW: ₱500,000 – ₱750,000
@@ -1072,12 +1125,13 @@ Contact us for a free site assessment! 💚""",
 🔋 **Hybrid (May Battery) — ₱70,000–₱100,000/kW:**
 - 3 kW:  ₱290,000 – ₱380,000
 - 5 kW:  ₱375,000 – ₱480,000
+- 6 kW:  ₱420,000 – ₱600,000
 - 8 kW:  ₱400,000 – ₱700,000
 - 10 kW: ₱650,000 – ₱950,000
 - 12 kW: ₱800,000 – ₱1,100,000
 - 15–16 kW: ₱950,000 – ₱1,500,000+
 
-📌 *Magtanong ng specific na size (hal. "3kW", "5kW") para sa detalyadong breakdown.*
+📌 *Magtanong ng specific na size (hal. "6kW", "8kW") para sa detalyadong breakdown.*
 Makipag-ugnayan para sa libreng site assessment! 💚"""
     },
     "website": {
@@ -1346,7 +1400,7 @@ PER_ITEM_ACCESSORY_KEYS = [
     # Installation estimates — longer kW numbers MUST come before shorter ones
     # (e.g. "15kw" must be checked before "5kw" to avoid substring match)
     "install_15kw", "install_12kw", "install_10kw",
-    "install_8kw", "install_5kw", "install_3kw",
+    "install_8kw", "install_6kw", "install_5kw", "install_3kw",
     "install_general",
 ]
 
