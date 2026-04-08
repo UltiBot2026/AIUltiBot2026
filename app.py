@@ -1386,6 +1386,15 @@ UNIT_PRICES = {
     "pv cable 6mm":   {"price": 85,    "unit": "meter","aliases": ["6mm cable", "6mm wire", "6mm pv cable", "6mm solar wire", "6mm solar cable"]},
     # HDPE Conduit
     "hdpe 25mm":      {"price": 160,   "unit": "meter","aliases": ["hdpe", "hdpe conduit", "hdpe pipe", "hdpe 25", "25mm hdpe", "hdpe conduit 25mm", "hdpe pipe 25mm", "hdpe tubing"]},
+    # Solar Panels (Talesun)
+    "solar panel 620w": {"price": 6100, "unit": "pc", "aliases": [
+        "620w panel", "620w", "620 watt", "620 watt panel", "620w solar", "620w solar panel",
+        "talesun 620w", "talesun 620", "panel 620w", "panel 620", "620"
+    ]},
+    "solar panel 585w": {"price": 5750, "unit": "pc", "aliases": [
+        "585w panel", "585w", "585 watt", "585 watt panel", "585w solar", "585w solar panel",
+        "talesun 585w", "talesun 585", "panel 585w", "panel 585", "585"
+    ]},
 }
 
 # Regex patterns for quantity extraction
