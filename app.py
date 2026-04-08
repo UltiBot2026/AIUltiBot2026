@@ -358,26 +358,26 @@ Makipag-ugnayan sa amin para sa bulk orders! 📞"""
     
     "location": {
         "keywords": ["location", "located", "saan", "address", "office", "branch", "where", "lokasyon"],
-        "answer_en": """📍 **Our Locations:**
+        "answer_en": """📍 Our Locations:
 
-**Main Office — UltiPhoton Solar Muntinlupa:**
+Main Office - UltiPhoton Solar Muntinlupa
 Filinvest, Muntinlupa City
-📌 https://share.google/Qke5XC4NOla3Kq8ef
+https://share.google/Qke5XC4NOla3Kq8ef
 
-**Branch — UltiPhoton Solar Batangas:**
+Branch - UltiPhoton Solar Batangas
 Batangas City
-📌 https://share.google/0IVMOYIrK7UCIlKFw
+https://share.google/0IVMOYIrK7UCIlKFw
 
 Feel free to visit us! ☀️""",
-        "answer_tl": """📍 **Aming Mga Lokasyon:**
+        "answer_tl": """📍 Aming Mga Lokasyon:
 
-**Main Office — UltiPhoton Solar Muntinlupa:**
+Main Office - UltiPhoton Solar Muntinlupa
 Filinvest, Muntinlupa City
-📌 https://share.google/Qke5XC4NOla3Kq8ef
+https://share.google/Qke5XC4NOla3Kq8ef
 
-**Branch — UltiPhoton Solar Batangas:**
+Branch - UltiPhoton Solar Batangas
 Batangas City
-📌 https://share.google/0IVMOYIrK7UCIlKFw
+https://share.google/0IVMOYIrK7UCIlKFw
 
 Bisitahin kami anumang oras! ☀️"""
     },
