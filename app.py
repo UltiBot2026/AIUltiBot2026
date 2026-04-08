@@ -778,6 +778,29 @@ Makipag-ugnayan para sa bulk orders at inverter pricing! 📞"""
         "answer_en": "Battery Breaker DC 250AT (Chint/Chyt): ₱1,700/pc ☀️",
         "answer_tl": "Battery Breaker DC 250AT (Chint/Chyt): ₱1,700/pc ☀️"
     },
+    "pv_cable": {
+        "keywords": [
+            "pv cable", "pv wire", "cable", "wire", "solar wire", "solar cable",
+            "4mm", "6mm", "4mm wire", "6mm wire", "4mm cable", "6mm cable",
+            "meron cable", "meron wire", "may cable", "may wire",
+            "magkano cable", "magkano wire", "presyo ng cable", "presyo ng wire",
+            "pv cable price", "wire price"
+        ],
+        "answer_en": """✅ Yes, PV cables are available!
+
+📌 **PV Cable / Wire:**
+- 4mm: ₱6,100/roll
+- 6mm: ₱7,800/roll
+
+Contact us to order! ☀️""",
+        "answer_tl": """✅ Available po ang PV cables!
+
+📌 **PV Cable / Wire:**
+- 4mm: ₱6,100/roll
+- 6mm: ₱7,800/roll
+
+Makipag-ugnayan para mag-order! ☀️"""
+    },
     "website": {
         "keywords": [
             "website", "web site", "online", "link", "url", "site nyo", "webpage",
