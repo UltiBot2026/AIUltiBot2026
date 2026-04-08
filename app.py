@@ -1362,7 +1362,7 @@ def estimate_lalamove_from_message(message, language="en"):
 UNIT_PRICES = {
     # PV Mountings (SoEasy)
     "railing":        {"price": 600,   "unit": "pc",   "aliases": ["railings", "aluminum railing", "alum railing", "aluminium railing", "2.4m rail", "2.4m railing", "rail 2.4m", "rail", "rails"]},
-    "l-foot":         {"price": 85,    "unit": "pc",   "aliases": ["l foot", "lfoot", "l-feet", "l feet", "lfeet", "l-foots", "l clamp", "l-clamp", "lclamp", "l clamps", "l-clamps"]},
+    "l-foot":         {"price": 85,    "unit": "pc",   "aliases": ["l foot", "lfoot", "l-feet", "l feet", "lfeet", "l-foots", "l clamp", "l-clamp", "lclamp", "l clamps", "l-clamps", "lft", "l ft", "l-ft", "lf"]},
     "mid clamp":      {"price": 85,    "unit": "pc",   "aliases": ["midclamp", "mid-clamp", "middle clamp", "mid clamps"]},
     "end clamp":      {"price": 85,    "unit": "pc",   "aliases": ["endclamp", "end-clamp", "end clamps", "end connector", "end connectors"]},
     "rail splicer":   {"price": 85,    "unit": "pc",   "aliases": ["rail splice", "splicer", "rail connector", "splicer connector", "splice connector", "splicing connector"]},
@@ -1462,7 +1462,8 @@ def parse_cart(message):
     text = message.lower()
     # Normalise separators: commas, semicolons, newlines all become ' , '
     text = _re.sub(r'[,;\n\r]+', ' , ', text)
-    text = _re.sub(r'\b(and|at|&|\+)\b', ' , ', text)
+    # English and Filipino separators
+    text = _re.sub(r'\b(and|at|&|\+|kasama|pati|at saka|tapos|plus|with|including|kasama na)\b', ' , ', text, flags=_re.IGNORECASE)
     # Remove decimal size prefixes like '2.4m' that precede an item name
     # e.g. '14 pcs 2.4m rail' → '14 pcs rail'  (the alias '2.4m rail' handles matching)
     text = _re.sub(r'\b(\d+\.\d+)\s*m\s+', '', text)
@@ -1478,28 +1479,42 @@ def parse_cart(message):
 
     for seg in segments:
         seg = seg.strip()
-        # Strip any leading non-numeric words within a segment
-        seg = _re.sub(r'^[^\d]+(?=\d)', '', seg)
-        # Match qty at the start of each segment
-        m = _re.match(
-            r'^(\d+)\s*(?:pcs?\.?|pieces?|units?|x|rolls?|meters?|mtrs?|m(?=\s))?\s*(.+)$',
+
+        # Pattern B: item BEFORE qty  → "railings 30pcs", "Lft 100pcs"
+        # MUST be checked on the ORIGINAL segment before stripping leading words
+        m_after = _re.match(
+            r'^([a-z][a-z0-9 \-]*)\s+(\d+)\s*(?:pcs?\.?|pieces?|units?|x|rolls?|meters?|mtrs?|m(?=\s))?\s*$',
             seg, _re.IGNORECASE
         )
-        if not m:
-            continue
-        qty = int(m.group(1))
-        raw_name = m.group(2).strip()
-        key, data = _resolve_item(raw_name)
-        if key and key not in seen_keys:
-            seen_keys.add(key)
-            found.append({
-                "qty": qty,
-                "key": key,
-                "label": key.title(),
-                "unit_price": data["price"],
-                "unit": data["unit"],
-                "subtotal": qty * data["price"],
-            })
+
+        # Strip any leading non-numeric words within a segment (for Pattern A)
+        seg_stripped = _re.sub(r'^[^\d]+(?=\d)', '', seg)
+
+        # Pattern A: qty BEFORE item  → "20pcs 620W", "30 railings"
+        m_before = _re.match(
+            r'^(\d+)\s*(?:pcs?\.?|pieces?|units?|x|rolls?|meters?|mtrs?|m(?=\s))?\s*(.+)$',
+            seg_stripped, _re.IGNORECASE
+        )
+
+        candidates = []
+        if m_before:
+            candidates.append((int(m_before.group(1)), m_before.group(2).strip()))
+        if m_after:
+            candidates.append((int(m_after.group(2)), m_after.group(1).strip()))
+
+        for qty, raw_name in candidates:
+            key, data = _resolve_item(raw_name)
+            if key and key not in seen_keys:
+                seen_keys.add(key)
+                found.append({
+                    "qty": qty,
+                    "key": key,
+                    "label": key.title(),
+                    "unit_price": data["price"],
+                    "unit": data["unit"],
+                    "subtotal": qty * data["price"],
+                })
+                break  # stop after first successful match for this segment
     return found
 
 def format_cart_response(cart, language):
