@@ -1215,18 +1215,83 @@ Makikita ninyo doon ang lahat ng impormasyon tungkol sa aming mga produkto at se
 LALAMOVE_ORIGIN = "Batangas City, Batangas, Philippines"
 
 # Lalamove PH published rates (Manila, NCR & South Luzon region)
-# Source: https://www.lalamove.com/en-ph/all-delivery-pricing-detail
+# Source: https://www.lalamove.com/en-ph/all-delivery-pricing-detail (verified 2025)
 LALAMOVE_RATES = [
-    # (max_km, vehicle, base_fare, rate_per_km_tier1, tier1_limit_km, rate_per_km_tier2)
     # Motorcycle: ₱49 base + ₱6/km (0-5km) + ₱5/km (above 5km)
-    {"vehicle": "Motorcycle", "base": 49,  "r1": 6,  "t1": 5,  "r2": 5,  "max_kg": 20},
+    {"vehicle": "Motorcycle (up to 20kg)",  "base": 49,  "r1": 6,  "t1": 5,  "r2": 5,  "max_kg": 20},
     # Sedan 200kg: ₱100 base + ₱18/km (0-5km) + ₱15/km (above 5km)
-    {"vehicle": "Sedan (200kg)", "base": 100, "r1": 18, "t1": 5,  "r2": 15, "max_kg": 200},
-    # MPV 600kg: ₱115 base + ₱20/km (1-30km) + ₱17/km (31-40km)
-    {"vehicle": "MPV (600kg)",   "base": 115, "r1": 20, "t1": 30, "r2": 17, "max_kg": 600},
-    # L300 1000kg: ₱900 base + ₱26/km
-    {"vehicle": "L300 (1000kg)", "base": 900, "r1": 26, "t1": 9999, "r2": 26, "max_kg": 1000},
+    {"vehicle": "Sedan 200kg",              "base": 100, "r1": 18, "t1": 5,  "r2": 15, "max_kg": 200},
+    # 300kg Subcompact SUV: ₱115 base + ₱20/km (1-30km) + ₱17/km (above 30km)
+    {"vehicle": "SUV/Crossover 300kg",      "base": 115, "r1": 20, "t1": 30, "r2": 17, "max_kg": 300},
+    # 600kg 7-seater SUV/Small Van: ₱200 base + ₱20/km (1-30km) + ₱17/km (above 30km)
+    {"vehicle": "MPV/Small Van 600kg",      "base": 200, "r1": 20, "t1": 30, "r2": 17, "max_kg": 600},
+    # 800kg Pickup: ₱240 base + ₱20/km
+    {"vehicle": "Pickup 800kg",             "base": 240, "r1": 20, "t1": 9999, "r2": 20, "max_kg": 800},
+    # L300/Cargo Van 1000kg: ₱280 base + ₱20/km
+    {"vehicle": "L300/Cargo Van 1000kg",    "base": 280, "r1": 20, "t1": 9999, "r2": 20, "max_kg": 1000},
 ]
+
+# Approximate driving distances (km) from Batangas City (Brgy. Bolbok) to common PH destinations
+# Used when Google Maps API key is not available
+BATANGAS_DISTANCE_TABLE = {
+    # Batangas Province
+    "batangas city": 5, "bolbok": 2, "batangas": 5,
+    "lipa": 22, "lipa city": 22,
+    "sto tomas": 35, "santo tomas": 35,
+    "tanauan": 40, "tanauan city": 40,
+    "malvar": 38, "balete": 28, "agoncillo": 30,
+    "nasugbu": 65, "lemery": 45, "san jose": 55,
+    "calaca": 48, "balayan": 52, "calatagan": 70,
+    "lobo": 60, "mabini": 55, "tingloy": 65,
+    "rosario": 35, "san juan": 50, "taysan": 42,
+    "ibaan": 30, "san nicolas": 25, "padre garcia": 38,
+    "cuenca": 32, "alitagtag": 35, "laurel": 45,
+    "mataas na kahoy": 48, "tuy": 58,
+    # Quezon Province
+    "tayabas": 85, "tayabas city": 85,
+    "lucena": 95, "lucena city": 95,
+    "sariaya": 90, "candelaria": 100,
+    "tiaong": 75, "rosario quezon": 80,
+    "pagbilao": 105, "atimonan": 115,
+    # Laguna
+    "calamba": 55, "calamba city": 55,
+    "sta rosa": 65, "santa rosa": 65,
+    "binan": 70, "san pedro": 80,
+    "cabuyao": 68, "bay": 72,
+    "los banos": 78, "los baños": 78,
+    "pagsanjan": 90, "paete": 95,
+    "san pablo": 60, "san pablo city": 60,
+    # Cavite
+    "tagaytay": 45, "silang": 50,
+    "dasmariñas": 70, "dasmarinas": 70,
+    "bacoor": 90, "imus": 88,
+    "cavite city": 95, "general trias": 75,
+    "trece martires": 65, "naic": 72,
+    # Metro Manila
+    "manila": 115, "manila city": 115,
+    "makati": 118, "makati city": 118,
+    "taguig": 112, "pasay": 116,
+    "paranaque": 110, "las pinas": 108,
+    "muntinlupa": 100, "alabang": 102,
+    "pasig": 122, "mandaluyong": 120,
+    "quezon city": 130, "caloocan": 135,
+    "marikina": 128, "valenzuela": 140,
+    "malabon": 138, "navotas": 140,
+    "san juan metro": 122, "pateros": 120,
+}
+
+def _estimate_km_from_address(address):
+    """Estimate driving distance from Batangas City using the lookup table.
+    Returns km (float) or None if address not recognized."""
+    addr_low = address.lower()
+    # Try longest match first
+    best_km = None
+    best_len = 0
+    for place, km in BATANGAS_DISTANCE_TABLE.items():
+        if place in addr_low and len(place) > best_len:
+            best_km = km
+            best_len = len(place)
+    return best_km
 
 def _calc_lalamove_fare(rate, km):
     """Calculate fare for a given rate config and distance in km."""
@@ -1306,26 +1371,30 @@ def estimate_lalamove_from_message(message, language="en"):
     if not address:
         return None
 
-    # Try to get driving distance
+    # Try to get driving distance via Google Maps API first, then fallback to lookup table
     km = _distance_km(LALAMOVE_ORIGIN, address + ", Philippines")
+    km_source = "exact"
+    if km is None:
+        km = _estimate_km_from_address(address)
+        km_source = "estimated"
 
     if km is None:
-        # No API key or geocoding failed — still acknowledge and ask for confirmation
+        # Address not recognized in lookup table either — acknowledge and guide
         if language == "tl":
             return (
                 f"✅ Natanggap namin ang inyong mga detalye!\n\n"
-                f"📍 Delivery Address: {address}\n\n"
+                f"📍 **Delivery Address:** {address}\n\n"
                 f"🚚 Para sa tumpak na presyo ng Lalamove, buksan po ang Lalamove app at i-input ang:\n"
-                f"• Pickup: Batangas City (UltiPhoton Solar)\n"
+                f"• Pickup: UltiPhoton Solar — Brgy. Bolbok, Batangas City\n"
                 f"• Drop-off: {address}\n\n"
                 f"Makipag-ugnayan sa amin para ma-confirm ang inyong order! 📞"
             )
         else:
             return (
                 f"✅ We received your delivery details!\n\n"
-                f"📍 Delivery Address: {address}\n\n"
+                f"📍 **Delivery Address:** {address}\n\n"
                 f"🚚 For the exact Lalamove rate, please open the Lalamove app and enter:\n"
-                f"• Pickup: Batangas City (UltiPhoton Solar)\n"
+                f"• Pickup: UltiPhoton Solar — Brgy. Bolbok, Batangas City\n"
                 f"• Drop-off: {address}\n\n"
                 f"Contact us to confirm your order! 📞"
             )
