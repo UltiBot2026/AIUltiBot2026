@@ -360,24 +360,24 @@ Makipag-ugnayan sa amin para sa bulk orders! 📞"""
         "keywords": ["location", "located", "saan", "address", "office", "branch", "where", "lokasyon"],
         "answer_en": """📍 **Our Locations:**
 
-**Main Office:**
-Filinvest, Muntilupa City
-[Google Map: UltiPhoton Solar Power OPC]
+**Main Office — UltiPhoton Solar Muntinlupa:**
+Filinvest, Muntinlupa City
+📌 https://share.google/Qke5XC4NOla3Kq8ef
 
-**Branch:**
-UltiPhoton Solar Power Batangas
-[Google Map: UltiPhoton Solar Power Batangas]
+**Branch — UltiPhoton Solar Batangas:**
+Batangas City
+📌 https://share.google/0IVMOYIrK7UCIlKFw
 
 Feel free to visit us! ☀️""",
         "answer_tl": """📍 **Aming Mga Lokasyon:**
 
-**Main Office:**
-Filinvest, Muntilupa City
-[Google Map: UltiPhoton Solar Power OPC]
+**Main Office — UltiPhoton Solar Muntinlupa:**
+Filinvest, Muntinlupa City
+📌 https://share.google/Qke5XC4NOla3Kq8ef
 
-**Branch:**
-UltiPhoton Solar Power Batangas
-[Google Map: UltiPhoton Solar Power Batangas]
+**Branch — UltiPhoton Solar Batangas:**
+Batangas City
+📌 https://share.google/0IVMOYIrK7UCIlKFw
 
 Bisitahin kami anumang oras! ☀️"""
     },
