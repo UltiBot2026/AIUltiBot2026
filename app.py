@@ -788,16 +788,24 @@ Makipag-ugnayan para sa bulk orders at inverter pricing! 📞"""
         ],
         "answer_en": """✅ Yes, PV cables are available!
 
-📌 **PV Cable / Wire:**
+📌 **PV Cable / Wire (per roll):**
 - 4mm: ₱6,100/roll
 - 6mm: ₱7,800/roll
+
+📌 **PV Cable / Wire (per meter):**
+- 4mm: ₱61/meter
+- 6mm: ₱78/meter
 
 Contact us to order! ☀️""",
         "answer_tl": """✅ Available po ang PV cables!
 
-📌 **PV Cable / Wire:**
+📌 **PV Cable / Wire (bawat roll):**
 - 4mm: ₱6,100/roll
 - 6mm: ₱7,800/roll
+
+📌 **PV Cable / Wire (bawat metro):**
+- 4mm: ₱61/metro
+- 6mm: ₱78/metro
 
 Makipag-ugnayan para mag-order! ☀️"""
     },
