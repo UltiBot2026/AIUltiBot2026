@@ -2259,6 +2259,38 @@ _PRICE_TIER_INSTALLER = [
 # Threshold for offering installer price
 _INSTALLER_THRESHOLD = 10
 
+def get_recent_wattage_question(user_id):
+    """Recover pending panel qty from recent conversation history.
+    Returns panel_count if the last bot message was a wattage question, else None."""
+    import re as _re
+    try:
+        with db_lock:
+            conn = sqlite3.connect('/tmp/ultiphoton_chatbot.db')
+            cursor = conn.cursor()
+            # Get the last bot response for this user within the last 10 minutes
+            cursor.execute(
+                """SELECT response FROM conversations
+                   WHERE user_id = ? AND faq_matched = 1
+                   AND timestamp >= datetime('now', '-10 minutes')
+                   ORDER BY timestamp DESC LIMIT 1""",
+                (user_id,)
+            )
+            result = cursor.fetchone()
+            conn.close()
+            if result:
+                resp = result[0]
+                # Check if the last bot message was a wattage clarification question
+                if ('620' in resp or '585' in resp) and ('wattage' in resp.lower() or 'reply' in resp.lower() or 'i-reply' in resp.lower() or 'anong' in resp.lower()):
+                    # Extract panel count from the response text
+                    nums = _re.findall(r'(\d+)\s*(?:pcs?|panels?|solar panels?)', resp)
+                    if nums:
+                        qty = int(nums[0])
+                        if 1 <= qty <= 500:
+                            return qty
+            return None
+    except:
+        return None
+
 def detect_panel_qty_no_wattage(user_message):
     """Detect if message asks about N panels WITHOUT specifying wattage.
     Returns panel_count (int) if ambiguous, else None."""
@@ -2912,6 +2944,12 @@ def webhook():
 
                             # ── Step 1b: Check if user is replying with wattage (620/585) ──
                             pending_qty = get_pending_panel_qty(sender_id)
+                            # Fallback: recover panel qty from conversation history if DB state was lost (e.g. after redeploy)
+                            if not pending_qty and not pending_wattage:
+                                pending_qty = get_recent_wattage_question(sender_id)
+                                if pending_qty:
+                                    print(f"🔄 Recovered pending_qty={pending_qty} from conversation history")
+                                    sys.stdout.flush()
                             if pending_qty and not pending_wattage:
                                 wattage_choice = detect_wattage_reply(message)
                                 if wattage_choice:
