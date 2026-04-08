@@ -790,22 +790,22 @@ Makipag-ugnayan para sa bulk orders at inverter pricing! 📞"""
 
 📌 **PV Cable / Wire — Single Core (per roll):**
 - 4mm: ₱6,100/roll
-- 6mm: ₱7,800/roll
+- 6mm: ₱7,500/roll
 
 📌 **PV Cable / Wire — Single Core (per meter):**
 - 4mm: ₱70/meter
-- 6mm: ₱95/meter
+- 6mm: ₱85/meter
 
 Contact us to order! ☀️""",
         "answer_tl": """✅ Yes! Available po ang Single Core PV cables!
 
 📌 **PV Cable / Wire — Single Core (bawat roll):**
 - 4mm: ₱6,100/roll
-- 6mm: ₱7,800/roll
+- 6mm: ₱7,500/roll
 
 📌 **PV Cable / Wire — Single Core (bawat metro):**
 - 4mm: ₱70/metro
-- 6mm: ₱95/metro
+- 6mm: ₱85/metro
 
 Makipag-ugnayan para mag-order! ☀️"""
     },
