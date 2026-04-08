@@ -476,7 +476,7 @@ Magpadala ng proof of payment! 🏦"""
             # Only GENERIC accessory keywords here — specific items have their own FAQ entries
             "accessories", "mounting", "mountings", "pv mounting", "pv mountings",
             "soeasy", "chint", "chyt", "materials", "wire", "protection", "device",
-            "meron", "mga accessories", "mga materials", "hdpe", "conduit"
+            "meron", "mga accessories", "mga materials"
         ],
         "answer_en": """🔧 **Accessories & Materials Price List:**
 
@@ -835,6 +835,22 @@ Contact us to order! ☀️""",
 - 6mm: ₱85/metro
 
 Makipag-ugnayan para mag-order! ☀️"""
+    },
+
+    "hdpe_price": {
+        "keywords": [
+            "hdpe", "hdpe 25mm", "hdpe conduit", "hdpe pipe", "hdpe tubing",
+            "25mm hdpe", "hdpe 25", "conduit", "magkano hdpe", "presyo ng hdpe",
+            "hdpe price", "hdpe cost", "how much hdpe", "meron hdpe"
+        ],
+        "answer_en": """📌 **HDPE Conduit 25mm:**
+- ₱175/meter
+
+Available po! Contact us to order! ☀️""",
+        "answer_tl": """📌 **HDPE Conduit 25mm:**
+- ₱175/metro
+
+Available po! Makipag-ugnayan para mag-order! ☀️"""
     },
 
     # ── Installation Estimate FAQs (per kW, On-Grid & Hybrid) ──────────────────
@@ -1891,7 +1907,7 @@ PER_ITEM_ACCESSORY_KEYS = [
     "l_foot", "mid_clamp", "end_clamp",
     "grounding_lug", "dc_breaker", "ac_breaker", "dc_spd", "ac_spd",
     "mc4", "battery_breaker",
-    "pv_cable",
+    "pv_cable", "hdpe_price",
     # Installation estimates — longer kW numbers MUST come before shorter ones
     # (e.g. "15kw" must be checked before "5kw" to avoid substring match)
     "install_15kw", "install_12kw", "install_10kw",
