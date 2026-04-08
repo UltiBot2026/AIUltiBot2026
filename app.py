@@ -471,7 +471,7 @@ Magpadala ng proof of payment! 🏦"""
             # Only GENERIC accessory keywords here — specific items have their own FAQ entries
             "accessories", "mounting", "mountings", "pv mounting", "pv mountings",
             "soeasy", "chint", "chyt", "materials", "wire", "protection", "device",
-            "meron", "mga accessories", "mga materials"
+            "meron", "mga accessories", "mga materials", "hdpe", "conduit"
         ],
         "answer_en": """🔧 **Accessories & Materials Price List:**
 
@@ -500,6 +500,9 @@ Magpadala ng proof of payment! 🏦"""
 - MC4 30A DC 1000V (Male & Female pair): ₱80/pair
 - Battery Breaker DC 250AT: ₱1,700/pc
 
+📌 **Conduit:**
+- HDPE 25mm: ₱160/meter
+
 Contact us for bulk orders! ⚡""",
         "answer_tl": """🔧 **Listahan ng Presyo ng Accessories & Materials:**
 
@@ -527,6 +530,9 @@ Contact us for bulk orders! ⚡""",
 📌 **Connectors & Others:**
 - MC4 30A DC 1000V (Male & Female pair): ₱80/pair
 - Battery Breaker DC 250AT: ₱1,700/pc
+
+📌 **Conduit:**
+- HDPE 25mm: ₱160/metro
 
 Makipag-ugnayan para sa bulk orders! ⚡"""
     },
@@ -1208,6 +1214,8 @@ UNIT_PRICES = {
     # PV Cable
     "pv cable 4mm":   {"price": 70,    "unit": "meter","aliases": ["4mm cable", "4mm wire", "4mm pv cable", "4mm solar wire", "4mm solar cable"]},
     "pv cable 6mm":   {"price": 85,    "unit": "meter","aliases": ["6mm cable", "6mm wire", "6mm pv cable", "6mm solar wire", "6mm solar cable"]},
+    # HDPE Conduit
+    "hdpe 25mm":      {"price": 160,   "unit": "meter","aliases": ["hdpe", "hdpe conduit", "hdpe pipe", "hdpe 25", "25mm hdpe", "hdpe conduit 25mm", "hdpe pipe 25mm", "hdpe tubing"]},
 }
 
 # Regex patterns for quantity extraction
