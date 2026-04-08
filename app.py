@@ -1593,13 +1593,27 @@ UNIT_PRICES = {
     # HDPE Conduit
     "hdpe 25mm":      {"price": 170,   "unit": "meter","aliases": ["hdpe", "hdpe conduit", "hdpe pipe", "hdpe 25", "25mm hdpe", "hdpe conduit 25mm", "hdpe pipe 25mm", "hdpe tubing"]},
     # Solar Panels (Talesun)
+    # NOTE: generic misspellings (no wattage) default to 620W price
     "solar panel 620w": {"price": 6100, "unit": "pc", "aliases": [
         "620w panel", "620w", "620 watt", "620 watt panel", "620w solar", "620w solar panel",
-        "talesun 620w", "talesun 620", "panel 620w", "panel 620", "620"
+        "talesun 620w", "talesun 620", "panel 620w", "panel 620", "620",
+        # 620W misspellings
+        "620w pannel", "620w pannels", "pannels 620w", "pannel 620w",
+        "620w panal", "620w panals", "620w panle", "620w panles",
+        # Generic panel words (no wattage) — catches misspellings like "pannels", "pannel"
+        "panel", "panels", "pannel", "pannels", "panals", "panal",
+        "panles", "panle", "solar pannel", "solar pannels", "solar panal",
+        "solar panals", "solar panle", "solar panles",
+        "solarpanel", "solarpanels", "solor panel", "solor panels",
+        "soler panel", "soler panels", "solar pane", "solar panes",
+        "solar panels", "solar panel",
     ]},
     "solar panel 585w": {"price": 5750, "unit": "pc", "aliases": [
         "585w panel", "585w", "585 watt", "585 watt panel", "585w solar", "585w solar panel",
-        "talesun 585w", "talesun 585", "panel 585w", "panel 585", "585"
+        "talesun 585w", "talesun 585", "panel 585w", "panel 585", "585",
+        # 585W misspellings
+        "585w pannel", "585w pannels", "pannels 585w", "pannel 585w",
+        "585w panal", "585w panals", "585w panle", "585w panles",
     ]},
     # GoodWe Inverters
     "goodwe inverter 8kw": {"price": 72000, "unit": "pc", "aliases": [
