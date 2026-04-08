@@ -708,6 +708,67 @@ Makipag-ugnayan para sa bulk orders at inverter pricing! 📞"""
         "answer_en": "[excel:full_pricelist]",
         "answer_tl": "[excel:full_pricelist]"
     },
+    # --- Per-item accessory FAQs (specific items return only their own price) ---
+    "railing": {
+        "keywords": ["railing", "railings", "aluminum railing", "rail", "rails", "magkano railing", "presyo ng railing", "railing price"],
+        "answer_en": "Aluminum Railing 2.4m (SoEasy): ₱600/pc ☀️",
+        "answer_tl": "Aluminum Railing 2.4m (SoEasy): ₱600/pc ☀️"
+    },
+    "l_foot": {
+        "keywords": ["l foot", "l-foot", "lfoot", "magkano l foot", "presyo ng l foot"],
+        "answer_en": "L Foot (SoEasy): ₱95/pc ☀️",
+        "answer_tl": "L Foot (SoEasy): ₱95/pc ☀️"
+    },
+    "mid_clamp": {
+        "keywords": ["mid clamp", "mid-clamp", "midclamp", "magkano mid clamp", "presyo ng mid clamp"],
+        "answer_en": "Mid Clamp (SoEasy): ₱85/pc ☀️",
+        "answer_tl": "Mid Clamp (SoEasy): ₱85/pc ☀️"
+    },
+    "end_clamp": {
+        "keywords": ["end clamp", "end-clamp", "endclamp", "magkano end clamp", "presyo ng end clamp"],
+        "answer_en": "End Clamp (SoEasy): ₱85/pc ☀️",
+        "answer_tl": "End Clamp (SoEasy): ₱85/pc ☀️"
+    },
+    "rail_splicer": {
+        "keywords": ["rail splicer", "rail-splicer", "railsplicer", "splicer", "magkano splicer"],
+        "answer_en": "Rail Splicer (SoEasy): ₱85/pc ☀️",
+        "answer_tl": "Rail Splicer (SoEasy): ₱85/pc ☀️"
+    },
+    "grounding_lug": {
+        "keywords": ["grounding lug", "grounding-lug", "groundinglug", "grounding", "lug", "pv grounding"],
+        "answer_en": "PV Grounding Lug (SoEasy): ₱70/pc ☀️",
+        "answer_tl": "PV Grounding Lug (SoEasy): ₱70/pc ☀️"
+    },
+    "dc_breaker": {
+        "keywords": ["dc breaker", "dc-breaker", "dcbreaker", "20a breaker", "20a 2p", "magkano dc breaker", "presyo ng dc breaker"],
+        "answer_en": "DC Breaker 20A, 2P (Chint/Chyt): ₱680/pc ☀️",
+        "answer_tl": "DC Breaker 20A, 2P (Chint/Chyt): ₱680/pc ☀️"
+    },
+    "ac_breaker": {
+        "keywords": ["ac breaker", "ac-breaker", "acbreaker", "magkano ac breaker", "presyo ng ac breaker", "40a", "63a", "100a"],
+        "answer_en": "AC Breakers (Chint/Chyt):\n- 40A, 2P: ₱750/pc\n- 63A, 2P: ₱750/pc\n- 100A, 2P: ₱1,300/pc ☀️",
+        "answer_tl": "AC Breakers (Chint/Chyt):\n- 40A, 2P: ₱750/pc\n- 63A, 2P: ₱750/pc\n- 100A, 2P: ₱1,300/pc ☀️"
+    },
+    "dc_spd": {
+        "keywords": ["dc spd", "dc-spd", "dcspd", "1200v spd", "1200vdc", "magkano dc spd", "presyo ng dc spd"],
+        "answer_en": "DC SPD 1200VDC 40kA (Chint/Chyt): ₱780/pc ☀️",
+        "answer_tl": "DC SPD 1200VDC 40kA (Chint/Chyt): ₱780/pc ☀️"
+    },
+    "ac_spd": {
+        "keywords": ["ac spd", "ac-spd", "acspd", "400v spd", "385v spd", "magkano ac spd", "presyo ng ac spd"],
+        "answer_en": "AC SPD (Chint/Chyt):\n- 2P 400V: ₱580/pc\n- 4P 385V: ₱980/pc ☀️",
+        "answer_tl": "AC SPD (Chint/Chyt):\n- 2P 400V: ₱580/pc\n- 4P 385V: ₱980/pc ☀️"
+    },
+    "mc4": {
+        "keywords": ["mc4", "mc-4", "connector", "connectors", "male female pair", "magkano mc4", "presyo ng mc4"],
+        "answer_en": "MC4 30A DC 1000V Male & Female Pair (Chint/Chyt): ₱80/pair ☀️",
+        "answer_tl": "MC4 30A DC 1000V Male & Female Pair (Chint/Chyt): ₱80/pair ☀️"
+    },
+    "battery_breaker": {
+        "keywords": ["battery breaker", "battery-breaker", "250at", "dc 250at", "magkano battery breaker", "presyo ng battery breaker"],
+        "answer_en": "Battery Breaker DC 250AT (Chint/Chyt): ₱1,700/pc ☀️",
+        "answer_tl": "Battery Breaker DC 250AT (Chint/Chyt): ₱1,700/pc ☀️"
+    },
     "website": {
         "keywords": [
             "website", "web site", "online", "link", "url", "site nyo", "webpage",
@@ -929,12 +990,19 @@ def get_after_hours_note(language):
                 "(Mon–Sun, 8AM–6PM PH Time). You have received an automated reply. "
                 "Our team will follow up with you on the next business day! 💚")
 
-# Keywords that are specific to accessories/materials — must be checked BEFORE generic pricing keywords
-ACCESSORY_SPECIFIC_KEYWORDS = {
-    "railing", "railings", "mounting", "mountings", "l foot", "mid clamp", "end clamp",
-    "rail splicer", "grounding lug", "grounding", "mc4", "spd", "dc breaker", "ac breaker",
-    "battery breaker", "clamp", "soeasy", "chint", "chyt", "breaker", "surge protection",
-    "connector", "connectors", "dc spd", "ac spd", "aluminum railing"
+# Per-item accessory FAQ keys — checked BEFORE the full accessories list
+# Order matters: more specific items first (e.g. dc_breaker before ac_breaker)
+PER_ITEM_ACCESSORY_KEYS = [
+    "rail_splicer", "railing",   # rail_splicer MUST come before railing (substring issue)
+    "l_foot", "mid_clamp", "end_clamp",
+    "grounding_lug", "dc_breaker", "ac_breaker", "dc_spd", "ac_spd",
+    "mc4", "battery_breaker"
+]
+
+# Keywords that trigger the FULL accessories list (only if no per-item match)
+ACCESSORY_FULL_LIST_KEYWORDS = {
+    "mounting", "mountings", "soeasy", "chint", "chyt", "surge protection",
+    "accessories", "materials", "pv mounting"
 }
 
 # Keywords that are specific to solar panels — must be checked BEFORE generic pricing keywords
@@ -944,31 +1012,43 @@ SOLAR_SPECIFIC_KEYWORDS = {
 }
 
 def find_matching_faq(user_message):
-    """Find matching FAQ with priority: specific product keywords win over generic pricing words."""
+    """Find matching FAQ with priority:
+    1. Per-item accessory keywords (railing, mc4, dc breaker, etc.) — most specific
+    2. Full accessories list (generic accessory queries)
+    3. Solar-panel-specific keywords
+    4. All other FAQs via their keyword lists
+    5. Fallback to accessories / solar_panel_price via their generic keywords
+    """
     message_lower = user_message.lower()
 
-    # --- PASS 1: Check accessories-specific keywords first ---
-    # This prevents "magkano ang railings?" from matching solar_panel_price via "magkano"
-    for kw in ACCESSORY_SPECIFIC_KEYWORDS:
+    # --- PASS 1: Per-item accessory keywords (most specific) ---
+    for item_key in PER_ITEM_ACCESSORY_KEYS:
+        faq_data = FAQS.get(item_key)
+        if faq_data:
+            for keyword in faq_data["keywords"]:
+                if keyword.lower() in message_lower:
+                    return item_key, faq_data
+
+    # --- PASS 2: Full accessories list (generic accessory queries) ---
+    for kw in ACCESSORY_FULL_LIST_KEYWORDS:
         if kw in message_lower:
             return "accessories", FAQS["accessories"]
 
-    # --- PASS 2: Check solar-panel-specific keywords ---
+    # --- PASS 3: Check solar-panel-specific keywords ---
     for kw in SOLAR_SPECIFIC_KEYWORDS:
         if kw in message_lower:
             return "solar_panel_price", FAQS["solar_panel_price"]
 
-    # --- PASS 3: Normal FAQ loop for all other FAQs (skipping accessories & solar_panel_price
-    #             since they were already handled above) ---
-    SKIP_IN_PASS3 = {"accessories", "solar_panel_price"}
+    # --- PASS 4: Normal FAQ loop (skip per-item, accessories, solar_panel_price) ---
+    SKIP_IN_PASS4 = set(PER_ITEM_ACCESSORY_KEYS) | {"accessories", "solar_panel_price"}
     for faq_key, faq_data in FAQS.items():
-        if faq_key in SKIP_IN_PASS3:
+        if faq_key in SKIP_IN_PASS4:
             continue
         for keyword in faq_data["keywords"]:
             if keyword.lower() in message_lower:
                 return faq_key, faq_data
 
-    # --- PASS 4: Fall back to accessories / solar_panel_price via generic keywords ---
+    # --- PASS 5: Fall back to accessories / solar_panel_price via their generic keywords ---
     for faq_key in ("accessories", "solar_panel_price"):
         faq_data = FAQS[faq_key]
         for keyword in faq_data["keywords"]:
