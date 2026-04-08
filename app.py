@@ -1670,6 +1670,8 @@ def parse_cart(message):
 
     # Strip leading non-numeric words (e.g. "magkano total", "how much", "bale eto order ko")
     text = _re.sub(r'^[^\d,]+(?=\d)', '', text)
+    # Strip trailing Filipino filler words (e.g. "po sana", "po lang", "po", "lang", "nalang")
+    text = _re.sub(r'\b(po sana|po lang|po na|po|lang|nalang|na lang|sana|daw|raw)\b\s*$', '', text, flags=_re.IGNORECASE)
 
     # Split on commas to get individual item segments
     segments = [s.strip() for s in text.split(',') if s.strip()]
@@ -1679,6 +1681,8 @@ def parse_cart(message):
 
     for seg in segments:
         seg = seg.strip()
+        # Strip trailing Filipino filler words from each segment
+        seg = _re.sub(r'\\b(po sana|po lang|po na|po|lang|nalang|na lang|sana|daw|raw)\\b\\s*$', '', seg, flags=_re.IGNORECASE).strip()
 
         # Pattern B: item BEFORE qty  → "railings 30pcs", "Lft 100pcs"
         # MUST be checked on the ORIGINAL segment before stripping leading words
@@ -2409,11 +2413,6 @@ def webhook():
                                 mark_first_message_sent(sender_id)
                                 time.sleep(0.3)
                             
-                            # 24/7 mode: always respond, but append after-hours note if outside business hours
-                            after_hours_note = None
-                            if not is_business_hours():
-                                after_hours_note = get_after_hours_note(language)
-                            
                             # Send typing indicator
                             send_typing_indicator(sender_id)
                             time.sleep(0.3)
@@ -2431,10 +2430,6 @@ def webhook():
                             # Send response with quick replies
                             send_message_with_quick_replies(sender_id, response_text, language)
                             
-                            # If outside business hours, send a brief follow-up note
-                            if after_hours_note:
-                                time.sleep(0.2)
-                                send_message(sender_id, after_hours_note)
             
             return "EVENT_RECEIVED", 200
             
