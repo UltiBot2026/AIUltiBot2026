@@ -552,6 +552,11 @@ Makipag-ugnayan para sa bulk orders! ⚡"""
 ✅ **SRNE** - 5 years warranty
 ✅ **Sigenergy** - 10 years warranty
 
+📌 **GoodWe Inverter Pricing:**
+- 8 kW: ₱72,000
+- 10 kW: ₱83,000
+- 12 kW: ₱92,000
+
 All brands are high-quality and reliable for Philippine climate! 🌞""",
         "answer_tl": """⚡ **Available Inverter Brands:**
 
@@ -560,6 +565,11 @@ All brands are high-quality and reliable for Philippine climate! 🌞""",
 ✅ **GoodWe** - 5 taong warranty
 ✅ **SRNE** - 5 taong warranty
 ✅ **Sigenergy** - 10 taong warranty
+
+📌 **Presyo ng GoodWe Inverter:**
+- 8 kW: ₱72,000
+- 10 kW: ₱83,000
+- 12 kW: ₱92,000
 
 Lahat ay high-quality at reliable! 🌞"""
     },
@@ -1394,6 +1404,19 @@ UNIT_PRICES = {
     "solar panel 585w": {"price": 5750, "unit": "pc", "aliases": [
         "585w panel", "585w", "585 watt", "585 watt panel", "585w solar", "585w solar panel",
         "talesun 585w", "talesun 585", "panel 585w", "panel 585", "585"
+    ]},
+    # GoodWe Inverters
+    "goodwe inverter 8kw": {"price": 72000, "unit": "pc", "aliases": [
+        "goodwe 8kw", "goodwe 8k", "8kw inverter", "8kw goodwe", "inverter 8kw",
+        "8k inverter", "8kw gw", "gw 8kw", "goodwe8kw"
+    ]},
+    "goodwe inverter 10kw": {"price": 83000, "unit": "pc", "aliases": [
+        "goodwe 10kw", "goodwe 10k", "10kw inverter", "10kw goodwe", "inverter 10kw",
+        "10k inverter", "10kw gw", "gw 10kw", "goodwe10kw"
+    ]},
+    "goodwe inverter 12kw": {"price": 92000, "unit": "pc", "aliases": [
+        "goodwe 12kw", "goodwe 12k", "12kw inverter", "12kw goodwe", "inverter 12kw",
+        "12k inverter", "12kw gw", "gw 12kw", "goodwe12kw"
     ]},
 }
 
