@@ -856,7 +856,7 @@ Makipag-ugnayan para sa bulk orders at inverter pricing! 📞"""
     },
     # --- Per-item accessory FAQs (specific items return only their own price) ---
     "railing": {
-        "keywords": ["railing", "railings", "aluminum railing", "rail", "rails", "magkano railing", "presyo ng railing", "railing price"],
+        "keywords": ["railing", "railings", "aluminum railing", "rail", "rails", "magkano railing", "presyo ng railing", "railing price", "solar rail", "solar rails", "solar railing", "pv rail", "mounting rail", "panel rail"],
         "answer_en": "Aluminum Railing 2.4m (SoEasy): ₱600/pc ☀️",
         "answer_tl": "Aluminum Railing 2.4m (SoEasy): ₱600/pc ☀️"
     },
@@ -876,7 +876,7 @@ Makipag-ugnayan para sa bulk orders at inverter pricing! 📞"""
         "answer_tl": "End Clamp (SoEasy): ₱85/pc ☀️"
     },
     "rail_splicer": {
-        "keywords": ["rail splicer", "rail-splicer", "railsplicer", "splicer", "magkano splicer"],
+        "keywords": ["rail splicer", "rail-splicer", "railsplicer", "splicer", "magkano splicer", "splice kit", "splicing kit", "rail jointer", "rail joiner", "jointer", "joiner", "rail coupling", "coupling", "splice"],
         "answer_en": "Rail Splicer (SoEasy): ₱85/pc ☀️",
         "answer_tl": "Rail Splicer (SoEasy): ₱85/pc ☀️"
     },
@@ -1572,11 +1572,11 @@ def estimate_lalamove_from_message(message, language="en"):
 
 UNIT_PRICES = {
     # PV Mountings (SoEasy)
-    "railing":        {"price": 600,   "unit": "pc",   "aliases": ["railings", "aluminum railing", "alum railing", "aluminium railing", "2.4m rail", "2.4m railing", "rail 2.4m", "rail", "rails"]},
+    "railing":        {"price": 600,   "unit": "pc",   "aliases": ["railings", "aluminum railing", "alum railing", "aluminium railing", "2.4m rail", "2.4m railing", "rail 2.4m", "rail", "rails", "solar rail", "solar rails", "solar railing", "solar railings", "pv rail", "pv rails", "mounting rail", "mounting rails", "panel rail", "panel rails"]},
     "l-foot":         {"price": 95,    "unit": "pc",   "aliases": ["l foot", "lfoot", "l-feet", "l feet", "lfeet", "l-foots", "l clamp", "l-clamp", "lclamp", "l clamps", "l-clamps", "lft", "l ft", "l-ft", "lf"]},
     "mid clamp":      {"price": 85,    "unit": "pc",   "aliases": ["midclamp", "mid-clamp", "middle clamp", "mid clamps"]},
     "end clamp":      {"price": 85,    "unit": "pc",   "aliases": ["endclamp", "end-clamp", "end clamps", "end connector", "end connectors"]},
-    "rail splicer":   {"price": 85,    "unit": "pc",   "aliases": ["rail splice", "splicer", "rail connector", "splicer connector", "splice connector", "splicing connector"]},
+    "rail splicer":   {"price": 85,    "unit": "pc",   "aliases": ["rail splice", "splicer", "rail connector", "splicer connector", "splice connector", "splicing connector", "splice kit", "splicing kit", "rail jointer", "rail joint", "rail joiner", "jointer", "joiner", "rail coupling", "coupling", "rail splice kit", "splice"]},
     "pv grounding lug": {"price": 70, "unit": "pc",   "aliases": ["grounding lug", "grounding lugs", "ground lug", "ground lugs", "pv lug", "pv lugs", "grounding"]},
     # DC Breakers
     "dc breaker":     {"price": 680,   "unit": "pc",   "aliases": ["dc circuit breaker", "dc cb", "dc breakers", "dc braker"]},
