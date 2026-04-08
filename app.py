@@ -86,9 +86,15 @@ def init_database():
                     user_id TEXT PRIMARY KEY,
                     language TEXT DEFAULT 'auto',
                     first_message_sent BOOLEAN DEFAULT 0,
+                    last_greeting_date TEXT DEFAULT NULL,
                     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
                 )
             ''')
+            # Migration: add last_greeting_date column if it doesn't exist yet
+            try:
+                cursor.execute('ALTER TABLE user_preferences ADD COLUMN last_greeting_date TEXT DEFAULT NULL')
+            except Exception:
+                pass  # Column already exists
             
             conn.commit()
             conn.close()
@@ -833,31 +839,51 @@ def get_user_language(user_id):
     except:
         return "auto"
 
-def is_first_message(user_id):
-    """Check if this is user's first message"""
+def _ph_today():
+    """Return today's date string in Philippine Time (UTC+8)."""
+    from datetime import datetime, timezone, timedelta
+    ph_tz = timezone(timedelta(hours=8))
+    return datetime.now(ph_tz).strftime("%Y-%m-%d")
+
+def should_send_greeting(user_id):
+    """Return True if the greeting has NOT been sent today (PH Time) for this user."""
     try:
+        today = _ph_today()
         with db_lock:
             conn = sqlite3.connect('/tmp/ultiphoton_chatbot.db')
             cursor = conn.cursor()
-            cursor.execute('SELECT first_message_sent FROM user_preferences WHERE user_id = ?', (user_id,))
+            cursor.execute('SELECT last_greeting_date FROM user_preferences WHERE user_id = ?', (user_id,))
             result = cursor.fetchone()
             conn.close()
-            return not result or not result[0]
+        # Send greeting if no record yet, or last greeting was on a previous day
+        return (not result) or (result[0] != today)
     except:
         return True
 
-def mark_first_message_sent(user_id):
-    """Mark that first message has been sent to user"""
+def mark_greeting_sent(user_id):
+    """Record that the greeting was sent today (PH Time) for this user."""
     try:
+        today = _ph_today()
         with db_lock:
             conn = sqlite3.connect('/tmp/ultiphoton_chatbot.db')
             cursor = conn.cursor()
-            cursor.execute('INSERT OR REPLACE INTO user_preferences (user_id, first_message_sent) VALUES (?, 1)', (user_id,))
+            cursor.execute(
+                'INSERT INTO user_preferences (user_id, last_greeting_date, first_message_sent) VALUES (?, ?, 1) '
+                'ON CONFLICT(user_id) DO UPDATE SET last_greeting_date=excluded.last_greeting_date',
+                (user_id, today)
+            )
             conn.commit()
             conn.close()
     except Exception as e:
-        print(f"❌ Error marking first message: {str(e)}")
+        print(f"❌ Error marking greeting sent: {str(e)}")
         sys.stdout.flush()
+
+# Keep old names as aliases so nothing else breaks
+def is_first_message(user_id):
+    return should_send_greeting(user_id)
+
+def mark_first_message_sent(user_id):
+    mark_greeting_sent(user_id)
 
 def save_conversation(user_id, message, response, language, faq_matched):
     """Save conversation to database for analytics"""
