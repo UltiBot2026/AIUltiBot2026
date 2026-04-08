@@ -326,6 +326,14 @@ def build_accessories_answer(lang="en"):
             for p in items:
                 lines.append(f"- {p['item']}: {p['price']}")
 
+    # HDPE conduit — hardcoded since it's not in the Excel sheet
+    if lang == "tl":
+        lines.append("\n📌 *Conduit:*")
+        lines.append("- HDPE 25mm: ₱175/metro")
+    else:
+        lines.append("\n📌 *Conduit:*")
+        lines.append("- HDPE 25mm: ₱175/meter")
+
     if lang == "tl":
         lines.append("\nMakipag-ugnayan para sa bulk orders! ⚡")
     else:
