@@ -870,8 +870,31 @@ def get_user_language(user_id):
     except:
         return "auto"
 
+# ── Persistent greeting store (survives server restarts) ─────────────────────
+# Stored as a JSON file alongside app.py so Render keeps it between deploys.
+# Format: { "<user_id>": "YYYY-MM-DD", ... }
+import json as _json
+
+_GREETING_FILE = _os.path.join(_os.path.dirname(_os.path.abspath(__file__)), "greeting_dates.json")
+_greeting_lock = Lock()
+
+def _load_greeting_store():
+    try:
+        with open(_GREETING_FILE, "r") as f:
+            return _json.load(f)
+    except Exception:
+        return {}
+
+def _save_greeting_store(store):
+    try:
+        with open(_GREETING_FILE, "w") as f:
+            _json.dump(store, f)
+    except Exception as e:
+        print(f"❌ Error saving greeting store: {e}")
+        sys.stdout.flush()
+
 def _ph_today():
-    """Return today's date string in Philippine Time (UTC+8)."""
+    """Return today's date string in Philippine Time (UTC+8), resets at midnight PH."""
     from datetime import datetime, timezone, timedelta
     ph_tz = timezone(timedelta(hours=8))
     return datetime.now(ph_tz).strftime("%Y-%m-%d")
@@ -880,33 +903,24 @@ def should_send_greeting(user_id):
     """Return True if the greeting has NOT been sent today (PH Time) for this user."""
     try:
         today = _ph_today()
-        with db_lock:
-            conn = sqlite3.connect('/tmp/ultiphoton_chatbot.db')
-            cursor = conn.cursor()
-            cursor.execute('SELECT last_greeting_date FROM user_preferences WHERE user_id = ?', (user_id,))
-            result = cursor.fetchone()
-            conn.close()
-        # Send greeting if no record yet, or last greeting was on a previous day
-        return (not result) or (result[0] != today)
-    except:
+        with _greeting_lock:
+            store = _load_greeting_store()
+        return store.get(str(user_id)) != today
+    except Exception:
         return True
 
 def mark_greeting_sent(user_id):
     """Record that the greeting was sent today (PH Time) for this user."""
     try:
         today = _ph_today()
-        with db_lock:
-            conn = sqlite3.connect('/tmp/ultiphoton_chatbot.db')
-            cursor = conn.cursor()
-            cursor.execute(
-                'INSERT INTO user_preferences (user_id, last_greeting_date, first_message_sent) VALUES (?, ?, 1) '
-                'ON CONFLICT(user_id) DO UPDATE SET last_greeting_date=excluded.last_greeting_date',
-                (user_id, today)
-            )
-            conn.commit()
-            conn.close()
+        with _greeting_lock:
+            store = _load_greeting_store()
+            store[str(user_id)] = today
+            _save_greeting_store(store)
+        print(f"✅ Greeting marked for {user_id} on {today}")
+        sys.stdout.flush()
     except Exception as e:
-        print(f"❌ Error marking greeting sent: {str(e)}")
+        print(f"❌ Error marking greeting sent: {e}")
         sys.stdout.flush()
 
 # Keep old names as aliases so nothing else breaks
