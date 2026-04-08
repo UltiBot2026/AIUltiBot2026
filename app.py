@@ -809,6 +809,277 @@ Contact us to order! ☀️""",
 
 Makipag-ugnayan para mag-order! ☀️"""
     },
+
+    # ── Installation Estimate FAQs (per kW, On-Grid & Hybrid) ──────────────────
+    "install_3kw": {
+        "keywords": [
+            "3kw", "3 kw", "3kilowatt", "3 kilowatt", "3kva", "3 kva",
+            "3kw system", "3kw solar", "3kw installation", "3kw setup",
+            "magkano 3kw", "presyo ng 3kw", "estimate 3kw", "quote 3kw",
+            "how much 3kw", "3kw price", "3kw cost"
+        ],
+        "answer_en": """☀️ **3 kW Solar System — Supply & Installation Estimate:**
+
+⚡ **On-Grid (Grid-Tied, No Battery):**
+- Estimated Cost: ₱160,000 – ₱235,000
+- Best for: Lower upfront cost, faster ROI (4–7 years)
+- Includes: Solar panels, grid-tie inverter, mounting, wiring, labor & basic permits
+
+🔋 **Hybrid (With Battery Backup):**
+- Estimated Cost: ₱290,000 – ₱380,000
+- Best for: Backup during brownouts & night use
+- Includes: Solar panels, hybrid inverter, lithium battery, mounting, wiring & full installation
+
+📌 *Prices may vary depending on brand, roof type, and installation complexity.*
+Contact us for a free site assessment! 💚""",
+        "answer_tl": """☀️ **3 kW Solar System — Estimate ng Presyo (Supply & Installation):**
+
+⚡ **On-Grid (Walang Battery):**
+- Estimated na Halaga: ₱160,000 – ₱235,000
+- Para sa: Mas mababang gastos, mas mabilis na ROI (4–7 taon)
+- Kasama: Solar panels, grid-tie inverter, mounting, wiring, labor at basic permits
+
+🔋 **Hybrid (May Battery Backup):**
+- Estimated na Halaga: ₱290,000 – ₱380,000
+- Para sa: Backup tuwing may brownout at gabi
+- Kasama: Solar panels, hybrid inverter, lithium battery, mounting, wiring at buong installation
+
+📌 *Maaaring mag-iba ang presyo depende sa brand, uri ng bubong, at complexity ng installation.*
+Makipag-ugnayan para sa libreng site assessment! 💚"""
+    },
+    "install_5kw": {
+        "keywords": [
+            "5kw", "5 kw", "5kilowatt", "5 kilowatt", "5kva", "5 kva",
+            "5kw system", "5kw solar", "5kw installation", "5kw setup",
+            "magkano 5kw", "presyo ng 5kw", "estimate 5kw", "quote 5kw",
+            "how much 5kw", "5kw price", "5kw cost"
+        ],
+        "answer_en": """☀️ **5 kW Solar System — Supply & Installation Estimate:**
+
+⚡ **On-Grid (Grid-Tied, No Battery):**
+- Estimated Cost: ₱280,000 – ₱380,000
+- Best for: Lower upfront cost, faster ROI (4–7 years)
+- Includes: Solar panels, grid-tie inverter, mounting, wiring, labor & basic permits
+
+🔋 **Hybrid (With Battery Backup):**
+- Estimated Cost: ₱375,000 – ₱480,000
+- Best for: Backup during brownouts & night use
+- Includes: Solar panels, hybrid inverter, lithium battery, mounting, wiring & full installation
+
+📌 *Prices may vary depending on brand, roof type, and installation complexity.*
+Contact us for a free site assessment! 💚""",
+        "answer_tl": """☀️ **5 kW Solar System — Estimate ng Presyo (Supply & Installation):**
+
+⚡ **On-Grid (Walang Battery):**
+- Estimated na Halaga: ₱280,000 – ₱380,000
+- Para sa: Mas mababang gastos, mas mabilis na ROI (4–7 taon)
+- Kasama: Solar panels, grid-tie inverter, mounting, wiring, labor at basic permits
+
+🔋 **Hybrid (May Battery Backup):**
+- Estimated na Halaga: ₱375,000 – ₱480,000
+- Para sa: Backup tuwing may brownout at gabi
+- Kasama: Solar panels, hybrid inverter, lithium battery, mounting, wiring at buong installation
+
+📌 *Maaaring mag-iba ang presyo depende sa brand, uri ng bubong, at complexity ng installation.*
+Makipag-ugnayan para sa libreng site assessment! 💚"""
+    },
+    "install_8kw": {
+        "keywords": [
+            "8kw", "8 kw", "8kilowatt", "8 kilowatt", "8kva", "8 kva",
+            "8kw system", "8kw solar", "8kw installation", "8kw setup",
+            "magkano 8kw", "presyo ng 8kw", "estimate 8kw", "quote 8kw",
+            "how much 8kw", "8kw price", "8kw cost"
+        ],
+        "answer_en": """☀️ **8 kW Solar System — Supply & Installation Estimate:**
+
+⚡ **On-Grid (Grid-Tied, No Battery):**
+- Estimated Cost: ₱380,000 – ₱500,000
+- Best for: Lower upfront cost, faster ROI (4–7 years)
+- Includes: Solar panels, grid-tie inverter, mounting, wiring, labor & basic permits
+
+🔋 **Hybrid (With Battery Backup):**
+- Estimated Cost: ₱400,000 – ₱700,000
+- Best for: Backup during brownouts & night use
+- Includes: Solar panels, hybrid inverter, lithium battery, mounting, wiring & full installation
+
+📌 *Prices may vary depending on brand, roof type, and installation complexity.*
+Contact us for a free site assessment! 💚""",
+        "answer_tl": """☀️ **8 kW Solar System — Estimate ng Presyo (Supply & Installation):**
+
+⚡ **On-Grid (Walang Battery):**
+- Estimated na Halaga: ₱380,000 – ₱500,000
+- Para sa: Mas mababang gastos, mas mabilis na ROI (4–7 taon)
+- Kasama: Solar panels, grid-tie inverter, mounting, wiring, labor at basic permits
+
+🔋 **Hybrid (May Battery Backup):**
+- Estimated na Halaga: ₱400,000 – ₱700,000
+- Para sa: Backup tuwing may brownout at gabi
+- Kasama: Solar panels, hybrid inverter, lithium battery, mounting, wiring at buong installation
+
+📌 *Maaaring mag-iba ang presyo depende sa brand, uri ng bubong, at complexity ng installation.*
+Makipag-ugnayan para sa libreng site assessment! 💚"""
+    },
+    "install_10kw": {
+        "keywords": [
+            "10kw", "10 kw", "10kilowatt", "10 kilowatt", "10kva", "10 kva",
+            "10kw system", "10kw solar", "10kw installation", "10kw setup",
+            "magkano 10kw", "presyo ng 10kw", "estimate 10kw", "quote 10kw",
+            "how much 10kw", "10kw price", "10kw cost"
+        ],
+        "answer_en": """☀️ **10 kW Solar System — Supply & Installation Estimate:**
+
+⚡ **On-Grid (Grid-Tied, No Battery):**
+- Estimated Cost: ₱420,000 – ₱600,000
+- Best for: Lower upfront cost, faster ROI (4–7 years)
+- Includes: Solar panels, grid-tie inverter, mounting, wiring, labor & basic permits
+
+🔋 **Hybrid (With Battery Backup):**
+- Estimated Cost: ₱650,000 – ₱950,000
+- Best for: Backup during brownouts & night use
+- Includes: Solar panels, hybrid inverter, lithium battery, mounting, wiring & full installation
+
+📌 *Prices may vary depending on brand, roof type, and installation complexity.*
+Contact us for a free site assessment! 💚""",
+        "answer_tl": """☀️ **10 kW Solar System — Estimate ng Presyo (Supply & Installation):**
+
+⚡ **On-Grid (Walang Battery):**
+- Estimated na Halaga: ₱420,000 – ₱600,000
+- Para sa: Mas mababang gastos, mas mabilis na ROI (4–7 taon)
+- Kasama: Solar panels, grid-tie inverter, mounting, wiring, labor at basic permits
+
+🔋 **Hybrid (May Battery Backup):**
+- Estimated na Halaga: ₱650,000 – ₱950,000
+- Para sa: Backup tuwing may brownout at gabi
+- Kasama: Solar panels, hybrid inverter, lithium battery, mounting, wiring at buong installation
+
+📌 *Maaaring mag-iba ang presyo depende sa brand, uri ng bubong, at complexity ng installation.*
+Makipag-ugnayan para sa libreng site assessment! 💚"""
+    },
+    "install_12kw": {
+        "keywords": [
+            "12kw", "12 kw", "12kilowatt", "12 kilowatt", "12kva", "12 kva",
+            "12kw system", "12kw solar", "12kw installation", "12kw setup",
+            "magkano 12kw", "presyo ng 12kw", "estimate 12kw", "quote 12kw",
+            "how much 12kw", "12kw price", "12kw cost"
+        ],
+        "answer_en": """☀️ **12 kW Solar System — Supply & Installation Estimate:**
+
+⚡ **On-Grid (Grid-Tied, No Battery):**
+- Estimated Cost: ₱500,000 – ₱750,000
+- Best for: Lower upfront cost, faster ROI (4–7 years)
+- Includes: Solar panels, grid-tie inverter, mounting, wiring, labor & basic permits
+
+🔋 **Hybrid (With Battery Backup):**
+- Estimated Cost: ₱800,000 – ₱1,100,000
+- Best for: Backup during brownouts & night use
+- Includes: Solar panels, hybrid inverter, lithium battery, mounting, wiring & full installation
+
+📌 *Prices may vary depending on brand, roof type, and installation complexity.*
+Contact us for a free site assessment! 💚""",
+        "answer_tl": """☀️ **12 kW Solar System — Estimate ng Presyo (Supply & Installation):**
+
+⚡ **On-Grid (Walang Battery):**
+- Estimated na Halaga: ₱500,000 – ₱750,000
+- Para sa: Mas mababang gastos, mas mabilis na ROI (4–7 taon)
+- Kasama: Solar panels, grid-tie inverter, mounting, wiring, labor at basic permits
+
+🔋 **Hybrid (May Battery Backup):**
+- Estimated na Halaga: ₱800,000 – ₱1,100,000
+- Para sa: Backup tuwing may brownout at gabi
+- Kasama: Solar panels, hybrid inverter, lithium battery, mounting, wiring at buong installation
+
+📌 *Maaaring mag-iba ang presyo depende sa brand, uri ng bubong, at complexity ng installation.*
+Makipag-ugnayan para sa libreng site assessment! 💚"""
+    },
+    "install_15kw": {
+        "keywords": [
+            "15 kw", "15kilowatt", "15 kilowatt", "15kva", "15 kva",
+            "16kw", "16 kw", "15-16kw", "15 to 16kw",
+            "15kw system", "15kw solar", "15kw installation", "15kw setup",
+            "magkano 15kw", "presyo ng 15kw", "estimate 15kw", "quote 15kw",
+            "how much 15kw", "15kw price", "15kw cost",
+            "magkano 16kw", "16kw price", "16kw cost"
+        ],
+        "answer_en": """☀️ **15–16 kW Solar System — Supply & Installation Estimate:**
+
+⚡ **On-Grid (Grid-Tied, No Battery):**
+- Estimated Cost: ₱600,000 – ₱1,000,000
+- Best for: Large homes / heavy AC usage, faster ROI
+- Includes: Solar panels, grid-tie inverter, mounting, wiring, labor & basic permits
+
+🔋 **Hybrid (With Battery Backup):**
+- Estimated Cost: ₱950,000 – ₱1,500,000+
+- Best for: Backup during brownouts & night use
+- Includes: Solar panels, hybrid inverter, lithium battery, mounting, wiring & full installation
+
+📌 *Prices may vary depending on brand, roof type, and installation complexity.*
+Contact us for a free site assessment! 💚""",
+        "answer_tl": """☀️ **15–16 kW Solar System — Estimate ng Presyo (Supply & Installation):**
+
+⚡ **On-Grid (Walang Battery):**
+- Estimated na Halaga: ₱600,000 – ₱1,000,000
+- Para sa: Malalaking bahay / mabigat na AC usage, mas mabilis na ROI
+- Kasama: Solar panels, grid-tie inverter, mounting, wiring, labor at basic permits
+
+🔋 **Hybrid (May Battery Backup):**
+- Estimated na Halaga: ₱950,000 – ₱1,500,000+
+- Para sa: Backup tuwing may brownout at gabi
+- Kasama: Solar panels, hybrid inverter, lithium battery, mounting, wiring at buong installation
+
+📌 *Maaaring mag-iba ang presyo depende sa brand, uri ng bubong, at complexity ng installation.*
+Makipag-ugnayan para sa libreng site assessment! 💚"""
+    },
+    "install_general": {
+        "keywords": [
+            "installation estimate", "installation cost estimate",
+            "supply and install", "supply install", "magkano mag-install",
+            "magkano ang installation", "presyo ng installation", "estimate ng solar",
+            "solar system price", "solar system cost", "on-grid price", "hybrid price",
+            "on grid price", "hybrid system price", "solar setup price", "solar setup cost",
+            "how much solar", "magkano solar system", "magkano ang solar",
+            "complete solar", "complete system", "buong sistema"
+        ],
+        "answer_en": """☀️ **Solar System Supply & Installation Estimates:**
+
+⚡ **On-Grid (No Battery) — ₱40,000–₱60,000/kW:**
+- 3 kW:  ₱160,000 – ₱235,000
+- 5 kW:  ₱280,000 – ₱380,000
+- 8 kW:  ₱380,000 – ₱500,000
+- 10 kW: ₱420,000 – ₱600,000
+- 12 kW: ₱500,000 – ₱750,000
+- 15–16 kW: ₱600,000 – ₱1,000,000
+
+🔋 **Hybrid (With Battery) — ₱70,000–₱100,000/kW:**
+- 3 kW:  ₱290,000 – ₱380,000
+- 5 kW:  ₱375,000 – ₱480,000
+- 8 kW:  ₱400,000 – ₱700,000
+- 10 kW: ₱650,000 – ₱950,000
+- 12 kW: ₱800,000 – ₱1,100,000
+- 15–16 kW: ₱950,000 – ₱1,500,000+
+
+📌 *Ask about a specific size (e.g. "3kW", "5kW") for a detailed breakdown.*
+Contact us for a free site assessment! 💚""",
+        "answer_tl": """☀️ **Estimate ng Presyo ng Solar System (Supply & Installation):**
+
+⚡ **On-Grid (Walang Battery) — ₱40,000–₱60,000/kW:**
+- 3 kW:  ₱160,000 – ₱235,000
+- 5 kW:  ₱280,000 – ₱380,000
+- 8 kW:  ₱380,000 – ₱500,000
+- 10 kW: ₱420,000 – ₱600,000
+- 12 kW: ₱500,000 – ₱750,000
+- 15–16 kW: ₱600,000 – ₱1,000,000
+
+🔋 **Hybrid (May Battery) — ₱70,000–₱100,000/kW:**
+- 3 kW:  ₱290,000 – ₱380,000
+- 5 kW:  ₱375,000 – ₱480,000
+- 8 kW:  ₱400,000 – ₱700,000
+- 10 kW: ₱650,000 – ₱950,000
+- 12 kW: ₱800,000 – ₱1,100,000
+- 15–16 kW: ₱950,000 – ₱1,500,000+
+
+📌 *Magtanong ng specific na size (hal. "3kW", "5kW") para sa detalyadong breakdown.*
+Makipag-ugnayan para sa libreng site assessment! 💚"""
+    },
     "website": {
         "keywords": [
             "website", "web site", "online", "link", "url", "site nyo", "webpage",
@@ -1070,7 +1341,13 @@ PER_ITEM_ACCESSORY_KEYS = [
     "rail_splicer", "railing",   # rail_splicer MUST come before railing (substring issue)
     "l_foot", "mid_clamp", "end_clamp",
     "grounding_lug", "dc_breaker", "ac_breaker", "dc_spd", "ac_spd",
-    "mc4", "battery_breaker"
+    "mc4", "battery_breaker",
+    "pv_cable",
+    # Installation estimates — longer kW numbers MUST come before shorter ones
+    # (e.g. "15kw" must be checked before "5kw" to avoid substring match)
+    "install_15kw", "install_12kw", "install_10kw",
+    "install_8kw", "install_5kw", "install_3kw",
+    "install_general",
 ]
 
 # Keywords that trigger the FULL accessories list (only if no per-item match)
