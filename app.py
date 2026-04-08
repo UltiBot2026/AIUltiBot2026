@@ -1181,6 +1181,168 @@ Makikita ninyo doon ang lahat ng impormasyon tungkol sa aming mga produkto at se
     }
 }
 
+# ── Price Calculator ─────────────────────────────────────────────────────────
+# Unit prices for all items the bot knows about (in PHP)
+UNIT_PRICES = {
+    # PV Mountings (SoEasy)
+    "railing":        {"price": 600,   "unit": "pc",   "aliases": ["railings", "aluminum railing", "rail", "rails", "alum railing", "aluminium railing"]},
+    "l-foot":         {"price": 85,    "unit": "pc",   "aliases": ["l foot", "lfoot", "l-feet", "l feet", "lfeet", "l-foots"]},
+    "mid clamp":      {"price": 85,    "unit": "pc",   "aliases": ["midclamp", "mid-clamp", "middle clamp"]},
+    "end clamp":      {"price": 85,    "unit": "pc",   "aliases": ["endclamp", "end-clamp"]},
+    "rail splicer":   {"price": 85,    "unit": "pc",   "aliases": ["rail splice", "splicer", "rail connector"]},
+    "pv grounding lug": {"price": 70, "unit": "pc",   "aliases": ["grounding lug", "ground lug", "pv lug", "grounding"]},
+    # DC Breakers
+    "dc breaker":     {"price": 680,   "unit": "pc",   "aliases": ["dc circuit breaker", "dc cb", "dc breakers", "dc braker"]},
+    # AC Breakers
+    "ac breaker 40a": {"price": 280,   "unit": "pc",   "aliases": ["40a breaker", "40amp breaker", "40a ac breaker", "40 amp breaker"]},
+    "ac breaker 63a": {"price": 380,   "unit": "pc",   "aliases": ["63a breaker", "63amp breaker", "63a ac breaker", "63 amp breaker"]},
+    "ac breaker 100a":{"price": 680,   "unit": "pc",   "aliases": ["100a breaker", "100amp breaker", "100a ac breaker", "100 amp breaker"]},
+    # SPD
+    "dc spd":         {"price": 780,   "unit": "pc",   "aliases": ["dc surge", "dc surge protector", "dc spd 1200v"]},
+    "ac spd 2p":      {"price": 580,   "unit": "pc",   "aliases": ["ac spd 2pole", "ac surge 2p", "2p spd", "2 pole spd"]},
+    "ac spd 4p":      {"price": 980,   "unit": "pc",   "aliases": ["ac spd 4pole", "ac surge 4p", "4p spd", "4 pole spd"]},
+    # MC4
+    "mc4":            {"price": 80,    "unit": "pair", "aliases": ["mc4 connector", "mc4 connectors", "mc-4", "mc 4"]},
+    # Battery Breaker
+    "battery breaker":{"price": 1700,  "unit": "pc",   "aliases": ["battery cb", "battery circuit breaker", "batt breaker", "battery braker"]},
+    # PV Cable
+    "pv cable 4mm":   {"price": 70,    "unit": "meter","aliases": ["4mm cable", "4mm wire", "4mm pv cable", "4mm solar wire", "4mm solar cable"]},
+    "pv cable 6mm":   {"price": 85,    "unit": "meter","aliases": ["6mm cable", "6mm wire", "6mm pv cable", "6mm solar wire", "6mm solar cable"]},
+}
+
+# Regex patterns for quantity extraction
+import re as _re
+
+# Build a sorted list of (key, data) with longest keys first so specific items
+# (e.g. "battery breaker", "ac breaker 100a") are tried before shorter ones.
+def _sorted_unit_prices():
+    items = list(UNIT_PRICES.items())
+    items.sort(key=lambda x: len(x[0]), reverse=True)
+    return items
+
+def _resolve_item(raw_name):
+    """Match a raw item name to a UNIT_PRICES key. Returns (key, item_data) or (None, None)."""
+    raw = raw_name.strip().lower()
+    sorted_items = _sorted_unit_prices()
+
+    # 1. Exact key match
+    if raw in UNIT_PRICES:
+        return raw, UNIT_PRICES[raw]
+
+    # 2. Exact alias match (longest key first)
+    for key, data in sorted_items:
+        if raw in [a.lower() for a in data["aliases"]]:
+            return key, data
+
+    # 3. Contained match: raw fully contained in key/alias OR key/alias fully contained in raw
+    #    Longest key wins to avoid short keys swallowing longer ones.
+    for key, data in sorted_items:
+        if raw == key or key == raw:
+            return key, data
+        for alias in data["aliases"]:
+            al = alias.lower()
+            if raw == al:
+                return key, data
+
+    # 4. Substring match — only if the candidate key/alias is fully contained in raw
+    #    (e.g. "ac breaker 40a" is in "ac breaker 40a connector")
+    for key, data in sorted_items:
+        if key in raw:
+            return key, data
+        for alias in data["aliases"]:
+            if alias.lower() in raw:
+                return key, data
+
+    return None, None
+
+# Tokenise a message into (qty, item_text) pairs.
+# Handles: "12pcs railings", "12 pcs railings", "12 pieces railings",
+#          "12x railings", "12 railings", "12m 4mm cable"
+_QTY_PATTERN = _re.compile(
+    r'(\d+)\s*(?:pcs?\.?|pieces?|units?|x|rolls?|meters?|mtrs?|m(?=\s))?' 
+    r'\s*([a-z][a-z0-9 \-]*)'
+    r'(?=\s*(?:,|\band\b|\bat\b|&|\+|$|\d))',
+    _re.IGNORECASE
+)
+
+def parse_cart(message):
+    """
+    Parse a message for quantity+item pairs.
+    Returns a list of dicts: [{qty, key, label, unit_price, unit, subtotal}, ...]
+    or an empty list if nothing was found.
+    """
+    text = message.lower()
+    # Normalise separators so we can split on commas
+    text = _re.sub(r'[,;]', ' , ', text)
+    text = _re.sub(r'\b(and|at|&|\+)\b', ' , ', text)
+
+    # Strip leading non-numeric words (e.g. "magkano total", "how much")
+    # so the first segment starts at the first digit
+    text = _re.sub(r'^[^\d,]+(?=\d)', '', text)
+
+    # Split on commas to get individual item segments
+    segments = [s.strip() for s in text.split(',') if s.strip()]
+
+    found = []
+    seen_keys = set()
+
+    for seg in segments:
+        seg = seg.strip()
+        # Strip any leading non-numeric words within a segment
+        seg = _re.sub(r'^[^\d]+(?=\d)', '', seg)
+        # Match qty at the start of each segment
+        m = _re.match(
+            r'^(\d+)\s*(?:pcs?\.?|pieces?|units?|x|rolls?|meters?|mtrs?|m(?=\s))?\s*(.+)$',
+            seg, _re.IGNORECASE
+        )
+        if not m:
+            continue
+        qty = int(m.group(1))
+        raw_name = m.group(2).strip()
+        key, data = _resolve_item(raw_name)
+        if key and key not in seen_keys:
+            seen_keys.add(key)
+            found.append({
+                "qty": qty,
+                "key": key,
+                "label": key.title(),
+                "unit_price": data["price"],
+                "unit": data["unit"],
+                "subtotal": qty * data["price"],
+            })
+    return found
+
+def format_cart_response(cart, language):
+    """Build the itemized total message from a parsed cart."""
+    grand_total = sum(item["subtotal"] for item in cart)
+    lines = []
+    for item in cart:
+        lines.append(
+            f"- {item['qty']} {item['unit']}(s) × {item['label']}: "
+            f"₱{item['unit_price']:,}/{item['unit']} = "
+            f"₱{item['subtotal']:,}"
+        )
+    items_block = "\n".join(lines)
+
+    if language == "tl":
+        return (
+            f"🧮 **Listahan ng Presyo:**\n\n"
+            f"{items_block}\n\n"
+            f"💰 **KABUUANG HALAGA: ₱{grand_total:,}**\n\n"
+            f"📌 *Ang presyo ay para sa materyales lamang. Hindi pa kasama ang delivery at labor.*\n"
+            f"Makipag-ugnayan sa amin para sa opisyal na quotation! 💚"
+        )
+    else:
+        return (
+            f"🧮 **Price Breakdown:**\n\n"
+            f"{items_block}\n\n"
+            f"💰 **TOTAL: ₱{grand_total:,}**\n\n"
+            f"📌 *Prices are for materials only. Delivery and labor charges not yet included.*\n"
+            f"Contact us for an official quotation! 💚"
+        )
+
+# ─────────────────────────────────────────────────────────────────────────────
+
 def detect_language(text):
     """Detect if message is in Tagalog or English"""
     tagalog_words = ["ang", "sa", "ng", "ko", "mo", "nyo", "kami", "tayo", "sila", "po", "ba", "kayo", "magkano", "saan", "paano", "ano", "ito", "yan", "dito", "doon", "nandito", "nandoon"]
@@ -1537,7 +1699,14 @@ def get_ai_response(user_message, language):
     try:
         print(f"🤖 Processing: {user_message[:50]}... (Language: {language})")
         sys.stdout.flush()
-        
+
+        # ── Price Calculator: check for quantity+item pairs first ──────────────
+        cart = parse_cart(user_message)
+        if cart:
+            print(f"🧮 Cart detected: {[i['key'] for i in cart]}")
+            sys.stdout.flush()
+            return format_cart_response(cart, language), True, "price_calculator"
+
         # Check for FAQ match first
         faq_key, faq_data = find_matching_faq(user_message)
         if faq_key and faq_data:
