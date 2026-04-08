@@ -2293,6 +2293,78 @@ def health():
 def home():
     return "🤖 Ultiphoton Solar Power OPC Advanced Chatbot is running!", 200
 
+@app.route("/privacy-policy", methods=["GET"])
+def privacy_policy():
+    html = """
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Privacy Policy - UltiPhoton Solar Power OPC</title>
+  <style>
+    body { font-family: Arial, sans-serif; max-width: 800px; margin: 40px auto; padding: 0 20px; color: #333; line-height: 1.7; }
+    h1 { color: #f5a623; } h2 { color: #444; margin-top: 30px; }
+    a { color: #f5a623; } footer { margin-top: 40px; font-size: 0.85em; color: #888; }
+  </style>
+</head>
+<body>
+  <h1>&#9728; UltiPhoton Solar Power OPC</h1>
+  <h1>Privacy Policy</h1>
+  <p><strong>Effective Date:</strong> April 8, 2026</p>
+  <p>UltiPhoton Solar Power OPC ("we", "our", or "us") operates a Messenger chatbot to assist customers with inquiries about solar panels, accessories, and installation services. This Privacy Policy explains how we collect, use, and protect your information.</p>
+
+  <h2>1. Information We Collect</h2>
+  <p>When you interact with our Messenger chatbot, we may collect:</p>
+  <ul>
+    <li>Your Facebook name and profile ID (provided automatically by Facebook Messenger)</li>
+    <li>Messages and inquiries you send to our chatbot</li>
+    <li>Delivery details you voluntarily provide (name, address, contact number)</li>
+  </ul>
+
+  <h2>2. How We Use Your Information</h2>
+  <p>We use the information collected to:</p>
+  <ul>
+    <li>Respond to your product and pricing inquiries</li>
+    <li>Provide delivery fee estimates and arrange logistics</li>
+    <li>Improve our chatbot responses and customer service</li>
+    <li>Contact you regarding your order or inquiry</li>
+  </ul>
+
+  <h2>3. Data Sharing</h2>
+  <p>We do not sell, trade, or share your personal information with third parties, except:</p>
+  <ul>
+    <li>With logistics partners (e.g., Lalamove) solely for delivery coordination</li>
+    <li>As required by law or government authorities</li>
+  </ul>
+
+  <h2>4. Data Retention</h2>
+  <p>Conversation data is stored temporarily to improve chatbot performance and is not retained beyond what is necessary for customer service purposes.</p>
+
+  <h2>5. Your Rights</h2>
+  <p>You may request deletion of your data at any time by contacting us directly through our Facebook Page: <a href="https://www.facebook.com/UltiPhotonSolarPowerOPC" target="_blank">UltiPhoton Solar Power OPC</a>.</p>
+
+  <h2>6. Security</h2>
+  <p>We implement reasonable security measures to protect your information from unauthorized access or disclosure.</p>
+
+  <h2>7. Changes to This Policy</h2>
+  <p>We may update this Privacy Policy from time to time. Changes will be posted on this page with an updated effective date.</p>
+
+  <h2>8. Contact Us</h2>
+  <p>If you have questions about this Privacy Policy, please contact us:</p>
+  <ul>
+    <li><strong>Business:</strong> UltiPhoton Solar Power OPC</li>
+    <li><strong>Location:</strong> Brgy. Bolbok, Batangas City, Philippines</li>
+    <li><strong>Facebook:</strong> <a href="https://www.facebook.com/UltiPhotonSolarPowerOPC" target="_blank">UltiPhoton Solar Power OPC</a></li>
+  </ul>
+
+  <footer><p>&copy; 2026 UltiPhoton Solar Power OPC. All rights reserved.</p></footer>
+</body>
+</html>
+"""
+    return html, 200, {"Content-Type": "text/html"}
+
+
 @app.route("/webhook", methods=["GET", "POST"])
 def webhook():
     if request.method == "GET":
