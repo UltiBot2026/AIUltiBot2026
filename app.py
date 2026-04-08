@@ -1185,12 +1185,12 @@ Makikita ninyo doon ang lahat ng impormasyon tungkol sa aming mga produkto at se
 # Unit prices for all items the bot knows about (in PHP)
 UNIT_PRICES = {
     # PV Mountings (SoEasy)
-    "railing":        {"price": 600,   "unit": "pc",   "aliases": ["railings", "aluminum railing", "rail", "rails", "alum railing", "aluminium railing"]},
-    "l-foot":         {"price": 85,    "unit": "pc",   "aliases": ["l foot", "lfoot", "l-feet", "l feet", "lfeet", "l-foots"]},
-    "mid clamp":      {"price": 85,    "unit": "pc",   "aliases": ["midclamp", "mid-clamp", "middle clamp"]},
-    "end clamp":      {"price": 85,    "unit": "pc",   "aliases": ["endclamp", "end-clamp"]},
-    "rail splicer":   {"price": 85,    "unit": "pc",   "aliases": ["rail splice", "splicer", "rail connector"]},
-    "pv grounding lug": {"price": 70, "unit": "pc",   "aliases": ["grounding lug", "ground lug", "pv lug", "grounding"]},
+    "railing":        {"price": 600,   "unit": "pc",   "aliases": ["railings", "aluminum railing", "alum railing", "aluminium railing", "2.4m rail", "2.4m railing", "rail 2.4m", "rail", "rails"]},
+    "l-foot":         {"price": 85,    "unit": "pc",   "aliases": ["l foot", "lfoot", "l-feet", "l feet", "lfeet", "l-foots", "l clamp", "l-clamp", "lclamp", "l clamps", "l-clamps"]},
+    "mid clamp":      {"price": 85,    "unit": "pc",   "aliases": ["midclamp", "mid-clamp", "middle clamp", "mid clamps"]},
+    "end clamp":      {"price": 85,    "unit": "pc",   "aliases": ["endclamp", "end-clamp", "end clamps", "end connector", "end connectors"]},
+    "rail splicer":   {"price": 85,    "unit": "pc",   "aliases": ["rail splice", "splicer", "rail connector", "splicer connector", "splice connector", "splicing connector"]},
+    "pv grounding lug": {"price": 70, "unit": "pc",   "aliases": ["grounding lug", "grounding lugs", "ground lug", "ground lugs", "pv lug", "pv lugs", "grounding"]},
     # DC Breakers
     "dc breaker":     {"price": 680,   "unit": "pc",   "aliases": ["dc circuit breaker", "dc cb", "dc breakers", "dc braker"]},
     # AC Breakers
@@ -1270,14 +1270,17 @@ def parse_cart(message):
     Parse a message for quantity+item pairs.
     Returns a list of dicts: [{qty, key, label, unit_price, unit, subtotal}, ...]
     or an empty list if nothing was found.
+    Handles: commas, newlines, 'and', 'at', decimal sizes like '2.4m rail'
     """
     text = message.lower()
-    # Normalise separators so we can split on commas
-    text = _re.sub(r'[,;]', ' , ', text)
+    # Normalise separators: commas, semicolons, newlines all become ' , '
+    text = _re.sub(r'[,;\n\r]+', ' , ', text)
     text = _re.sub(r'\b(and|at|&|\+)\b', ' , ', text)
+    # Remove decimal size prefixes like '2.4m' that precede an item name
+    # e.g. '14 pcs 2.4m rail' → '14 pcs rail'  (the alias '2.4m rail' handles matching)
+    text = _re.sub(r'\b(\d+\.\d+)\s*m\s+', '', text)
 
-    # Strip leading non-numeric words (e.g. "magkano total", "how much")
-    # so the first segment starts at the first digit
+    # Strip leading non-numeric words (e.g. "magkano total", "how much", "bale eto order ko")
     text = _re.sub(r'^[^\d,]+(?=\d)', '', text)
 
     # Split on commas to get individual item segments
