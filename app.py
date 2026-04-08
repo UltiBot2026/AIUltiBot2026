@@ -279,10 +279,54 @@ def build_pricelist_answer(lang="en"):
         for p in prices["battery_breaker"]:
             lines.append(f"- {p['item']}: {p['price']}")
 
-    if lang == "tl":
-        lines.append("\nMakipag-ugnayan para sa bulk orders at inverter pricing! 📞")
+    # Conduit (from Excel or hardcoded fallback)
+    conduit_items = prices.get("conduit", [])
+    if conduit_items:
+        lines.append("\n📌 *Conduit:*")
+        for c in conduit_items:
+            lines.append(f"- {c['item']}: {c['price']}")
     else:
-        lines.append("\nContact us for bulk orders & inverter pricing! 📞")
+        if lang == "tl":
+            lines.append("\n📌 *Conduit:*")
+            lines.append("- HDPE 25mm: ₱170/metro")
+        else:
+            lines.append("\n📌 *Conduit:*")
+            lines.append("- HDPE 25mm: ₱170/meter")
+
+    # PV Cable (hardcoded — not in Excel)
+    if lang == "tl":
+        lines.append("\n📌 *PV Cable / Wire (Single Core):*")
+        lines.append("- 4mm: ₱6,100/roll | ₱70/metro")
+        lines.append("- 6mm: ₱7,500/roll | ₱85/metro")
+    else:
+        lines.append("\n📌 *PV Cable / Wire (Single Core):*")
+        lines.append("- 4mm: ₱6,100/roll | ₱70/meter")
+        lines.append("- 6mm: ₱7,500/roll | ₱85/meter")
+
+    # Inverters (hardcoded — not in Excel)
+    if lang == "tl":
+        lines.append("\n⚡ *GoodWe Inverter:*")
+        lines.append("- 8 kW: ₱72,000")
+        lines.append("- 10 kW: ₱83,000")
+        lines.append("- 12 kW: ₱92,000")
+    else:
+        lines.append("\n⚡ *GoodWe Inverter:*")
+        lines.append("- 8 kW: ₱72,000")
+        lines.append("- 10 kW: ₱83,000")
+        lines.append("- 12 kW: ₱92,000")
+
+    # Batteries (hardcoded — not in Excel)
+    if lang == "tl":
+        lines.append("\n🔋 *GoodWe Battery:*")
+        lines.append("- 280Ah: ₱118,000")
+    else:
+        lines.append("\n🔋 *GoodWe Battery:*")
+        lines.append("- 280Ah: ₱118,000")
+
+    if lang == "tl":
+        lines.append("\nMakipag-ugnayan para sa bulk orders at espesyal na presyo! 📞")
+    else:
+        lines.append("\nContact us for bulk orders & special pricing! 📞")
 
     return "\n".join(lines)
 
@@ -701,7 +745,14 @@ Schedule ngayon! 📞"""
             "pricelist", "price list", "listahan ng presyo", "presyo ng lahat",
             "lahat ng presyo", "complete price", "full price", "all prices",
             "materials price", "magkano lahat", "ano lahat", "list of prices",
-            "price ng materials", "presyo ng materials"
+            "price ng materials", "presyo ng materials",
+            # Solar materials queries
+            "solar materials", "mga solar materials", "ano po mga solar materials",
+            "ano mga solar materials", "available materials", "mga available",
+            "solar products", "mga solar products", "ano ang solar materials",
+            "lahat ng solar", "lahat ng materials", "complete list",
+            "complete materials", "full materials", "all materials",
+            "mga gamit", "ano mga gamit", "lahat ng gamit", "mga available na gamit"
         ],
         "answer_en": """💰 **Ultiphoton Official Price List:**
 
