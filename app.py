@@ -557,6 +557,9 @@ Makipag-ugnayan para sa bulk orders! ⚡"""
 - 10 kW: ₱83,000
 - 12 kW: ₱92,000
 
+🔋 **GoodWe Battery:**
+- 280Ah: ₱118,000
+
 All brands are high-quality and reliable for Philippine climate! 🌞""",
         "answer_tl": """⚡ **Available Inverter Brands:**
 
@@ -570,6 +573,9 @@ All brands are high-quality and reliable for Philippine climate! 🌞""",
 - 8 kW: ₱72,000
 - 10 kW: ₱83,000
 - 12 kW: ₱92,000
+
+🔋 **GoodWe Battery:**
+- 280Ah: ₱118,000
 
 Lahat ay high-quality at reliable! 🌞"""
     },
@@ -1417,6 +1423,12 @@ UNIT_PRICES = {
     "goodwe inverter 12kw": {"price": 92000, "unit": "pc", "aliases": [
         "goodwe 12kw", "goodwe 12k", "12kw inverter", "12kw goodwe", "inverter 12kw",
         "12k inverter", "12kw gw", "gw 12kw", "goodwe12kw"
+    ]},
+    # GoodWe Battery
+    "goodwe battery 280ah": {"price": 118000, "unit": "pc", "aliases": [
+        "goodwe battery", "goodwe 280ah", "280ah battery", "battery 280ah",
+        "goodwe batt", "gw battery", "gw 280ah", "280ah goodwe",
+        "goodwe lithium", "goodwe storage", "goodwe 280"
     ]},
 }
 
