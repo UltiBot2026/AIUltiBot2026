@@ -2915,28 +2915,17 @@ def webhook():
                             if pending_qty and not pending_wattage:
                                 wattage_choice = detect_wattage_reply(message)
                                 if wattage_choice:
-                                    if pending_qty >= _INSTALLER_THRESHOLD:
-                                        # 10+ panels: ask retail vs installer
-                                        save_pending_wattage(sender_id, wattage_choice)
-                                        response_text = ask_price_tier(pending_qty, wattage_choice, language)
-                                        faq_matched, faq_key = True, "price_tier_clarification"
-                                        print(f"❓ Price tier clarification: {pending_qty} pcs {wattage_choice}W")
-                                        sys.stdout.flush()
-                                        log_analytics(sender_id, faq_key, message)
-                                        save_conversation(sender_id, message, response_text, language, faq_matched)
-                                        send_message_with_quick_replies(sender_id, response_text, language)
-                                        return "EVENT_RECEIVED", 200
-                                    else:
-                                        # < 10 panels: use retail price directly
-                                        clear_pending_panel_qty(sender_id)
-                                        response_text = format_panel_package_response(pending_qty, wattage_choice, language, price_tier='retail')
-                                        faq_matched, faq_key = True, "panel_package_calc"
-                                        print(f"☀️ Panel package: {pending_qty} pcs {wattage_choice}W (retail)")
-                                        sys.stdout.flush()
-                                        log_analytics(sender_id, faq_key, message)
-                                        save_conversation(sender_id, message, response_text, language, faq_matched)
-                                        send_message_with_quick_replies(sender_id, response_text, language)
-                                        return "EVENT_RECEIVED", 200
+                                    # 10+ panels: auto installer price; <10: retail price
+                                    price_tier = 'installer' if pending_qty >= _INSTALLER_THRESHOLD else 'retail'
+                                    clear_pending_panel_qty(sender_id)
+                                    response_text = format_panel_package_response(pending_qty, wattage_choice, language, price_tier=price_tier)
+                                    faq_matched, faq_key = True, "panel_package_calc"
+                                    print(f"☀️ Panel package: {pending_qty} pcs {wattage_choice}W ({price_tier})")
+                                    sys.stdout.flush()
+                                    log_analytics(sender_id, faq_key, message)
+                                    save_conversation(sender_id, message, response_text, language, faq_matched)
+                                    send_message_with_quick_replies(sender_id, response_text, language)
+                                    return "EVENT_RECEIVED", 200
                                 # Still waiting — remind them to choose
                                 # (fall through to normal AI response)
 
