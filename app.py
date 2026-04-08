@@ -1447,7 +1447,7 @@ def estimate_lalamove_from_message(message, language="en"):
 UNIT_PRICES = {
     # PV Mountings (SoEasy)
     "railing":        {"price": 600,   "unit": "pc",   "aliases": ["railings", "aluminum railing", "alum railing", "aluminium railing", "2.4m rail", "2.4m railing", "rail 2.4m", "rail", "rails"]},
-    "l-foot":         {"price": 85,    "unit": "pc",   "aliases": ["l foot", "lfoot", "l-feet", "l feet", "lfeet", "l-foots", "l clamp", "l-clamp", "lclamp", "l clamps", "l-clamps", "lft", "l ft", "l-ft", "lf"]},
+    "l-foot":         {"price": 95,    "unit": "pc",   "aliases": ["l foot", "lfoot", "l-feet", "l feet", "lfeet", "l-foots", "l clamp", "l-clamp", "lclamp", "l clamps", "l-clamps", "lft", "l ft", "l-ft", "lf"]},
     "mid clamp":      {"price": 85,    "unit": "pc",   "aliases": ["midclamp", "mid-clamp", "middle clamp", "mid clamps"]},
     "end clamp":      {"price": 85,    "unit": "pc",   "aliases": ["endclamp", "end-clamp", "end clamps", "end connector", "end connectors"]},
     "rail splicer":   {"price": 85,    "unit": "pc",   "aliases": ["rail splice", "splicer", "rail connector", "splicer connector", "splice connector", "splicing connector"]},
@@ -1455,9 +1455,9 @@ UNIT_PRICES = {
     # DC Breakers
     "dc breaker":     {"price": 680,   "unit": "pc",   "aliases": ["dc circuit breaker", "dc cb", "dc breakers", "dc braker"]},
     # AC Breakers
-    "ac breaker 40a": {"price": 280,   "unit": "pc",   "aliases": ["40a breaker", "40amp breaker", "40a ac breaker", "40 amp breaker"]},
-    "ac breaker 63a": {"price": 380,   "unit": "pc",   "aliases": ["63a breaker", "63amp breaker", "63a ac breaker", "63 amp breaker"]},
-    "ac breaker 100a":{"price": 680,   "unit": "pc",   "aliases": ["100a breaker", "100amp breaker", "100a ac breaker", "100 amp breaker"]},
+    "ac breaker 40a": {"price": 750,   "unit": "pc",   "aliases": ["40a breaker", "40amp breaker", "40a ac breaker", "40 amp breaker"]},
+    "ac breaker 63a": {"price": 750,   "unit": "pc",   "aliases": ["63a breaker", "63amp breaker", "63a ac breaker", "63 amp breaker"]},
+    "ac breaker 100a":{"price": 1300,  "unit": "pc",   "aliases": ["100a breaker", "100amp breaker", "100a ac breaker", "100 amp breaker"]},
     # SPD
     "dc spd":         {"price": 780,   "unit": "pc",   "aliases": ["dc surge", "dc surge protector", "dc spd 1200v"]},
     "ac spd 2p":      {"price": 580,   "unit": "pc",   "aliases": ["ac spd 2pole", "ac surge 2p", "2p spd", "2 pole spd"]},
