@@ -744,6 +744,27 @@ Nag-aalok kami ng free inspection para malaman ang perfect solar system para sa 
 
 Schedule ngayon! 📞"""
     },
+    "pallet_quantity": {
+        "keywords": [
+            "paleta", "pallet", "ilang piraso", "piraso sa isang paleta",
+            "ilang panels sa paleta", "panels per pallet", "how many per pallet",
+            "ilang pcs", "ilang pieces", "pieces per pallet", "qty per pallet",
+            "quantity per pallet", "ilang panel sa paleta", "pcs per pallet"
+        ],
+        "answer_en": """📦 **Panels Per Pallet:**
+
+- **Talesun 585W** — 37 pcs per pallet
+- **Talesun 620W** — 36 pcs per pallet
+
+For bulk orders, contact us for special pricing! ☀️""",
+        "answer_tl": """📦 **Ilang Piraso sa Isang Paleta:**
+
+- **Talesun 585W** — 37 piraso bawat paleta
+- **Talesun 620W** — 36 piraso bawat paleta
+
+Para sa bulk orders, makipag-ugnayan para sa espesyal na presyo! ☀️"""
+    },
+
     "full_pricelist": {
         "keywords": [
             "pricelist", "price list", "listahan ng presyo", "presyo ng lahat",
