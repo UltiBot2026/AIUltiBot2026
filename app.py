@@ -506,7 +506,7 @@ Magpadala ng proof of payment! 🏦"""
 - Battery Breaker DC 250AT: ₱1,700/pc
 
 📌 **Conduit:**
-- HDPE 25mm: ₱160/meter
+- HDPE 25mm: ₱175/meter
 
 Contact us for bulk orders! ⚡""",
         "answer_tl": """🔧 **Listahan ng Presyo ng Accessories & Materials:**
@@ -537,7 +537,7 @@ Contact us for bulk orders! ⚡""",
 - Battery Breaker DC 250AT: ₱1,700/pc
 
 📌 **Conduit:**
-- HDPE 25mm: ₱160/metro
+- HDPE 25mm: ₱175/metro
 
 Makipag-ugnayan para sa bulk orders! ⚡"""
     },
@@ -1470,7 +1470,7 @@ UNIT_PRICES = {
     "pv cable 4mm":   {"price": 70,    "unit": "meter","aliases": ["4mm cable", "4mm wire", "4mm pv cable", "4mm solar wire", "4mm solar cable"]},
     "pv cable 6mm":   {"price": 85,    "unit": "meter","aliases": ["6mm cable", "6mm wire", "6mm pv cable", "6mm solar wire", "6mm solar cable"]},
     # HDPE Conduit
-    "hdpe 25mm":      {"price": 160,   "unit": "meter","aliases": ["hdpe", "hdpe conduit", "hdpe pipe", "hdpe 25", "25mm hdpe", "hdpe conduit 25mm", "hdpe pipe 25mm", "hdpe tubing"]},
+    "hdpe 25mm":      {"price": 175,   "unit": "meter","aliases": ["hdpe", "hdpe conduit", "hdpe pipe", "hdpe 25", "25mm hdpe", "hdpe conduit 25mm", "hdpe pipe 25mm", "hdpe tubing"]},
     # Solar Panels (Talesun)
     "solar panel 620w": {"price": 6100, "unit": "pc", "aliases": [
         "620w panel", "620w", "620 watt", "620 watt panel", "620w solar", "620w solar panel",
