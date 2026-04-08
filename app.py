@@ -793,8 +793,8 @@ Makipag-ugnayan para sa bulk orders at inverter pricing! 📞"""
 - 6mm: ₱7,800/roll
 
 📌 **PV Cable / Wire (per meter):**
-- 4mm: ₱61/meter
-- 6mm: ₱78/meter
+- 4mm: ₱70/meter
+- 6mm: ₱95/meter
 
 Contact us to order! ☀️""",
         "answer_tl": """✅ Available po ang PV cables!
@@ -804,8 +804,8 @@ Contact us to order! ☀️""",
 - 6mm: ₱7,800/roll
 
 📌 **PV Cable / Wire (bawat metro):**
-- 4mm: ₱61/metro
-- 6mm: ₱78/metro
+- 4mm: ₱70/metro
+- 6mm: ₱95/metro
 
 Makipag-ugnayan para mag-order! ☀️"""
     },
