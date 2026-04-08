@@ -389,27 +389,31 @@ Bisitahin kami anumang oras! ☀️"""
     },
     
     "cod": {
-        "keywords": ["cod", "delivery", "cash on delivery", "available", "area", "deliver", "delivery"],
-        "answer_en": """✅ **Cash on Delivery Available!**
+        "keywords": ["cod", "delivery", "cash on delivery", "available", "area", "deliver", "delivery", "lalamove", "magpadala", "ipadala", "ship", "shipping", "paano i-deliver", "paano mag-deliver", "how to deliver", "how to ship"],
+        "answer_en": """🚚 **Delivery Information:**
 
-We offer COD within **Batangas City area**.
+For delivery, we recommend using **Lalamove** for fast and reliable service!
 
-We can also deliver to:
-• Laguna
-• Quezon Province
-• Whole South Luzon
+Please provide your details so we can arrange the delivery:
 
-Contact us for delivery details! 🚚""",
-        "answer_tl": """✅ **Cash on Delivery Available!**
+📋 **Name:**
+📍 **Address:**
+📞 **Contact Number:**
+🏠 **Nearest Landmark:**
 
-Available ang COD sa loob ng **Batangas City area**.
+Once we receive your details, we will coordinate the Lalamove booking for you! ☀️""",
+        "answer_tl": """🚚 **Impormasyon sa Delivery:**
 
-Maaari din kaming magdeliver sa:
-• Laguna
-• Quezon Province
-• Buong South Luzon
+Para sa delivery, inirerekomenda namin ang **Lalamove** para sa mabilis at maaasahang serbisyo!
 
-Makipag-ugnayan para sa delivery details! 🚚"""
+Mangyaring ibigay ang inyong mga detalye para maayos namin ang delivery:
+
+📋 **Pangalan:**
+📍 **Address:**
+📞 **Contact Number:**
+🏠 **Pinakamalapit na Landmark:**
+
+Kapag natanggap na namin ang inyong mga detalye, aayusin na namin ang Lalamove booking para sa inyo! ☀️"""
     },
     
     "payment": {
