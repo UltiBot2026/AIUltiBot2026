@@ -105,6 +105,11 @@ def init_database():
                 cursor.execute('ALTER TABLE user_preferences ADD COLUMN pending_panel_qty INTEGER DEFAULT NULL')
             except Exception:
                 pass  # Column already exists
+            # Migration: add pending_wattage for installer price flow
+            try:
+                cursor.execute('ALTER TABLE user_preferences ADD COLUMN pending_wattage INTEGER DEFAULT NULL')
+            except Exception:
+                pass  # Column already exists
             
             conn.commit()
             conn.close()
@@ -1878,6 +1883,49 @@ def clear_pending_panel_qty(user_id):
     except Exception as e:
         print(f"❌ Error clearing pending_panel_qty: {e}")
 
+def save_pending_wattage(user_id, wattage):
+    """Save pending wattage while waiting for price tier choice."""
+    try:
+        with db_lock:
+            conn = sqlite3.connect('/tmp/ultiphoton_chatbot.db')
+            cursor = conn.cursor()
+            cursor.execute(
+                'UPDATE user_preferences SET pending_wattage = ? WHERE user_id = ?',
+                (wattage, user_id)
+            )
+            conn.commit()
+            conn.close()
+    except Exception as e:
+        print(f"❌ Error saving pending_wattage: {e}")
+
+def get_pending_wattage(user_id):
+    """Get pending wattage for price tier clarification."""
+    try:
+        with db_lock:
+            conn = sqlite3.connect('/tmp/ultiphoton_chatbot.db')
+            cursor = conn.cursor()
+            cursor.execute('SELECT pending_wattage FROM user_preferences WHERE user_id = ?', (user_id,))
+            result = cursor.fetchone()
+            conn.close()
+            return result[0] if result and result[0] is not None else None
+    except:
+        return None
+
+def clear_pending_wattage(user_id):
+    """Clear pending wattage after price tier is resolved."""
+    try:
+        with db_lock:
+            conn = sqlite3.connect('/tmp/ultiphoton_chatbot.db')
+            cursor = conn.cursor()
+            cursor.execute(
+                'UPDATE user_preferences SET pending_wattage = NULL WHERE user_id = ?',
+                (user_id,)
+            )
+            conn.commit()
+            conn.close()
+    except Exception as e:
+        print(f"❌ Error clearing pending_wattage: {e}")
+
 # ── Persistent greeting store (survives server restarts) ─────────────────────
 # Stored as a JSON file alongside app.py so Render keeps it between deploys.
 # Format: { "<user_id>": "YYYY-MM-DD", ... }
@@ -2197,6 +2245,19 @@ _WATTAGE_REPLY_585 = [
     "585", "585w", "585 watt", "585watts", "five eighty five",
     "585w po", "585 po", "yung 585", "ang 585",
 ]
+# Keywords that indicate customer is replying with price tier choice
+_PRICE_TIER_RETAIL = [
+    "retail", "retail price", "retail po", "regular", "regular price",
+    "normal", "normal price", "retail lang", "retail na",
+    "1", "option 1", "una", "first",
+]
+_PRICE_TIER_INSTALLER = [
+    "installer", "installer price", "installer po", "installer lang",
+    "installer na", "install", "instaler", "instaler price",
+    "2", "option 2", "pangalawa", "second",
+]
+# Threshold for offering installer price
+_INSTALLER_THRESHOLD = 10
 
 def detect_panel_qty_no_wattage(user_message):
     """Detect if message asks about N panels WITHOUT specifying wattage.
@@ -2228,10 +2289,48 @@ def detect_wattage_reply(user_message):
             return 585
     return None
 
-def format_panel_package_response(panel_count, wattage, language):
+def detect_price_tier_reply(user_message):
+    """Detect if user is replying with a price tier choice (retail or installer).
+    Returns 'retail', 'installer', or None."""
+    msg = user_message.lower().strip()
+    # Check installer first (more specific)
+    for kw in _PRICE_TIER_INSTALLER:
+        if kw in msg:
+            return 'installer'
+    for kw in _PRICE_TIER_RETAIL:
+        if kw in msg:
+            return 'retail'
+    return None
+
+def ask_price_tier(panel_count, wattage, language):
+    """Ask customer whether they want retail or installer pricing (for 10+ panels)."""
+    retail_price    = 6100 if wattage == 620 else 5750
+    installer_price = 5850 if wattage == 620 else 5650
+    panel_label     = f"Talesun {wattage}W"
+    if language == "tl":
+        return (
+            f"☀️ {panel_count} pcs {panel_label} — Anong presyo po ang gusto ninyo?\n\n"
+            f"🔵 **1. Retail Price** — ₱{retail_price:,}/pc\n"
+            f"🟢 **2. Installer Price** — ₱{installer_price:,}/pc *(para sa installers/bulk orders)*\n\n"
+            f"I-reply lang po ng **retail** o **installer** para makuha ang kabuuang presyo! 😊"
+        )
+    else:
+        return (
+            f"☀️ {panel_count} pcs {panel_label} — Which price tier do you prefer?\n\n"
+            f"🔵 **1. Retail Price** — ₱{retail_price:,}/pc\n"
+            f"🟢 **2. Installer Price** — ₱{installer_price:,}/pc *(for installers/bulk orders)*\n\n"
+            f"Just reply **retail** or **installer** to get the full package price! 😊"
+        )
+
+def format_panel_package_response(panel_count, wattage, language, price_tier='retail'):
     """Calculate and format the full panel package price breakdown."""
     import math
-    price_per_panel = 6100 if wattage == 620 else 5750
+    if price_tier == 'installer':
+        price_per_panel = 5850 if wattage == 620 else 5650
+        tier_label = "Installer Price"
+    else:
+        price_per_panel = 6100 if wattage == 620 else 5750
+        tier_label = "Retail Price"
     panel_label = f"Talesun {wattage}W"
 
     # Panel subtotal
@@ -2256,7 +2355,7 @@ def format_panel_package_response(panel_count, wattage, language):
 
     if language == "tl":
         return (
-            f"☀️ **Package para sa {panel_count} pcs {panel_label}:**\n\n"
+            f"☀️ **Package para sa {panel_count} pcs {panel_label} ({tier_label}):**\n\n"
             f"📊 **Solar Panels:**\n"
             f"- {panel_count} pcs × {panel_label}: ₱{price_per_panel:,}/pc = ₱{panel_total:,}\n\n"
             f"🔧 **Mounting Hardware:**\n"
@@ -2273,7 +2372,7 @@ def format_panel_package_response(panel_count, wattage, language):
         )
     else:
         return (
-            f"☀️ **Package for {panel_count} pcs {panel_label}:**\n\n"
+            f"☀️ **Package for {panel_count} pcs {panel_label} ({tier_label}):**\n\n"
             f"📊 **Solar Panels:**\n"
             f"- {panel_count} pcs × {panel_label}: ₱{price_per_panel:,}/pc = ₱{panel_total:,}\n\n"
             f"🔧 **Mounting Hardware:**\n"
@@ -2793,20 +2892,51 @@ def webhook():
                             send_typing_indicator(sender_id)
                             time.sleep(0.3)
                             
-                            # ── Step 1: Check if user is replying with wattage (620/585) ──
-                            pending_qty = get_pending_panel_qty(sender_id)
-                            if pending_qty:
-                                wattage_choice = detect_wattage_reply(message)
-                                if wattage_choice:
+                            # ── Step 1a: Check if user is replying with price tier (retail/installer) ──
+                            pending_wattage = get_pending_wattage(sender_id)
+                            pending_qty_for_tier = get_pending_panel_qty(sender_id)
+                            if pending_wattage and pending_qty_for_tier:
+                                tier_choice = detect_price_tier_reply(message)
+                                if tier_choice:
+                                    clear_pending_wattage(sender_id)
                                     clear_pending_panel_qty(sender_id)
-                                    response_text = format_panel_package_response(pending_qty, wattage_choice, language)
+                                    response_text = format_panel_package_response(pending_qty_for_tier, pending_wattage, language, price_tier=tier_choice)
                                     faq_matched, faq_key = True, "panel_package_calc"
-                                    print(f"☀️ Panel package: {pending_qty} pcs {wattage_choice}W")
+                                    print(f"☀️ Panel package: {pending_qty_for_tier} pcs {pending_wattage}W ({tier_choice})") 
                                     sys.stdout.flush()
                                     log_analytics(sender_id, faq_key, message)
                                     save_conversation(sender_id, message, response_text, language, faq_matched)
                                     send_message_with_quick_replies(sender_id, response_text, language)
                                     return "EVENT_RECEIVED", 200
+                                # Still waiting — fall through
+
+                            # ── Step 1b: Check if user is replying with wattage (620/585) ──
+                            pending_qty = get_pending_panel_qty(sender_id)
+                            if pending_qty and not pending_wattage:
+                                wattage_choice = detect_wattage_reply(message)
+                                if wattage_choice:
+                                    if pending_qty >= _INSTALLER_THRESHOLD:
+                                        # 10+ panels: ask retail vs installer
+                                        save_pending_wattage(sender_id, wattage_choice)
+                                        response_text = ask_price_tier(pending_qty, wattage_choice, language)
+                                        faq_matched, faq_key = True, "price_tier_clarification"
+                                        print(f"❓ Price tier clarification: {pending_qty} pcs {wattage_choice}W")
+                                        sys.stdout.flush()
+                                        log_analytics(sender_id, faq_key, message)
+                                        save_conversation(sender_id, message, response_text, language, faq_matched)
+                                        send_message_with_quick_replies(sender_id, response_text, language)
+                                        return "EVENT_RECEIVED", 200
+                                    else:
+                                        # < 10 panels: use retail price directly
+                                        clear_pending_panel_qty(sender_id)
+                                        response_text = format_panel_package_response(pending_qty, wattage_choice, language, price_tier='retail')
+                                        faq_matched, faq_key = True, "panel_package_calc"
+                                        print(f"☀️ Panel package: {pending_qty} pcs {wattage_choice}W (retail)")
+                                        sys.stdout.flush()
+                                        log_analytics(sender_id, faq_key, message)
+                                        save_conversation(sender_id, message, response_text, language, faq_matched)
+                                        send_message_with_quick_replies(sender_id, response_text, language)
+                                        return "EVENT_RECEIVED", 200
                                 # Still waiting — remind them to choose
                                 # (fall through to normal AI response)
 
