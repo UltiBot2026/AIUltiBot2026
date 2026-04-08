@@ -197,6 +197,21 @@ def load_prices_from_excel():
                 bb.append({"item": str(item).strip(), "brand": brand, "price": f"₱{int(price):,}"})
         data["battery_breaker"] = bb
 
+        # --- Conduit ---
+        if "CONDUIT" in wb.sheetnames:
+            ws = wb["CONDUIT"]
+            conduit = []
+            for row in ws.iter_rows(min_row=2, values_only=True):
+                item, brand, _, price = (row + (None,)*4)[:4]
+                if item and price is not None:
+                    if isinstance(price, str):
+                        import re as _re
+                        price_str = _re.sub(r'^P(?=\d)', '₱', str(price).strip())
+                    else:
+                        price_str = f"₱{int(price):,}/meter"
+                    conduit.append({"item": str(item).strip(), "brand": brand or "", "price": price_str})
+            data["conduit"] = conduit
+
         print(f"✅ Price list loaded from Excel: {sum(len(v) for v in data.values())} items")
         sys.stdout.flush()
         return data
@@ -326,13 +341,19 @@ def build_accessories_answer(lang="en"):
             for p in items:
                 lines.append(f"- {p['item']}: {p['price']}")
 
-    # HDPE conduit — hardcoded since it's not in the Excel sheet
-    if lang == "tl":
+    # Conduit — from Excel if available, else hardcoded fallback
+    conduit_items = prices.get("conduit", [])
+    if conduit_items:
         lines.append("\n📌 *Conduit:*")
-        lines.append("- HDPE 25mm: ₱175/metro")
+        for c in conduit_items:
+            lines.append(f"- {c['item']}: {c['price']}")
     else:
-        lines.append("\n📌 *Conduit:*")
-        lines.append("- HDPE 25mm: ₱175/meter")
+        if lang == "tl":
+            lines.append("\n📌 *Conduit:*")
+            lines.append("- HDPE 25mm: ₱170/metro")
+        else:
+            lines.append("\n📌 *Conduit:*")
+            lines.append("- HDPE 25mm: ₱170/meter")
 
     if lang == "tl":
         lines.append("\nMakipag-ugnayan para sa bulk orders! ⚡")
@@ -852,11 +873,11 @@ Makipag-ugnayan para mag-order! ☀️"""
             "hdpe price", "hdpe cost", "how much hdpe", "meron hdpe"
         ],
         "answer_en": """📌 **HDPE Conduit 25mm:**
-- ₱175/meter
+- ₱170/meter
 
 Available po! Contact us to order! ☀️""",
         "answer_tl": """📌 **HDPE Conduit 25mm:**
-- ₱175/metro
+- ₱170/metro
 
 Available po! Makipag-ugnayan para mag-order! ☀️"""
     },
@@ -1494,7 +1515,7 @@ UNIT_PRICES = {
     "pv cable 4mm":   {"price": 70,    "unit": "meter","aliases": ["4mm cable", "4mm wire", "4mm pv cable", "4mm solar wire", "4mm solar cable"]},
     "pv cable 6mm":   {"price": 85,    "unit": "meter","aliases": ["6mm cable", "6mm wire", "6mm pv cable", "6mm solar wire", "6mm solar cable"]},
     # HDPE Conduit
-    "hdpe 25mm":      {"price": 175,   "unit": "meter","aliases": ["hdpe", "hdpe conduit", "hdpe pipe", "hdpe 25", "25mm hdpe", "hdpe conduit 25mm", "hdpe pipe 25mm", "hdpe tubing"]},
+    "hdpe 25mm":      {"price": 170,   "unit": "meter","aliases": ["hdpe", "hdpe conduit", "hdpe pipe", "hdpe 25", "25mm hdpe", "hdpe conduit 25mm", "hdpe pipe 25mm", "hdpe tubing"]},
     # Solar Panels (Talesun)
     "solar panel 620w": {"price": 6100, "unit": "pc", "aliases": [
         "620w panel", "620w", "620 watt", "620 watt panel", "620w solar", "620w solar panel",
