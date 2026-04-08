@@ -100,6 +100,11 @@ def init_database():
                 cursor.execute('ALTER TABLE user_preferences ADD COLUMN last_greeting_date TEXT DEFAULT NULL')
             except Exception:
                 pass  # Column already exists
+            # Migration: add pending_panel_qty for wattage clarification flow
+            try:
+                cursor.execute('ALTER TABLE user_preferences ADD COLUMN pending_panel_qty INTEGER DEFAULT NULL')
+            except Exception:
+                pass  # Column already exists
             
             conn.commit()
             conn.close()
@@ -1829,6 +1834,50 @@ def get_user_language(user_id):
     except:
         return "auto"
 
+def save_pending_panel_qty(user_id, qty):
+    """Save pending panel quantity while waiting for wattage clarification."""
+    try:
+        with db_lock:
+            conn = sqlite3.connect('/tmp/ultiphoton_chatbot.db')
+            cursor = conn.cursor()
+            cursor.execute(
+                'INSERT OR REPLACE INTO user_preferences (user_id, pending_panel_qty) '
+                'VALUES (?, ?) ON CONFLICT(user_id) DO UPDATE SET pending_panel_qty=excluded.pending_panel_qty',
+                (user_id, qty)
+            )
+            conn.commit()
+            conn.close()
+    except Exception as e:
+        print(f"❌ Error saving pending_panel_qty: {e}")
+
+def get_pending_panel_qty(user_id):
+    """Get pending panel quantity for wattage clarification."""
+    try:
+        with db_lock:
+            conn = sqlite3.connect('/tmp/ultiphoton_chatbot.db')
+            cursor = conn.cursor()
+            cursor.execute('SELECT pending_panel_qty FROM user_preferences WHERE user_id = ?', (user_id,))
+            result = cursor.fetchone()
+            conn.close()
+            return result[0] if result and result[0] is not None else None
+    except:
+        return None
+
+def clear_pending_panel_qty(user_id):
+    """Clear pending panel quantity after wattage is resolved."""
+    try:
+        with db_lock:
+            conn = sqlite3.connect('/tmp/ultiphoton_chatbot.db')
+            cursor = conn.cursor()
+            cursor.execute(
+                'UPDATE user_preferences SET pending_panel_qty = NULL WHERE user_id = ?',
+                (user_id,)
+            )
+            conn.commit()
+            conn.close()
+    except Exception as e:
+        print(f"❌ Error clearing pending_panel_qty: {e}")
+
 # ── Persistent greeting store (survives server restarts) ─────────────────────
 # Stored as a JSON file alongside app.py so Render keeps it between deploys.
 # Format: { "<user_id>": "YYYY-MM-DD", ... }
@@ -2119,6 +2168,145 @@ def get_faq_answer(faq_data, language, faq_key=None):
         return faq_data["answer_en"]
     else:
         return faq_data.get("answer", "")
+
+# ─────────────────────────────────────────────────────────────────────────────
+# WATTAGE CLARIFICATION FLOW
+# When customer asks about N panels without specifying 620W or 585W,
+# bot asks which wattage, then calculates total package price.
+# ─────────────────────────────────────────────────────────────────────────────
+import re as _re_watt
+
+# Keywords that indicate a panel quantity inquiry (no wattage specified)
+_PANEL_QTY_INQUIRY_KEYWORDS = [
+    "solar panel", "solar panels", "solar pannel", "solar pannels",
+    "solor panel", "soler panel", "pv panel",
+    "pannel", "pannels", "panal", "panals", "panle", "panles",
+    "panel", "panels",
+]
+# Keywords that indicate wattage IS specified (skip clarification)
+_WATTAGE_SPECIFIED_PATTERNS = [
+    r'\b620\b', r'\b585\b', r'\b620w\b', r'\b585w\b',
+    r'620\s*watt', r'585\s*watt',
+]
+# Keywords that indicate customer is replying with wattage choice
+_WATTAGE_REPLY_620 = [
+    "620", "620w", "620 watt", "620watts", "six twenty",
+    "620w po", "620 po", "yung 620", "ang 620",
+]
+_WATTAGE_REPLY_585 = [
+    "585", "585w", "585 watt", "585watts", "five eighty five",
+    "585w po", "585 po", "yung 585", "ang 585",
+]
+
+def detect_panel_qty_no_wattage(user_message):
+    """Detect if message asks about N panels WITHOUT specifying wattage.
+    Returns panel_count (int) if ambiguous, else None."""
+    msg = user_message.lower()
+    # Must mention panels
+    if not any(kw in msg for kw in _PANEL_QTY_INQUIRY_KEYWORDS):
+        return None
+    # Must NOT already specify wattage
+    for pat in _WATTAGE_SPECIFIED_PATTERNS:
+        if _re_watt.search(pat, msg):
+            return None
+    # Must contain a number (panel count) — also handles "4pcs", "10pc"
+    numbers = _re_watt.findall(r'(\d+)\s*(?:pcs?\.?|pieces?|units?|piraso)?', msg)
+    candidates = [int(n) for n in numbers if 1 <= int(n) <= 500]
+    if not candidates:
+        return None
+    return candidates[0]
+
+def detect_wattage_reply(user_message):
+    """Detect if user is replying with a wattage choice (620 or 585).
+    Returns 620, 585, or None."""
+    msg = user_message.lower().strip()
+    for kw in _WATTAGE_REPLY_620:
+        if kw in msg:
+            return 620
+    for kw in _WATTAGE_REPLY_585:
+        if kw in msg:
+            return 585
+    return None
+
+def format_panel_package_response(panel_count, wattage, language):
+    """Calculate and format the full panel package price breakdown."""
+    import math
+    price_per_panel = 6100 if wattage == 620 else 5750
+    panel_label = f"Talesun {wattage}W"
+
+    # Panel subtotal
+    panel_total = panel_count * price_per_panel
+
+    # Mounting hardware
+    railings     = math.ceil(panel_count * 1.2)
+    l_foot       = panel_count * 3
+    mid_clamp    = panel_count * 2
+    end_clamp    = panel_count * 2
+    rail_splicer = panel_count
+    pv_lug       = panel_count
+
+    t_railing    = railings * 600
+    t_l_foot     = l_foot * 95
+    t_mid_clamp  = mid_clamp * 85
+    t_end_clamp  = end_clamp * 85
+    t_splicer    = rail_splicer * 85
+    t_lug        = pv_lug * 70
+    mounting_total = t_railing + t_l_foot + t_mid_clamp + t_end_clamp + t_splicer + t_lug
+    grand_total  = panel_total + mounting_total
+
+    if language == "tl":
+        return (
+            f"☀️ **Package para sa {panel_count} pcs {panel_label}:**\n\n"
+            f"📊 **Solar Panels:**\n"
+            f"- {panel_count} pcs × {panel_label}: ₱{price_per_panel:,}/pc = ₱{panel_total:,}\n\n"
+            f"🔧 **Mounting Hardware:**\n"
+            f"- Railing 2.4m: {railings} pcs × ₱600 = ₱{t_railing:,}\n"
+            f"- L-Foot: {l_foot} pcs × ₱95 = ₱{t_l_foot:,}\n"
+            f"- Mid Clamp: {mid_clamp} pcs × ₱85 = ₱{t_mid_clamp:,}\n"
+            f"- End Clamp: {end_clamp} pcs × ₱85 = ₱{t_end_clamp:,}\n"
+            f"- Rail Splicer: {rail_splicer} pcs × ₱85 = ₱{t_splicer:,}\n"
+            f"- PV Grounding Lug: {pv_lug} pcs × ₱70 = ₱{t_lug:,}\n\n"
+            f"💰 **KABUUANG HALAGA: ₱{grand_total:,}**\n"
+            f"  *(Panels: ₱{panel_total:,} + Mounting: ₱{mounting_total:,})*\n\n"
+            f"📌 *Para sa materyales lamang. Hindi pa kasama ang delivery at labor.*\n"
+            f"Makipag-ugnayan sa amin para sa opisyal na quotation! 💚"
+        )
+    else:
+        return (
+            f"☀️ **Package for {panel_count} pcs {panel_label}:**\n\n"
+            f"📊 **Solar Panels:**\n"
+            f"- {panel_count} pcs × {panel_label}: ₱{price_per_panel:,}/pc = ₱{panel_total:,}\n\n"
+            f"🔧 **Mounting Hardware:**\n"
+            f"- Railing 2.4m: {railings} pcs × ₱600 = ₱{t_railing:,}\n"
+            f"- L-Foot: {l_foot} pcs × ₱95 = ₱{t_l_foot:,}\n"
+            f"- Mid Clamp: {mid_clamp} pcs × ₱85 = ₱{t_mid_clamp:,}\n"
+            f"- End Clamp: {end_clamp} pcs × ₱85 = ₱{t_end_clamp:,}\n"
+            f"- Rail Splicer: {rail_splicer} pcs × ₱85 = ₱{t_splicer:,}\n"
+            f"- PV Grounding Lug: {pv_lug} pcs × ₱70 = ₱{t_lug:,}\n\n"
+            f"💰 **TOTAL: ₱{grand_total:,}**\n"
+            f"  *(Panels: ₱{panel_total:,} + Mounting: ₱{mounting_total:,})*\n\n"
+            f"📌 *Prices are for materials only. Delivery and labor not yet included.*\n"
+            f"Contact us for an official quotation! 💚"
+        )
+
+def ask_wattage_question(panel_count, language):
+    """Generate the wattage clarification question."""
+    if language == "tl":
+        return (
+            f"☀️ Salamat po sa inyong interes sa {panel_count} solar panels!\n\n"
+            f"👉 Anong wattage po ang gusto ninyo?\n\n"
+            f"🔵 **620W** — ₱6,100/pc (mas mataas na output)\n"
+            f"🟡 **585W** — ₱5,750/pc (mas ekonomikal)\n\n"
+            f"I-reply lang po ng **620** o **585** para makuha ang kabuuang presyo kasama ang mounting hardware! 😊"
+        )
+    else:
+        return (
+            f"☀️ Thank you for your interest in {panel_count} solar panels!\n\n"
+            f"👉 Which wattage do you prefer?\n\n"
+            f"🔵 **620W** — ₱6,100/pc (higher output)\n"
+            f"🟡 **585W** — ₱5,750/pc (more economical)\n\n"
+            f"Just reply **620** or **585** and I'll calculate the full package price including mounting hardware! 😊"
+        )
 
 # ─────────────────────────────────────────────────────────────────────────────
 # MOUNTING HARDWARE CALCULATOR
@@ -2605,6 +2793,36 @@ def webhook():
                             send_typing_indicator(sender_id)
                             time.sleep(0.3)
                             
+                            # ── Step 1: Check if user is replying with wattage (620/585) ──
+                            pending_qty = get_pending_panel_qty(sender_id)
+                            if pending_qty:
+                                wattage_choice = detect_wattage_reply(message)
+                                if wattage_choice:
+                                    clear_pending_panel_qty(sender_id)
+                                    response_text = format_panel_package_response(pending_qty, wattage_choice, language)
+                                    faq_matched, faq_key = True, "panel_package_calc"
+                                    print(f"☀️ Panel package: {pending_qty} pcs {wattage_choice}W")
+                                    sys.stdout.flush()
+                                    log_analytics(sender_id, faq_key, message)
+                                    save_conversation(sender_id, message, response_text, language, faq_matched)
+                                    send_message_with_quick_replies(sender_id, response_text, language)
+                                    return "EVENT_RECEIVED", 200
+                                # Still waiting — remind them to choose
+                                # (fall through to normal AI response)
+
+                            # ── Step 2: Detect panel qty inquiry without wattage ──
+                            ambiguous_qty = detect_panel_qty_no_wattage(message)
+                            if ambiguous_qty:
+                                save_pending_panel_qty(sender_id, ambiguous_qty)
+                                response_text = ask_wattage_question(ambiguous_qty, language)
+                                faq_matched, faq_key = True, "wattage_clarification"
+                                print(f"❓ Wattage clarification needed: {ambiguous_qty} panels")
+                                sys.stdout.flush()
+                                log_analytics(sender_id, faq_key, message)
+                                save_conversation(sender_id, message, response_text, language, faq_matched)
+                                send_message_with_quick_replies(sender_id, response_text, language)
+                                return "EVENT_RECEIVED", 200
+
                             # Get AI response (with FAQ checking)
                             response_text, faq_matched, faq_key = get_ai_response(message, language)
                             
