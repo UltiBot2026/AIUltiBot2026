@@ -24,6 +24,7 @@ if not PAGE_ACCESS_TOKEN:
     PAGE_ACCESS_TOKEN = "default_token_here"
 
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "").strip()
+GOOGLE_MAPS_API_KEY = os.getenv("GOOGLE_MAPS_API_KEY", "").strip()
 PAGE_ID = "516699488185698"
 VERIFY_TOKEN = "ultiphoton_solar_verify_2026"
 
@@ -1193,6 +1194,171 @@ Makikita ninyo doon ang lahat ng impormasyon tungkol sa aming mga produkto at se
 
 # ── Price Calculator ─────────────────────────────────────────────────────────
 # Unit prices for all items the bot knows about (in PHP)
+# ── Lalamove Delivery Fee Estimation ──────────────────────────────────────────
+# Origin: UltiPhoton Solar Batangas branch (used as pickup point)
+LALAMOVE_ORIGIN = "Batangas City, Batangas, Philippines"
+
+# Lalamove PH published rates (Manila, NCR & South Luzon region)
+# Source: https://www.lalamove.com/en-ph/all-delivery-pricing-detail
+LALAMOVE_RATES = [
+    # (max_km, vehicle, base_fare, rate_per_km_tier1, tier1_limit_km, rate_per_km_tier2)
+    # Motorcycle: ₱49 base + ₱6/km (0-5km) + ₱5/km (above 5km)
+    {"vehicle": "Motorcycle", "base": 49,  "r1": 6,  "t1": 5,  "r2": 5,  "max_kg": 20},
+    # Sedan 200kg: ₱100 base + ₱18/km (0-5km) + ₱15/km (above 5km)
+    {"vehicle": "Sedan (200kg)", "base": 100, "r1": 18, "t1": 5,  "r2": 15, "max_kg": 200},
+    # MPV 600kg: ₱115 base + ₱20/km (1-30km) + ₱17/km (31-40km)
+    {"vehicle": "MPV (600kg)",   "base": 115, "r1": 20, "t1": 30, "r2": 17, "max_kg": 600},
+    # L300 1000kg: ₱900 base + ₱26/km
+    {"vehicle": "L300 (1000kg)", "base": 900, "r1": 26, "t1": 9999, "r2": 26, "max_kg": 1000},
+]
+
+def _calc_lalamove_fare(rate, km):
+    """Calculate fare for a given rate config and distance in km."""
+    tier1_km = min(km, rate["t1"])
+    tier2_km = max(0, km - rate["t1"])
+    return rate["base"] + tier1_km * rate["r1"] + tier2_km * rate["r2"]
+
+def _geocode_address(address):
+    """Return (lat, lng) for an address using Google Maps Geocoding API."""
+    if not GOOGLE_MAPS_API_KEY:
+        return None
+    try:
+        url = "https://maps.googleapis.com/maps/api/geocode/json"
+        resp = requests.get(url, params={"address": address, "key": GOOGLE_MAPS_API_KEY}, timeout=8)
+        data = resp.json()
+        if data.get("status") == "OK":
+            loc = data["results"][0]["geometry"]["location"]
+            return loc["lat"], loc["lng"]
+    except Exception as e:
+        print(f"❌ Geocode error: {e}")
+    return None
+
+def _distance_km(origin_addr, dest_addr):
+    """Return driving distance in km between two addresses using Google Distance Matrix."""
+    if not GOOGLE_MAPS_API_KEY:
+        return None
+    try:
+        url = "https://maps.googleapis.com/maps/api/distancematrix/json"
+        resp = requests.get(url, params={
+            "origins": origin_addr,
+            "destinations": dest_addr,
+            "key": GOOGLE_MAPS_API_KEY,
+            "mode": "driving",
+            "region": "ph"
+        }, timeout=10)
+        data = resp.json()
+        if data.get("status") == "OK":
+            element = data["rows"][0]["elements"][0]
+            if element.get("status") == "OK":
+                return element["distance"]["value"] / 1000.0  # meters → km
+    except Exception as e:
+        print(f"❌ Distance Matrix error: {e}")
+    return None
+
+# Regex to detect customer delivery detail messages
+_ADDR_PATTERN = re.compile(
+    r'(?:address|address:|address\s*:|add:|add\s*:|lugar|tirahan|lokasyon|location|brgy|barangay|st\.|street|ave\.|avenue|blk|block|lot|subd|subdivision)'
+    r'|(?:name:|name\s*:|pangalan:|pangalan\s*:|cp\s*no|cp\s*:|contact\s*no|contact\s*number|cellphone|mobile)',
+    re.IGNORECASE
+)
+
+def _extract_address_from_message(message):
+    """Try to extract a delivery address from a customer message.
+    Returns the address string or None."""
+    lines = [l.strip() for l in message.replace(',\n', '\n').split('\n') if l.strip()]
+    address_line = None
+    for line in lines:
+        low = line.lower()
+        # Look for address-labelled lines
+        if re.match(r'^(address|add|tirahan|lugar|lokasyon)\s*[:\-]?\s*', low):
+            # Strip the label
+            address_line = re.sub(r'^(address|add|tirahan|lugar|lokasyon)\s*[:\-]?\s*', '', line, flags=re.IGNORECASE).strip()
+            break
+        # Lines that look like a Philippine address (contain brgy/block/lot/city/province)
+        if re.search(r'\b(brgy|barangay|blk|block|lot|city|province|quezon|batangas|laguna|manila|muntinlupa|cavite|rizal|bulacan|pampanga|cebu|davao)\b', low):
+            address_line = line
+            break
+    return address_line if address_line and len(address_line) > 8 else None
+
+def estimate_lalamove_from_message(message, language="en"):
+    """Detect if a message contains a delivery address and return a Lalamove fee estimate.
+    Returns formatted response string or None if not a delivery address message."""
+    # Only trigger if message looks like delivery details
+    if not _ADDR_PATTERN.search(message):
+        return None
+    address = _extract_address_from_message(message)
+    if not address:
+        return None
+
+    # Try to get driving distance
+    km = _distance_km(LALAMOVE_ORIGIN, address + ", Philippines")
+
+    if km is None:
+        # No API key or geocoding failed — still acknowledge and ask for confirmation
+        if language == "tl":
+            return (
+                f"✅ Natanggap namin ang inyong mga detalye!\n\n"
+                f"📍 Delivery Address: {address}\n\n"
+                f"🚚 Para sa tumpak na presyo ng Lalamove, buksan po ang Lalamove app at i-input ang:\n"
+                f"• Pickup: Batangas City (UltiPhoton Solar)\n"
+                f"• Drop-off: {address}\n\n"
+                f"Makipag-ugnayan sa amin para ma-confirm ang inyong order! 📞"
+            )
+        else:
+            return (
+                f"✅ We received your delivery details!\n\n"
+                f"📍 Delivery Address: {address}\n\n"
+                f"🚚 For the exact Lalamove rate, please open the Lalamove app and enter:\n"
+                f"• Pickup: Batangas City (UltiPhoton Solar)\n"
+                f"• Drop-off: {address}\n\n"
+                f"Contact us to confirm your order! 📞"
+            )
+
+    # Calculate estimates for each vehicle type
+    estimates = []
+    for rate in LALAMOVE_RATES:
+        fare = _calc_lalamove_fare(rate, km)
+        estimates.append((rate["vehicle"], fare))
+
+    km_display = f"{km:.1f}"
+    if language == "tl":
+        lines = [
+            f"✅ Natanggap namin ang inyong mga detalye!",
+            f"",
+            f"📍 **Delivery Address:** {address}",
+            f"📏 **Estimated Distance:** ~{km_display} km mula Batangas City",
+            f"",
+            f"🚚 **Estimated Lalamove Delivery Fee:**",
+        ]
+        for vehicle, fare in estimates:
+            lines.append(f"• {vehicle}: ~₱{fare:,.0f}")
+        lines += [
+            f"",
+            f"⚠️ *Ang presyo ay estimate lamang. Maaaring mag-iba depende sa traffic, surcharge, at Lalamove app.*",
+            f"",
+            f"Makipag-ugnayan sa amin para ma-confirm ang inyong order! 📞"
+        ]
+    else:
+        lines = [
+            f"✅ We received your delivery details!",
+            f"",
+            f"📍 **Delivery Address:** {address}",
+            f"📏 **Estimated Distance:** ~{km_display} km from Batangas City",
+            f"",
+            f"🚚 **Estimated Lalamove Delivery Fee:**",
+        ]
+        for vehicle, fare in estimates:
+            lines.append(f"• {vehicle}: ~₱{fare:,.0f}")
+        lines += [
+            f"",
+            f"⚠️ *Prices are estimates only. Actual fare may vary based on traffic, surcharges, and Lalamove app pricing.*",
+            f"",
+            f"Contact us to confirm your order! 📞"
+        ]
+    return "\n".join(lines)
+
+# ── End Lalamove Delivery Fee Estimation ───────────────────────────────────────
+
 UNIT_PRICES = {
     # PV Mountings (SoEasy)
     "railing":        {"price": 600,   "unit": "pc",   "aliases": ["railings", "aluminum railing", "alum railing", "aluminium railing", "2.4m rail", "2.4m railing", "rail 2.4m", "rail", "rails"]},
@@ -1714,6 +1880,13 @@ def get_ai_response(user_message, language):
     try:
         print(f"🤖 Processing: {user_message[:50]}... (Language: {language})")
         sys.stdout.flush()
+
+        # ── Lalamove Delivery Estimate: detect customer address messages ──────────
+        lalamove_response = estimate_lalamove_from_message(user_message, language)
+        if lalamove_response:
+            print(f"🚚 Lalamove estimate generated")
+            sys.stdout.flush()
+            return lalamove_response, True, "lalamove_estimate"
 
         # ── Price Calculator: check for quantity+item pairs first ──────────────
         cart = parse_cart(user_message)
