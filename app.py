@@ -2120,6 +2120,131 @@ def get_faq_answer(faq_data, language, faq_key=None):
     else:
         return faq_data.get("answer", "")
 
+# ─────────────────────────────────────────────────────────────────────────────
+# MOUNTING HARDWARE CALCULATOR
+# Triggered when customer asks how many accessories they need for N panels
+# ─────────────────────────────────────────────────────────────────────────────
+import re as _re_hw
+import math
+
+_HW_TRIGGER_KEYWORDS = [
+    # Filipino
+    "ilang l-foot", "ilang l foot", "ilang lfoot", "ilang lft",
+    "ilang mid clamp", "ilang midclamp",
+    "ilang end clamp", "ilang endclamp",
+    "ilang rail splicer", "ilang splicer",
+    "ilang grounding lug", "ilang lug",
+    "ilang railing", "ilang railings",
+    "ilang piraso ang kailangan", "ilang piraso ang need",
+    "ilang kailangan", "ilang need ko", "ilang po kailangan",
+    "ilang accessories", "ilang mounting",
+    "ilang po ang kailangan", "ilang po ang need",
+    # English
+    "how many l-foot", "how many l foot", "how many lfoot",
+    "how many mid clamp", "how many end clamp",
+    "how many rail splicer", "how many splicer",
+    "how many grounding lug", "how many lug",
+    "how many railing", "how many railings",
+    "how many accessories", "how many mounting",
+    "how many do i need", "how many pieces do i need",
+    "accessories needed", "mounting needed",
+    "accessories for", "mounting for",
+    "pieces needed", "pcs needed",
+]
+
+_HW_PANEL_PATTERN = _re_hw.compile(
+    r'(\d+)\s*(?:pcs?\.?|pieces?|panels?|pannels?|solar panels?|units?)?\s*'
+    r'(?:panel|panels|pannels|solar|pv)?',
+    _re_hw.IGNORECASE
+)
+
+def detect_hardware_calc(user_message):
+    """Detect if user is asking how many mounting accessories they need for N panels.
+    Returns panel_count (int) if detected, else None."""
+    msg = user_message.lower()
+    # Must contain a trigger keyword
+    if not any(kw in msg for kw in _HW_TRIGGER_KEYWORDS):
+        return None
+    # Extract panel count from message
+    numbers = _re_hw.findall(r'\b(\d+)\b', msg)
+    if not numbers:
+        return None
+    # Take the first/largest number as panel count (filter out small noise numbers)
+    candidates = [int(n) for n in numbers if 1 <= int(n) <= 500]
+    if not candidates:
+        return None
+    return candidates[0]
+
+def format_hardware_calc_response(panel_count, language):
+    """Calculate and format mounting hardware quantities and total price."""
+    import math
+    # Formulas
+    railings    = math.ceil(panel_count * 1.2)
+    l_foot      = panel_count * 3
+    mid_clamp   = panel_count * 2
+    end_clamp   = panel_count * 2
+    rail_splicer= panel_count * 1
+    pv_lug      = panel_count * 1
+
+    # Prices from UNIT_PRICES
+    p_railing   = 600
+    p_l_foot    = 95
+    p_mid_clamp = 85
+    p_end_clamp = 85
+    p_splicer   = 85
+    p_lug       = 70
+
+    # Totals
+    t_railing   = railings    * p_railing
+    t_l_foot    = l_foot      * p_l_foot
+    t_mid_clamp = mid_clamp   * p_mid_clamp
+    t_end_clamp = end_clamp   * p_end_clamp
+    t_splicer   = rail_splicer* p_splicer
+    t_lug       = pv_lug      * p_lug
+    grand_total = t_railing + t_l_foot + t_mid_clamp + t_end_clamp + t_splicer + t_lug
+
+    if language == "tl":
+        return (
+            f"🔧 **Mounting Hardware para sa {panel_count} Solar Panels:**\n\n"
+            f"| Materyales | Qty | Presyo/pc | Subtotal |\n"
+            f"|---|---|---|---|\n"
+            f"| Aluminum Railing 2.4m | {railings} pcs | ₱{p_railing:,} | ₱{t_railing:,} |\n"
+            f"| L-Foot | {l_foot} pcs | ₱{p_l_foot:,} | ₱{t_l_foot:,} |\n"
+            f"| Mid Clamp | {mid_clamp} pcs | ₱{p_mid_clamp:,} | ₱{t_mid_clamp:,} |\n"
+            f"| End Clamp | {end_clamp} pcs | ₱{p_end_clamp:,} | ₱{t_end_clamp:,} |\n"
+            f"| Rail Splicer | {rail_splicer} pcs | ₱{p_splicer:,} | ₱{t_splicer:,} |\n"
+            f"| PV Grounding Lug | {pv_lug} pcs | ₱{p_lug:,} | ₱{t_lug:,} |\n\n"
+            f"💰 **KABUUANG HALAGA: ₱{grand_total:,}**\n\n"
+            f"📐 *Formula:*\n"
+            f"- Railing = panels × 1.2 (rounded up)\n"
+            f"- L-Foot = panels × 3\n"
+            f"- Mid/End Clamp = panels × 2\n"
+            f"- Rail Splicer / PV Lug = panels × 1\n\n"
+            f"📌 *Para sa materyales lamang. Hindi pa kasama ang delivery at labor.*\n"
+            f"Makipag-ugnayan sa amin para sa opisyal na quotation! 💚"
+        )
+    else:
+        return (
+            f"🔧 **Mounting Hardware for {panel_count} Solar Panels:**\n\n"
+            f"| Material | Qty | Price/pc | Subtotal |\n"
+            f"|---|---|---|---|\n"
+            f"| Aluminum Railing 2.4m | {railings} pcs | ₱{p_railing:,} | ₱{t_railing:,} |\n"
+            f"| L-Foot | {l_foot} pcs | ₱{p_l_foot:,} | ₱{t_l_foot:,} |\n"
+            f"| Mid Clamp | {mid_clamp} pcs | ₱{p_mid_clamp:,} | ₱{t_mid_clamp:,} |\n"
+            f"| End Clamp | {end_clamp} pcs | ₱{p_end_clamp:,} | ₱{t_end_clamp:,} |\n"
+            f"| Rail Splicer | {rail_splicer} pcs | ₱{p_splicer:,} | ₱{t_splicer:,} |\n"
+            f"| PV Grounding Lug | {pv_lug} pcs | ₱{p_lug:,} | ₱{t_lug:,} |\n\n"
+            f"💰 **TOTAL: ₱{grand_total:,}**\n\n"
+            f"📐 *Formula used:*\n"
+            f"- Railing = panels × 1.2 (rounded up)\n"
+            f"- L-Foot = panels × 3\n"
+            f"- Mid/End Clamp = panels × 2\n"
+            f"- Rail Splicer / PV Lug = panels × 1\n\n"
+            f"📌 *Prices are for materials only. Delivery and labor not yet included.*\n"
+            f"Contact us for an official quotation! 💚"
+        )
+
+# ─────────────────────────────────────────────────────────────────────────────
 def get_quick_reply_buttons(language):
     """Get quick reply buttons for common questions"""
     if language == "tl":
@@ -2154,6 +2279,13 @@ def get_ai_response(user_message, language):
             print(f"🚚 Lalamove estimate generated")
             sys.stdout.flush()
             return lalamove_response, True, "lalamove_estimate"
+
+        # ── Mounting Hardware Calculator: detect "ilang kailangan" type queries ──
+        hw_panel_count = detect_hardware_calc(user_message)
+        if hw_panel_count:
+            print(f"🔧 Hardware calc triggered: {hw_panel_count} panels")
+            sys.stdout.flush()
+            return format_hardware_calc_response(hw_panel_count, language), True, "hardware_calculator"
 
         # ── Price Calculator: check for quantity+item pairs first ──────────────
         cart = parse_cart(user_message)
