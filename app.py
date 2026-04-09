@@ -2012,11 +2012,17 @@ def parse_cart(message):
             seg_stripped, _re.IGNORECASE
         )
 
+        # Known wattage values — must never be treated as a quantity
+        _KNOWN_WATTS = {580, 585, 610, 620, 625}
         candidates = []
         if m_before:
-            candidates.append((int(m_before.group(1)), m_before.group(2).strip()))
+            _q = int(m_before.group(1))
+            if _q not in _KNOWN_WATTS:  # e.g. "Hm 620w panel?" → 620 is wattage, not qty
+                candidates.append((_q, m_before.group(2).strip()))
         if m_after:
-            candidates.append((int(m_after.group(2)), m_after.group(1).strip()))
+            _q = int(m_after.group(2))
+            if _q not in _KNOWN_WATTS:
+                candidates.append((_q, m_after.group(1).strip()))
 
         for qty, raw_name in candidates:
             # Strip leading dash/hyphen separators (e.g. "- 585W Solar panel" → "585W Solar panel")
