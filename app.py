@@ -2896,8 +2896,26 @@ def send_message_with_quick_replies(recipient_id, message_text, language):
             sys.stdout.flush()
             return True
         else:
-            print(f"❌ Error: {response.status_code}")
+            print(f"❌ FB Error {response.status_code}: {response.text[:500]}")
             sys.stdout.flush()
+            # Fallback: try sending without quick replies if quick_replies caused the error
+            try:
+                plain_payload = {
+                    "recipient": {"id": recipient_id},
+                    "messaging_type": "RESPONSE",
+                    "message": {"text": message_text}
+                }
+                r2 = requests.post(url, json=plain_payload, params=params, timeout=10)
+                if r2.status_code == 200:
+                    print(f"✅ Fallback plain message sent!")
+                    sys.stdout.flush()
+                    return True
+                else:
+                    print(f"❌ Fallback also failed {r2.status_code}: {r2.text[:500]}")
+                    sys.stdout.flush()
+            except Exception as fe:
+                print(f"❌ Fallback exception: {fe}")
+                sys.stdout.flush()
             return False
             
     except Exception as e:
@@ -2928,7 +2946,7 @@ def send_message(recipient_id, message_text):
             sys.stdout.flush()
             return True
         else:
-            print(f"❌ Facebook Error: {response.status_code}")
+            print(f"❌ Facebook Error {response.status_code}: {response.text[:500]}")
             sys.stdout.flush()
             return False
             
