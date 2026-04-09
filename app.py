@@ -2437,8 +2437,15 @@ def find_matching_faq(user_message):
     5. Fallback to accessories / solar_panel_price via their generic keywords
     """
     message_lower = user_message.lower()
-
-    # --- PASS 1: Per-item accessory keywords (most specific) ---
+    # --- PASS 0: Specs FAQs — checked FIRST so 'specs 585W' beats the pricing FAQ ---
+    SPECS_KEYS = ["specs_585w", "specs_620w", "specs_general"]
+    for spec_key in SPECS_KEYS:
+        faq_data = FAQS.get(spec_key)
+        if faq_data:
+            for keyword in faq_data["keywords"]:
+                if keyword.lower() in message_lower:
+                    return spec_key, faq_data
+    # --- PASS 1: Per-item accessory keywords (most specific) ----
     for item_key in PER_ITEM_ACCESSORY_KEYS:
         faq_data = FAQS.get(item_key)
         if faq_data:
@@ -2457,7 +2464,7 @@ def find_matching_faq(user_message):
             return "solar_panel_price", FAQS["solar_panel_price"]
 
     # --- PASS 4: Normal FAQ loop (skip per-item, accessories, solar_panel_price) ---
-    SKIP_IN_PASS4 = set(PER_ITEM_ACCESSORY_KEYS) | {"accessories", "solar_panel_price"}
+    SKIP_IN_PASS4 = set(PER_ITEM_ACCESSORY_KEYS) | {"accessories", "solar_panel_price", "specs_585w", "specs_620w", "specs_general"}
     for faq_key, faq_data in FAQS.items():
         if faq_key in SKIP_IN_PASS4:
             continue
