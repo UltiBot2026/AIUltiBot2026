@@ -366,8 +366,12 @@ def build_solar_panel_answer(lang="en"):
 
     if lang == "tl":
         lines.append("\nMakipag-ugnayan sa amin para sa bulk orders! 📞")
+        lines.append("\n🛒 *Ready na mag-order? I-type ang listahan ng materials mo tulad nito:*")
+        lines.append("1 pc Solar Panel 585W\n4 pcs L-Foot\n4 pcs Mid Clamp\n...at awtomatiko naming kakalkulahin ang total! 🧮")
     else:
         lines.append("\nContact us for bulk orders and special pricing! 📞")
+        lines.append("\n🛒 *Ready to order? Type your materials list like this:*")
+        lines.append("1 pc Solar Panel 585W\n4 pcs L-Foot\n4 pcs Mid Clamp\n...and I'll calculate your total automatically! 🧮")
 
     return "\n".join(lines)
 
@@ -415,12 +419,17 @@ def build_accessories_answer(lang="en"):
 
     if lang == "tl":
         lines.append("\nMakipag-ugnayan para sa bulk orders! ⚡")
+        lines.append("\n🛒 *Ready na mag-order? I-type ang listahan ng materials mo:*")
+        lines.append("1 pc Solar Panel 585W\n4 pcs L-Foot\n4 pcs Mid Clamp\n...at awtomatiko naming kakalkulahin ang total! 🧮")
     else:
         lines.append("\nContact us for bulk orders! ⚡")
+        lines.append("\n🛒 *Ready to order? Just type your materials list:*")
+        lines.append("1 pc Solar Panel 585W\n4 pcs L-Foot\n4 pcs Mid Clamp\n...and I'll calculate your total automatically! 🧮")
 
     return "\n".join(lines)
 
-# ─────────────────────────────────────────────────────────────────────────────
+
+# ───────────────────────────────────────────────────────────────────────────────
 
 # FAQ Database with Updated Information
 FAQS = {
@@ -950,6 +959,66 @@ Contact us to order! ☀️""",
 - 6mm: ₱85/metro
 
 Makipag-ugnayan para mag-order! ☀️"""
+    },
+
+    "order_format": {
+        "keywords": [
+            # English order intent
+            "ready to order", "i want to order", "i would like to order", "place order",
+            "how to order", "how do i order", "paano mag-order", "paano umorder",
+            "order na", "mag-order na", "gusto ko na mag-order", "order po",
+            "i want to buy", "i would like to buy", "gusto ko bilhin", "bibilhin ko",
+            "total ko", "total namin", "paki total", "pakitotal", "compute total",
+            "how to get total", "paano makuha total", "paano makuha ang total",
+            "send list", "list of materials", "materials list", "order list",
+            "format ng order", "order format", "how to send order",
+        ],
+        "answer_en": """🛒 **Ready to Order? Here's how to get your total cost!**
+
+Just type your materials list in Messenger using this format:
+
+📋 *Example:*
+1 pc Solar Panel 585W
+1 pc Railing
+4 pcs L-Foot
+4 pcs Mid Clamp
+4 pcs End Clamp
+1 pc Rail Splicer
+1 pc PV Grounding Lug
+20 meters PV Cable 6mm
+
+✅ Our bot will **automatically calculate your total!**
+
+📌 *Tips:*
+- You can write "pcs", "pc", "pieces", or just the number
+- Specify wattage: **585W** or **620W** for solar panels
+- 10+ solar panels automatically get **installer price** 🟢
+- Misspelled words are okay — we'll figure it out! 😊
+
+Contact us for delivery & payment details! 💚""",
+        "answer_tl": """🛒 **Ready na mag-order? Ganito para malaman ang total cost!**
+
+I-type lang ang listahan ng materials sa Messenger gamit ang format na ito:
+
+📋 *Halimbawa:*
+1 pc Solar Panel 585W
+1 pc Railing
+4 pcs L-Foot
+4 pcs Mid Clamp
+4 pcs End Clamp
+1 pc Rail Splicer
+1 pc PV Grounding Lug
+20 metro PV Cable 6mm
+
+✅ Awtomatiko naming **kakalkulahin ang inyong total!**
+
+📌 *Tips:*
+- Pwedeng "pcs", "pc", "piraso", o numero lang
+- Tukuyin ang wattage: **585W** o **620W** para sa solar panels
+- 10+ solar panels = awtomatikong **installer price** 🟢
+- Kahit may maling spelling — maiintindihan namin! 😊
+
+Makipag-ugnayan sa amin para sa delivery at payment! 💚"""
     },
 
     "hdpe_price": {
@@ -1604,7 +1673,8 @@ UNIT_PRICES = {
     "hdpe 25mm":      {"price": 170,   "unit": "meter","aliases": ["hdpe", "hdpe conduit", "hdpe pipe", "hdpe 25", "25mm hdpe", "hdpe conduit 25mm", "hdpe pipe 25mm", "hdpe tubing"]},
     # Solar Panels (Talesun)
     # NOTE: generic misspellings (no wattage) default to 620W price
-    "solar panel 620w": {"price": 6100, "unit": "pc", "aliases": [
+    # installer_price is used when qty >= 10 in the cart calculator
+    "solar panel 620w": {"price": 6100, "installer_price": 5850, "unit": "pc", "aliases": [
         "620w panel", "620w", "620 watt", "620 watt panel", "620w solar", "620w solar panel",
         "talesun 620w", "talesun 620", "panel 620w", "panel 620", "620",
         # 620W misspellings
@@ -1618,7 +1688,7 @@ UNIT_PRICES = {
         "soler panel", "soler panels", "solar pane", "solar panes",
         "solar panels", "solar panel",
     ]},
-    "solar panel 585w": {"price": 5750, "unit": "pc", "aliases": [
+    "solar panel 585w": {"price": 5750, "installer_price": 5650, "unit": "pc", "aliases": [
         "585w panel", "585w", "585 watt", "585 watt panel", "585w solar", "585w solar panel",
         "talesun 585w", "talesun 585", "panel 585w", "panel 585", "585",
         # 585W misspellings
@@ -1660,6 +1730,26 @@ def _resolve_item(raw_name):
     """Match a raw item name to a UNIT_PRICES key. Returns (key, item_data) or (None, None)."""
     raw = raw_name.strip().lower()
     sorted_items = _sorted_unit_prices()
+
+    # 0. Wattage-priority: if raw contains '585' or '620', resolve to the correct panel first.
+    #    This prevents the generic 'solar panel' alias (in 620W) from winning over 585W.
+    #    Also catches misspellings like 'pannels 585w', '585w pannel', etc.
+    _has_585 = bool(_re.search(r'585', raw))   # any occurrence of 585
+    _has_620 = bool(_re.search(r'620', raw))   # any occurrence of 620
+    if _has_585 and not _has_620:
+        # Raw contains 585 but not 620 — must be 585W panel
+        key585, data585 = 'solar panel 585w', UNIT_PRICES.get('solar panel 585w')
+        if data585:
+            # Confirm it's panel-related (contains a panel keyword or wattage alias)
+            _panel_words = ['panel', 'pannel', 'panal', 'panle', 'solar', 'talesun', '585']
+            if any(pw in raw for pw in _panel_words):
+                return key585, data585
+    if _has_620 and not _has_585:
+        key620, data620 = 'solar panel 620w', UNIT_PRICES.get('solar panel 620w')
+        if data620:
+            _panel_words = ['panel', 'pannel', 'panal', 'panle', 'solar', 'talesun', '620']
+            if any(pw in raw for pw in _panel_words):
+                return key620, data620
 
     # 1. Exact key match
     if raw in UNIT_PRICES:
@@ -1756,16 +1846,28 @@ def parse_cart(message):
             candidates.append((int(m_after.group(2)), m_after.group(1).strip()))
 
         for qty, raw_name in candidates:
+            # Strip leading dash/hyphen separators (e.g. "- 585W Solar panel" → "585W Solar panel")
+            raw_name = _re.sub(r'^[-–—\s]+', '', raw_name).strip()
+            # Strip parenthetical price hints (e.g. "(P5650)", "(₱6100)")
+            raw_name = _re.sub(r'\s*\([^)]*\)\s*$', '', raw_name).strip()
+            # Normalize multiple spaces to single space
+            raw_name = _re.sub(r'\s+', ' ', raw_name).strip()
             key, data = _resolve_item(raw_name)
             if key and key not in seen_keys:
                 seen_keys.add(key)
+                # Use installer price for solar panels when qty >= 10
+                is_panel = key in ('solar panel 620w', 'solar panel 585w')
+                unit_price = data['price']
+                if is_panel and qty >= 10 and data.get('installer_price'):
+                    unit_price = data['installer_price']
                 found.append({
                     "qty": qty,
                     "key": key,
                     "label": key.title(),
-                    "unit_price": data["price"],
+                    "unit_price": unit_price,
                     "unit": data["unit"],
-                    "subtotal": qty * data["price"],
+                    "subtotal": qty * unit_price,
+                    "is_installer": is_panel and qty >= 10 and bool(data.get('installer_price')),
                 })
                 break  # stop after first successful match for this segment
     return found
@@ -1773,19 +1875,24 @@ def parse_cart(message):
 def format_cart_response(cart, language):
     """Build the itemized total message from a parsed cart."""
     grand_total = sum(item["subtotal"] for item in cart)
+    has_installer = any(item.get('is_installer') for item in cart)
     lines = []
     for item in cart:
+        tier_note = " *(installer)*" if item.get('is_installer') else ""
         lines.append(
             f"- {item['qty']} {item['unit']}(s) × {item['label']}: "
-            f"₱{item['unit_price']:,}/{item['unit']} = "
+            f"₱{item['unit_price']:,}/{item['unit']}{tier_note} = "
             f"₱{item['subtotal']:,}"
         )
     items_block = "\n".join(lines)
+    installer_note_tl = "\n🟢 *Installer price ang ginamit para sa 10+ pcs na solar panels.*" if has_installer else ""
+    installer_note_en = "\n🟢 *Installer price applied for 10+ pcs solar panels.*" if has_installer else ""
 
     if language == "tl":
         return (
             f"🧮 **Listahan ng Presyo:**\n\n"
-            f"{items_block}\n\n"
+            f"{items_block}\n"
+            f"{installer_note_tl}\n"
             f"💰 **KABUUANG HALAGA: ₱{grand_total:,}**\n\n"
             f"📌 *Ang presyo ay para sa materyales lamang. Hindi pa kasama ang delivery at labor.*\n"
             f"Makipag-ugnayan sa amin para sa opisyal na quotation! 💚"
@@ -1793,7 +1900,8 @@ def format_cart_response(cart, language):
     else:
         return (
             f"🧮 **Price Breakdown:**\n\n"
-            f"{items_block}\n\n"
+            f"{items_block}\n"
+            f"{installer_note_en}\n"
             f"💰 **TOTAL: ₱{grand_total:,}**\n\n"
             f"📌 *Prices are for materials only. Delivery and labor charges not yet included.*\n"
             f"Contact us for an official quotation! 💚"
