@@ -2437,14 +2437,21 @@ def find_matching_faq(user_message):
     5. Fallback to accessories / solar_panel_price via their generic keywords
     """
     message_lower = user_message.lower()
-    # --- PASS 0: Specs FAQs — checked FIRST so 'specs 585W' beats the pricing FAQ ---
-    SPECS_KEYS = ["specs_585w", "specs_620w", "specs_general"]
-    for spec_key in SPECS_KEYS:
-        faq_data = FAQS.get(spec_key)
-        if faq_data:
-            for keyword in faq_data["keywords"]:
-                if keyword.lower() in message_lower:
-                    return spec_key, faq_data
+    # --- PASS 0: Specs FAQs — smart detection: specs word + panel reference ---
+    _SPEC_WORDS = ["spec", "specs", "specification", "specifications", "detalye",
+                   "katangian", "details", "detail", "technical", "datasheet",
+                   "data sheet", "spec sheet"]
+    _has_spec_word = any(sw in message_lower for sw in _SPEC_WORDS)
+    if _has_spec_word:
+        _has_585 = any(x in message_lower for x in ["585", "580"])
+        _has_620 = any(x in message_lower for x in ["620", "610", "625"])
+        _has_panel = any(x in message_lower for x in ["panel", "solar", "talesun", "bifacial"])
+        if _has_585:
+            return "specs_585w", FAQS["specs_585w"]
+        elif _has_620:
+            return "specs_620w", FAQS["specs_620w"]
+        elif _has_panel or _has_spec_word:
+            return "specs_general", FAQS["specs_general"]
     # --- PASS 1: Per-item accessory keywords (most specific) ----
     for item_key in PER_ITEM_ACCESSORY_KEYS:
         faq_data = FAQS.get(item_key)
