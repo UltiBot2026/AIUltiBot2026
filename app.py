@@ -460,7 +460,7 @@ Makipag-ugnayan sa amin para sa bulk orders! 📞"""
     },
     
     "location": {
-        "keywords": ["location", "located", "saan", "address", "office", "branch", "where", "lokasyon"],
+        "keywords": ["location", "located", "saan", "address", "office", "branch", "where", "lokasyon", "loc", "loc po", "saan kayo", "san kayo", "san po", "san po kayo", "nasaan", "nasaan kayo", "asan", "asan kayo", "store", "shop", "tindahan"],
         "answer_en": """📍 Our Locations:
 
 Main Office - UltiPhoton Solar Muntinlupa
@@ -768,7 +768,9 @@ Schedule ngayon! 📞"""
             "paleta", "pallet", "ilang piraso", "piraso sa isang paleta",
             "ilang panels sa paleta", "panels per pallet", "how many per pallet",
             "ilang pcs", "ilang pieces", "pieces per pallet", "qty per pallet",
-            "quantity per pallet", "ilang panel sa paleta", "pcs per pallet"
+            "quantity per pallet", "ilang panel sa paleta", "pcs per pallet",
+            "per pallet", "sa paleta", "bawat paleta", "isang paleta",
+            "ilang panels", "how many panels", "ilang solar panel"
         ],
         "answer_en": """📦 **Panels Per Pallet:**
 
@@ -3095,7 +3097,34 @@ def webhook():
                     for messaging in entry.get("messaging", []):
                         sender_id = messaging.get("sender", {}).get("id")
                         message = messaging.get("message", {}).get("text")
-                        
+
+                        # ── Handle comment-to-Messenger referral (no text yet) ──
+                        # When someone clicks "Send Message" from a post comment,
+                        # Facebook sends a referral event with no message text.
+                        # We send a greeting so the customer knows the bot is active.
+                        if sender_id and not message:
+                            referral = messaging.get("referral") or messaging.get("message", {}).get("referral")
+                            postback = messaging.get("postback")
+                            if referral or postback:
+                                print(f"\n🔗 Referral/postback from {sender_id}")
+                                sys.stdout.flush()
+                                if is_first_message(sender_id):
+                                    lang = get_user_language(sender_id)
+                                    if lang == "auto":
+                                        lang = "tl"  # default to Tagalog for PH customers
+                                    greeting = get_greeting_message(lang)
+                                    send_message_with_quick_replies(sender_id, greeting, lang)
+                                    mark_first_message_sent(sender_id)
+                                else:
+                                    lang = get_user_language(sender_id)
+                                    if lang == "auto":
+                                        lang = "tl"
+                                    if lang == "tl":
+                                        send_message(sender_id, "Kumusta! 😊 Paano namin kayo matutulungan ngayon?")
+                                    else:
+                                        send_message(sender_id, "Hello! 😊 How can we help you today?")
+                                continue
+
                         if sender_id and message:
                             print(f"\n📨 Message from {sender_id}: {message}")
                             sys.stdout.flush()
