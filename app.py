@@ -1693,6 +1693,10 @@ UNIT_PRICES = {
     "solar panel 585w": {"price": 5750, "installer_price": 5650, "unit": "pc", "aliases": [
         "585w panel", "585w", "585 watt", "585 watt panel", "585w solar", "585w solar panel",
         "talesun 585w", "talesun 585", "panel 585w", "panel 585", "585",
+        # Close wattages that customers may type by mistake (rounds to 585W)
+        "580w", "580w panel", "580w solar", "580 watt", "580",
+        "583w", "584w", "586w", "587w", "588w", "590w",
+        "580w pannel", "580w pannels",
         # 585W misspellings
         "585w pannel", "585w pannels", "pannels 585w", "pannel 585w",
         "585w panal", "585w panals", "585w panle", "585w panles",
@@ -1736,8 +1740,8 @@ def _resolve_item(raw_name):
     # 0. Wattage-priority: if raw contains '585' or '620', resolve to the correct panel first.
     #    This prevents the generic 'solar panel' alias (in 620W) from winning over 585W.
     #    Also catches misspellings like 'pannels 585w', '585w pannel', etc.
-    _has_585 = bool(_re.search(r'585', raw))   # any occurrence of 585
-    _has_620 = bool(_re.search(r'620', raw))   # any occurrence of 620
+    _has_585 = bool(_re.search(r'58[0-9]', raw))   # 580-589 all map to 585W
+    _has_620 = bool(_re.search(r'6[12][0-9]', raw))  # 610-629 all map to 620W
     if _has_585 and not _has_620:
         # Raw contains 585 but not 620 — must be 585W panel
         key585, data585 = 'solar panel 585w', UNIT_PRICES.get('solar panel 585w')
