@@ -2959,6 +2959,30 @@ def send_message(recipient_id, message_text):
 def health():
     return {"status": "ok", "service": "Ultiphoton Chatbot"}, 200
 
+@app.route("/debug_send", methods=["GET"])
+def debug_send():
+    """Test the Facebook send API and return the full error for debugging."""
+    try:
+        import requests as _req
+        url = f"https://graph.facebook.com/v21.0/{PAGE_ID}/messages"
+        payload = {
+            "recipient": {"id": PAGE_ID},
+            "messaging_type": "RESPONSE",
+            "message": {"text": "Debug test"}
+        }
+        params = {"access_token": PAGE_ACCESS_TOKEN}
+        r = _req.post(url, json=payload, params=params, timeout=10)
+        token_preview = PAGE_ACCESS_TOKEN[:20] + "..." if PAGE_ACCESS_TOKEN else "EMPTY"
+        return {
+            "status_code": r.status_code,
+            "response": r.text[:1000],
+            "page_id": PAGE_ID,
+            "token_preview": token_preview,
+            "url": url
+        }, 200
+    except Exception as e:
+        return {"error": str(e)}, 500
+
 @app.route("/", methods=["GET"])
 def home():
     return "🤖 Ultiphoton Solar Power OPC Advanced Chatbot is running!", 200
