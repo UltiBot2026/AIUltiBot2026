@@ -1401,16 +1401,183 @@ Visit us online at:
 👉 https://ultiphotonsolarpoweropc.com/
 
 You can find more information about our products, services, and solar solutions on our website! ☀️""",
-        "answer_tl": """🌐 **Ang Aming Website:**
-
+         "answer_tl": """🌐 **Ang Aming Website:**
 Bisitahin kami online sa:
 👉 https://ultiphotonsolarpoweropc.com/
-
 Makikita ninyo doon ang lahat ng impormasyon tungkol sa aming mga produkto at serbisyo! ☀️"""
+    },
+
+    # ── Talesun 585W Specifications ──────────────────────────────────────────
+    "specs_585w": {
+        "keywords": [
+            "spec 585", "specs 585", "specification 585", "specifications 585",
+            "585w spec", "585w specs", "585 watt spec", "585w specification",
+            "585w details", "585 details", "585w info", "585w data",
+            "585w dimension", "585w weight", "585w efficiency", "585w voltage",
+            "585w warranty", "585w model", "585w talesun", "talesun 585w spec",
+            "talesun 585 spec", "spek 585", "spek ng 585", "detalye ng 585",
+            "katangian ng 585", "sukat ng 585", "timbang ng 585",
+        ],
+        "answer_en": """☀️ **Talesun 585W Bifacial Solar Panel Specifications**
+📋 Model: BIPRO TM7G72M 16BB (Silver Frame)
+
+⚡ **Electrical:**
+- Power Output: 585W (Range: 580–605W)
+- Module Efficiency: ~21.5%
+- Operating Voltage (Vmpp): ~37.5V
+- Open-Circuit Voltage (Voc): 52.17V
+- Operating Current (Impp): ~15.6A
+- Short-Circuit Current (Isc): ~15.6A
+- Max String Voltage: 1500V
+
+📐 **Physical:**
+- Dimensions: 2,278 × 1,134 × 30 mm (89.69 × 44.65 × 1.18 in)
+- Weight: 31.8 kg (70.11 lbs)
+- Cell Type: Monocrystalline, 144 cells (half-cut)
+- Technology: Bifacial, TOPCon, N-type
+
+🛡️ **Warranty:** 12 Years
+✅ Dual glass | Bifacial backsheet | Half-cut cell technology
+
+📌 *Prices are for materials only. Contact us for official quotation!* 💚""",
+        "answer_tl": """☀️ **Talesun 585W Bifacial Solar Panel — Mga Detalye**
+📋 Model: BIPRO TM7G72M 16BB (Silver Frame)
+
+⚡ **Elektrikal:**
+- Kapangyarihan: 585W (Saklaw: 580–605W)
+- Kahusayan ng Module: ~21.5%
+- Operating Voltage (Vmpp): ~37.5V
+- Open-Circuit Voltage (Voc): 52.17V
+- Operating Current (Impp): ~15.6A
+- Short-Circuit Current (Isc): ~15.6A
+- Max String Voltage: 1500V
+
+📐 **Pisikal:**
+- Sukat: 2,278 × 1,134 × 30 mm
+- Timbang: 31.8 kg
+- Uri ng Cell: Monocrystalline, 144 cells (half-cut)
+- Teknolohiya: Bifacial, TOPCon, N-type
+
+🛡️ **Warranty:** 12 Taon
+✅ Dual glass | Bifacial backsheet | Half-cut cell technology
+
+📌 *Para sa opisyal na quotation, makipag-ugnayan sa amin!* 💚"""
+    },
+
+    # ── Talesun 620W Specifications ──────────────────────────────────────────
+    "specs_620w": {
+        "keywords": [
+            "spec 620", "specs 620", "specification 620", "specifications 620",
+            "620w spec", "620w specs", "620 watt spec", "620w specification",
+            "620w details", "620 details", "620w info", "620w data",
+            "620w dimension", "620w weight", "620w efficiency", "620w voltage",
+            "620w warranty", "620w model", "620w talesun", "talesun 620w spec",
+            "talesun 620 spec", "spek 620", "spek ng 620", "detalye ng 620",
+            "katangian ng 620", "sukat ng 620", "timbang ng 620",
+        ],
+        "answer_en": """☀️ **Talesun 620W Bifacial Solar Panel Specifications**
+📋 Model: BIPRO TM3G66M 16BB (Silver Frame)
+
+⚡ **Electrical:**
+- Power Output: 620W (Range: 610–630W)
+- Module Efficiency: ~22.8%
+- Operating Voltage (Vmpp): 41.10V
+- Open-Circuit Voltage (Voc): 49.00V
+- Operating Current (Impp): ~15.1A
+- Short-Circuit Current (Isc): ~15.8A
+- Max String Voltage: 1500V
+
+📐 **Physical:**
+- Dimensions: 2,382 × 1,134 × 30 mm (93.78 × 44.65 × 1.18 in)
+- Weight: 33.7 kg (74.29 lbs)
+- Cell Type: Monocrystalline, 132 cells
+- Technology: Bifacial, TOPCon, N-type
+
+🛡️ **Warranty:** 12 Years
+✅ Dual glass | Bifacial backsheet | Half-cut cell technology
+
+📌 *Prices are for materials only. Contact us for official quotation!* 💚""",
+        "answer_tl": """☀️ **Talesun 620W Bifacial Solar Panel — Mga Detalye**
+📋 Model: BIPRO TM3G66M 16BB (Silver Frame)
+
+⚡ **Elektrikal:**
+- Kapangyarihan: 620W (Saklaw: 610–630W)
+- Kahusayan ng Module: ~22.8%
+- Operating Voltage (Vmpp): 41.10V
+- Open-Circuit Voltage (Voc): 49.00V
+- Operating Current (Impp): ~15.1A
+- Short-Circuit Current (Isc): ~15.8A
+- Max String Voltage: 1500V
+
+📐 **Pisikal:**
+- Sukat: 2,382 × 1,134 × 30 mm
+- Timbang: 33.7 kg
+- Uri ng Cell: Monocrystalline, 132 cells
+- Teknolohiya: Bifacial, TOPCon, N-type
+
+🛡️ **Warranty:** 12 Taon
+✅ Dual glass | Bifacial backsheet | Half-cut cell technology
+
+📌 *Para sa opisyal na quotation, makipag-ugnayan sa amin!* 💚"""
+    },
+
+    # ── General Talesun / Both Panel Specs ───────────────────────────────────
+    "specs_general": {
+        "keywords": [
+            "spec sheet", "specs sheet", "specification sheet", "datasheet",
+            "panel spec", "panel specs", "solar panel spec", "solar panel specs",
+            "solar spec", "solar specs", "talesun spec", "talesun specs",
+            "bifacial spec", "topcon spec", "n-type spec",
+            "spek ng panel", "spek ng solar", "detalye ng panel",
+            "katangian ng panel", "anong spec", "anong specs",
+            "what are the specs", "panel specifications", "technical specs",
+            "technical specification", "panel info", "solar info",
+        ],
+        "answer_en": """☀️ **Talesun Bifacial Solar Panel Specifications**
+
+📋 **585W — BIPRO TM7G72M 16BB**
+- Power: 585W | Efficiency: ~21.5% | Weight: 31.8 kg
+- Dimensions: 2,278 × 1,134 × 30 mm
+- Voc: 52.17V | Vmpp: ~37.5V | Isc: ~15.6A
+- Cells: 144 half-cut monocrystalline | Technology: TOPCon N-type Bifacial
+
+📋 **620W — BIPRO TM3G66M 16BB**
+- Power: 620W | Efficiency: ~22.8% | Weight: 33.7 kg
+- Dimensions: 2,382 × 1,134 × 30 mm
+- Voc: 49.00V | Vmpp: 41.10V | Isc: ~15.8A
+- Cells: 132 half-cut monocrystalline | Technology: TOPCon N-type Bifacial
+
+✅ **Both models feature:**
+- Bifacial gain: up to +25% from rear-side reflection
+- Max string voltage: 1500V
+- 12-Year product warranty
+- Dual glass + silver aluminum frame
+
+📌 *Ask for 585W or 620W specs for full details!* 💚""",
+        "answer_tl": """☀️ **Talesun Bifacial Solar Panel — Mga Detalye**
+
+📋 **585W — BIPRO TM7G72M 16BB**
+- Kapangyarihan: 585W | Kahusayan: ~21.5% | Timbang: 31.8 kg
+- Sukat: 2,278 × 1,134 × 30 mm
+- Voc: 52.17V | Vmpp: ~37.5V | Isc: ~15.6A
+- Cells: 144 half-cut monocrystalline | Teknolohiya: TOPCon N-type Bifacial
+
+📋 **620W — BIPRO TM3G66M 16BB**
+- Kapangyarihan: 620W | Kahusayan: ~22.8% | Timbang: 33.7 kg
+- Sukat: 2,382 × 1,134 × 30 mm
+- Voc: 49.00V | Vmpp: 41.10V | Isc: ~15.8A
+- Cells: 132 half-cut monocrystalline | Teknolohiya: TOPCon N-type Bifacial
+
+✅ **Parehong modelo:**
+- Bifacial gain: hanggang +25% mula sa likod
+- Max string voltage: 1500V
+- 12-Taon na warranty
+- Dual glass + silver aluminum frame
+
+📌 *I-type ang '585W specs' o '620W specs' para sa buong detalye!* 💚"""
     }
 }
-
-# ── Price Calculator ─────────────────────────────────────────────────────────
+# ── Price Calculatorr ─────────────────────────────────────────────────────────
 # Unit prices for all items the bot knows about (in PHP)
 # ── Lalamove Delivery Fee Estimation ──────────────────────────────────────────
 # Origin: UltiPhoton Solar Batangas branch (used as pickup point)
