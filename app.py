@@ -2951,13 +2951,18 @@ def get_ai_response(user_message, language):
             sys.stdout.flush()
             return format_hardware_calc_response(hw_panel_count, language), True, "hardware_calculator"
 
+        # ── Specs check: if message has a spec word, skip cart parser entirely ──────
+        _ml = user_message.lower()
+        _spec_words = ["spec","specs","specification","specifications","detalye",
+                       "katangian","details","detail","technical","datasheet",
+                       "data sheet","spec sheet"]
+        _is_spec_query = any(sw in _ml for sw in _spec_words)
         # ── Price Calculator: check for quantity+item pairs first ────────────────────
-        cart = parse_cart(user_message)
+        cart = None if _is_spec_query else parse_cart(user_message)
         if cart:
             print(f"🧮 Cart detected: {[i['key'] for i in cart]}")
             sys.stdout.flush()
             return format_cart_response(cart, language), True, "price_calculator"
-
         # Check for FAQ match first
         faq_key, faq_data = find_matching_faq(user_message)
         if faq_key and faq_data:
