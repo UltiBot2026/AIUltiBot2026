@@ -2585,6 +2585,48 @@ _HW_PANEL_PATTERN = _re_hw.compile(
     _re_hw.IGNORECASE
 )
 
+# Keywords that signal the customer wants accessories/mounting computed alongside panels
+_ACCESSORIES_COMPUTE_KEYWORDS = [
+    # English
+    "compute", "calculate", "accessories", "accesories", "acessories",
+    "mounting", "mountings", "hardware", "how much mounting", "how much accessories",
+    "and accessories", "with accessories", "including accessories",
+    "and mounting", "with mounting", "including mounting",
+    "total with accessories", "total with mounting",
+    "full package", "package price", "complete package",
+    "all in", "all-in",
+    # Filipino
+    "kasama ang accessories", "kasama accessories", "kasama mounting",
+    "pati accessories", "pati mounting", "pati ang mounting",
+    "at accessories", "at mounting", "at ang mounting",
+    "compute accessories", "calculate accessories",
+    "ilang accessories", "magkano accessories", "magkano ang accessories",
+    "magkano mounting", "magkano ang mounting",
+    "complete", "kumpleto", "buong package",
+]
+
+def detect_panel_with_accessories(user_message):
+    """Detect messages like '2pcs 585W panels and compute for accessories'.
+    Returns (panel_count, wattage) if both panel qty+wattage AND accessories keyword found, else (None, None)."""
+    msg = user_message.lower()
+    # Must contain an accessories/compute keyword
+    if not any(kw in msg for kw in _ACCESSORIES_COMPUTE_KEYWORDS):
+        return None, None
+    # Extract wattage using simple substring (handles '585w', '585W', '585 watt', etc.)
+    wattage = None
+    if '585' in msg:
+        wattage = 585
+    elif '620' in msg:
+        wattage = 620
+    if not wattage:
+        return None, None
+    # Extract all digit sequences; filter out wattage numbers and out-of-range values
+    numbers = _re_hw.findall(r'\d+', msg)
+    candidates = [int(n) for n in numbers if 1 <= int(n) <= 500 and int(n) not in (585, 620)]
+    if not candidates:
+        return None, None
+    return candidates[0], wattage
+
 def detect_hardware_calc(user_message):
     """Detect if user is asking how many mounting accessories they need for N panels.
     Returns panel_count (int) if detected, else None."""
@@ -2707,6 +2749,14 @@ def get_ai_response(user_message, language):
             sys.stdout.flush()
             return lalamove_response, True, "lalamove_estimate"
 
+        # ── Combined Panel + Accessories: "2pcs 585W panels and compute for accessories" ──
+        combo_panel_count, combo_wattage = detect_panel_with_accessories(user_message)
+        if combo_panel_count and combo_wattage:
+            price_tier = 'installer' if combo_panel_count >= 10 else 'retail'
+            print(f"☀️ Panel+accessories combo: {combo_panel_count} pcs {combo_wattage}W ({price_tier})")
+            sys.stdout.flush()
+            return format_panel_package_response(combo_panel_count, combo_wattage, language, price_tier=price_tier), True, "panel_package_calc"
+
         # ── Mounting Hardware Calculator: detect "ilang kailangan" type queries ──
         hw_panel_count = detect_hardware_calc(user_message)
         if hw_panel_count:
@@ -2714,7 +2764,7 @@ def get_ai_response(user_message, language):
             sys.stdout.flush()
             return format_hardware_calc_response(hw_panel_count, language), True, "hardware_calculator"
 
-        # ── Price Calculator: check for quantity+item pairs first ──────────────
+        # ── Price Calculator: check for quantity+item pairs first ────────────────────
         cart = parse_cart(user_message)
         if cart:
             print(f"🧮 Cart detected: {[i['key'] for i in cart]}")
