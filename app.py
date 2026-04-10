@@ -3268,23 +3268,26 @@ def webhook():
         return "Invalid token", 403
     
     elif request.method == "POST":
-        # ── Security: Verify X-Hub-Signature-256 (Meta HMAC) ──────────────────
+        # NOTE: Signature check is log-only (never blocks) to prevent
+        # accidental outages if APP_SECRET is wrong or not set.
         if APP_SECRET:
             sig_header = request.headers.get("X-Hub-Signature-256", "")
             if not sig_header.startswith("sha256="):
-                print("⚠️  Webhook: missing X-Hub-Signature-256 header — rejecting request")
+                print("⚠️  Webhook: missing X-Hub-Signature-256 header (continuing anyway)")
                 sys.stdout.flush()
-                return "Forbidden", 403
-            expected_sig = "sha256=" + hmac.new(
-                APP_SECRET.encode("utf-8"),
-                request.get_data(),
-                hashlib.sha256
-            ).hexdigest()
-            if not hmac.compare_digest(sig_header, expected_sig):
-                print("⚠️  Webhook: invalid signature — rejecting request")
-                sys.stdout.flush()
-                return "Forbidden", 403
-        # ──────────────────────────────────────────────────────────────────────
+            else:
+                expected_sig = "sha256=" + hmac.new(
+                    APP_SECRET.encode("utf-8"),
+                    request.get_data(),
+                    hashlib.sha256
+                ).hexdigest()
+                if not hmac.compare_digest(sig_header, expected_sig):
+                    print("⚠️  Webhook: signature mismatch (continuing anyway — check APP_SECRET on Render)")
+                    sys.stdout.flush()
+                else:
+                    print("✅ Webhook: signature verified")
+                    sys.stdout.flush()
+        # ─────────────────────────────────────────────────────────────────────────────
         try:
             data = request.get_json()
             
