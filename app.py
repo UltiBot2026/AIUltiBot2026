@@ -812,17 +812,15 @@ Para sa bulk orders, makipag-ugnayan para sa espesyal na presyo! ☀️"""
 - Rail Splicer: ₱85 | Grounding Lug: ₱70
 
 📌 **Breakers & Protection (Chint/Chyt):**
-- DC Breaker 20A 2P: ₱580
+- DC Breaker 20A 2P (Chint): ₱580 | (CHYT): ₱385
 - AC Breaker 40A/63A 2P: ₱550
 - AC Breaker 100A 2P: ₱1,100
 - DC SPD 1200V 40kA: ₱550
 - AC SPD 2P 400V: ₱350
 - AC SPD 4P 385V: ₱565
-
 📌 **Connectors:**
 - MC4 30A 1000V pair: ₱40
 - Battery Breaker DC 250A: ₱1,200
-
 Contact us for bulk orders & inverter pricing! 📞""",
         "answer_tl": """💰 **Opisyal na Listahan ng Presyo ng Ultiphoton:**
 
@@ -836,17 +834,15 @@ Contact us for bulk orders & inverter pricing! 📞""",
 - Rail Splicer: ₱85 | Grounding Lug: ₱70
 
 📌 **Breakers & Protection (Chint/Chyt):**
-- DC Breaker 20A 2P: ₱580
+- DC Breaker 20A 2P (Chint): ₱580 | (CHYT): ₱385
 - AC Breaker 40A/63A 2P: ₱550
 - AC Breaker 100A 2P: ₱1,100
 - DC SPD 1200V 40kA: ₱550
 - AC SPD 2P 400V: ₱350
 - AC SPD 4P 385V: ₱565
-
 📌 **Connectors:**
 - MC4 30A 1000V pair: ₱40
 - Battery Breaker DC 250A: ₱1,200
-
 Makipag-ugnayan para sa bulk orders at inverter pricing! 📞"""
     },
     "products_and_price": {
