@@ -577,7 +577,7 @@ Magpadala ng proof of payment! 🏦"""
         "answer_en": """🔧 **Accessories & Materials Price List:**
 
 📌 **PV Mountings (SoEasy Brand):**
-- Aluminum Railing 2.4m: ₱600/pc
+- Aluminum Railing 2.4m: ₱620/pc
 - L Foot: ₱95/pc
 - Mid Clamp: ₱85/pc
 - End Clamp: ₱85/pc
@@ -608,7 +608,7 @@ Contact us for bulk orders! ⚡""",
         "answer_tl": """🔧 **Listahan ng Presyo ng Accessories & Materials:**
 
 📌 **PV Mountings (SoEasy Brand):**
-- Aluminum Railing 2.4m: ₱600/pc
+- Aluminum Railing 2.4m: ₱620/pc
 - L Foot: ₱95/pc
 - Mid Clamp: ₱85/pc
 - End Clamp: ₱85/pc
@@ -807,21 +807,21 @@ Para sa bulk orders, makipag-ugnayan para sa espesyal na presyo! ☀️"""
 - 585W: ₱5,800 retail / ₱5,650 installer
 
 📌 **PV Mountings (SoEasy):**
-- Aluminum Railing 2.4m: ₱600
+- Aluminum Railing 2.4m: ₱620
 - L Foot: ₱95 | Mid/End Clamp: ₱85
 - Rail Splicer: ₱85 | Grounding Lug: ₱70
 
 📌 **Breakers & Protection (Chint/Chyt):**
-- DC Breaker 20A 2P: ₱680
-- AC Breaker 40A/63A 2P: ₱750
-- AC Breaker 100A 2P: ₱1,300
+- DC Breaker 20A 2P: ₱580
+- AC Breaker 40A/63A 2P: ₱550
+- AC Breaker 100A 2P: ₱1,100
 - DC SPD 1200V 40kA: ₱550
 - AC SPD 2P 400V: ₱350
 - AC SPD 4P 385V: ₱565
 
 📌 **Connectors:**
 - MC4 30A 1000V pair: ₱40
-- Battery Breaker DC 250AT: ₱1,700
+- Battery Breaker DC 250A: ₱1,200
 
 Contact us for bulk orders & inverter pricing! 📞""",
         "answer_tl": """💰 **Opisyal na Listahan ng Presyo ng Ultiphoton:**
@@ -831,21 +831,21 @@ Contact us for bulk orders & inverter pricing! 📞""",
 - 585W: ₱5,800 retail / ₱5,650 installer
 
 📌 **PV Mountings (SoEasy):**
-- Aluminum Railing 2.4m: ₱600
+- Aluminum Railing 2.4m: ₱620
 - L Foot: ₱95 | Mid/End Clamp: ₱85
 - Rail Splicer: ₱85 | Grounding Lug: ₱70
 
 📌 **Breakers & Protection (Chint/Chyt):**
-- DC Breaker 20A 2P: ₱680
-- AC Breaker 40A/63A 2P: ₱750
-- AC Breaker 100A 2P: ₱1,300
+- DC Breaker 20A 2P: ₱580
+- AC Breaker 40A/63A 2P: ₱550
+- AC Breaker 100A 2P: ₱1,100
 - DC SPD 1200V 40kA: ₱550
 - AC SPD 2P 400V: ₱350
 - AC SPD 4P 385V: ₱565
 
 📌 **Connectors:**
 - MC4 30A 1000V pair: ₱40
-- Battery Breaker DC 250AT: ₱1,700
+- Battery Breaker DC 250A: ₱1,200
 
 Makipag-ugnayan para sa bulk orders at inverter pricing! 📞"""
     },
@@ -873,8 +873,8 @@ Makipag-ugnayan para sa bulk orders at inverter pricing! 📞"""
     # --- Per-item accessory FAQs (specific items return only their own price) ---
     "railing": {
         "keywords": ["railing", "railings", "aluminum railing", "rail", "rails", "magkano railing", "presyo ng railing", "railing price", "solar rail", "solar rails", "solar railing", "pv rail", "mounting rail", "panel rail"],
-        "answer_en": "Aluminum Railing 2.4m (SoEasy): ₱600/pc ☀️",
-        "answer_tl": "Aluminum Railing 2.4m (SoEasy): ₱600/pc ☀️"
+        "answer_en": "Aluminum Railing 2.4m (SoEasy): ₱620/pc ☀️",
+        "answer_tl": "Aluminum Railing 2.4m (SoEasy): ₱620/pc ☀️"
     },
     "l_foot": {
         "keywords": ["l foot", "l-foot", "lfoot", "magkano l foot", "presyo ng l foot"],
@@ -903,13 +903,13 @@ Makipag-ugnayan para sa bulk orders at inverter pricing! 📞"""
     },
     "dc_breaker": {
         "keywords": ["dc breaker", "dc-breaker", "dcbreaker", "20a breaker", "20a 2p", "magkano dc breaker", "presyo ng dc breaker"],
-        "answer_en": "DC Breaker 20A, 2P (Chint/Chyt): ₱680/pc ☀️",
-        "answer_tl": "DC Breaker 20A, 2P (Chint/Chyt): ₱680/pc ☀️"
+        "answer_en": "DC Breaker 20A, 2P (Chint): ₱580/pc | (CHYT): ₱385/pc ☀️",
+        "answer_tl": "DC Breaker 20A, 2P (Chint): ₱580/pc | (CHYT): ₱385/pc ☀️"
     },
     "ac_breaker": {
         "keywords": ["ac breaker", "ac-breaker", "acbreaker", "magkano ac breaker", "presyo ng ac breaker", "40a", "63a", "100a"],
-        "answer_en": "AC Breakers (Chint/Chyt):\n- 40A, 2P: ₱750/pc\n- 63A, 2P: ₱750/pc\n- 100A, 2P: ₱1,300/pc ☀️",
-        "answer_tl": "AC Breakers (Chint/Chyt):\n- 40A, 2P: ₱750/pc\n- 63A, 2P: ₱750/pc\n- 100A, 2P: ₱1,300/pc ☀️"
+        "answer_en": "AC Breakers (Chint/Chyt):\n- 40A, 2P: ₱550/pc\n- 63A, 2P: ₱550/pc\n- 100A, 2P: ₱1,100/pc ☀️",
+        "answer_tl": "AC Breakers (Chint/Chyt):\n- 40A, 2P: ₱550/pc\n- 63A, 2P: ₱550/pc\n- 100A, 2P: ₱1,100/pc ☀️"
     },
     "dc_spd": {
         "keywords": ["dc spd", "dc-spd", "dcspd", "1200v spd", "1200vdc", "magkano dc spd", "presyo ng dc spd"],
@@ -928,8 +928,8 @@ Makipag-ugnayan para sa bulk orders at inverter pricing! 📞"""
     },
     "battery_breaker": {
         "keywords": ["battery breaker", "battery-breaker", "250at", "dc 250at", "magkano battery breaker", "presyo ng battery breaker"],
-        "answer_en": "Battery Breaker DC 250AT (Chint/Chyt): ₱1,700/pc ☀️",
-        "answer_tl": "Battery Breaker DC 250AT (Chint/Chyt): ₱1,700/pc ☀️"
+        "answer_en": "Battery Breaker DC 250A (Chyt): ₱1,200/pc ☀️",
+        "answer_tl": "Battery Breaker DC 250A (Chyt): ₱1,200/pc ☀️"
     },
     "pv_cable": {
         "keywords": [
@@ -2692,7 +2692,7 @@ def format_panel_package_response(panel_count, wattage, language, price_tier='re
             f"📊 **Solar Panels:**\n"
             f"- {panel_count} pcs × {panel_label}: ₱{price_per_panel:,}/pc = ₱{panel_total:,}\n\n"
             f"🔧 **Mounting Hardware:**\n"
-            f"- Railing 2.4m: {railings} pcs × ₱600 = ₱{t_railing:,}\n"
+            f"- Railing 2.4m: {railings} pcs × ₱620 = ₱{t_railing:,}\n"
             f"- L-Foot: {l_foot} pcs × ₱95 = ₱{t_l_foot:,}\n"
             f"- Mid Clamp: {mid_clamp} pcs × ₱85 = ₱{t_mid_clamp:,}\n"
             f"- End Clamp: {end_clamp} pcs × ₱85 = ₱{t_end_clamp:,}\n"
@@ -2709,7 +2709,7 @@ def format_panel_package_response(panel_count, wattage, language, price_tier='re
             f"📊 **Solar Panels:**\n"
             f"- {panel_count} pcs × {panel_label}: ₱{price_per_panel:,}/pc = ₱{panel_total:,}\n\n"
             f"🔧 **Mounting Hardware:**\n"
-            f"- Railing 2.4m: {railings} pcs × ₱600 = ₱{t_railing:,}\n"
+            f"- Railing 2.4m: {railings} pcs × ₱620 = ₱{t_railing:,}\n"
             f"- L-Foot: {l_foot} pcs × ₱95 = ₱{t_l_foot:,}\n"
             f"- Mid Clamp: {mid_clamp} pcs × ₱85 = ₱{t_mid_clamp:,}\n"
             f"- End Clamp: {end_clamp} pcs × ₱85 = ₱{t_end_clamp:,}\n"
