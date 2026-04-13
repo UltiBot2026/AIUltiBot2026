@@ -438,22 +438,22 @@ FAQS = {
         "answer_en": """☀️ **Solar Panel Pricing (Talesun):**
 
 **620W Bifacial**
-- Retail: ₱6,100/pc
+- Retail: ₱6,000/pc
 - Installer price: ₱5,850/pc
 
 **585W Bifacial**
-- Retail: ₱5,750/pc
+- Retail: ₱5,800/pc
 - Installer price: ₱5,650/pc
 
 Contact us for bulk orders and special pricing! 📞""",
         "answer_tl": """☀️ **Presyo ng Solar Panels (Talesun):**
 
 **620W Bifacial**
-- Retail: ₱6,100/pc
+- Retail: ₱6,000/pc
 - Installer price: ₱5,850/pc
 
 **585W Bifacial**
-- Retail: ₱5,750/pc
+- Retail: ₱5,800/pc
 - Installer price: ₱5,650/pc
 
 Makipag-ugnayan sa amin para sa bulk orders! 📞"""
@@ -585,21 +585,21 @@ Magpadala ng proof of payment! 🏦"""
 - PV Grounding Lug: ₱70/pc
 
 📌 **DC Breakers (Chint/Chyt):**
-- DC Breaker 20A, 2P: ₱680/pc
+- DC Breaker 20A, 2P (Chint): ₱580/pc | (CHYT): ₱385/pc
 
 📌 **AC Breakers (Chint/Chyt):**
-- AC Breaker 40A, 2P: ₱750/pc
-- AC Breaker 63A, 2P: ₱750/pc
-- AC Breaker 100A, 2P: ₱1,300/pc
+- AC Breaker 40A, 2P: ₱550/pc
+- AC Breaker 63A, 2P: ₱550/pc
+- AC Breaker 100A, 2P: ₱1,100/pc
 
 📌 **Surge Protection (SPD):**
-- DC SPD 1200VDC 40kA: ₱780/pc
-- AC SPD 2P 400V: ₱580/pc
-- AC SPD 4P 385V: ₱980/pc
+- DC SPD 1200VDC 40kA: ₱550/pc
+- AC SPD 2P 400V: ₱350/pc
+- AC SPD 4P 385V: ₱565/pc
 
 📌 **Connectors & Others:**
-- MC4 30A DC 1000V (Male & Female pair): ₱80/pair
-- Battery Breaker DC 250AT: ₱1,700/pc
+- MC4 30A DC 1000V (Male & Female pair): ₱40/pair
+- Battery Breaker DC 250A: ₱1,200/pc
 
 📌 **Conduit:**
 - HDPE 25mm: ₱175/meter
@@ -616,21 +616,21 @@ Contact us for bulk orders! ⚡""",
 - PV Grounding Lug: ₱70/pc
 
 📌 **DC Breakers (Chint/Chyt):**
-- DC Breaker 20A, 2P: ₱680/pc
+- DC Breaker 20A, 2P (Chint): ₱580/pc | (CHYT): ₱385/pc
 
 📌 **AC Breakers (Chint/Chyt):**
-- AC Breaker 40A, 2P: ₱750/pc
-- AC Breaker 63A, 2P: ₱750/pc
-- AC Breaker 100A, 2P: ₱1,300/pc
+- AC Breaker 40A, 2P: ₱550/pc
+- AC Breaker 63A, 2P: ₱550/pc
+- AC Breaker 100A, 2P: ₱1,100/pc
 
 📌 **Surge Protection (SPD):**
-- DC SPD 1200VDC 40kA: ₱780/pc
-- AC SPD 2P 400V: ₱580/pc
-- AC SPD 4P 385V: ₱980/pc
+- DC SPD 1200VDC 40kA: ₱550/pc
+- AC SPD 2P 400V: ₱350/pc
+- AC SPD 4P 385V: ₱565/pc
 
 📌 **Connectors & Others:**
-- MC4 30A DC 1000V (Male & Female pair): ₱80/pair
-- Battery Breaker DC 250AT: ₱1,700/pc
+- MC4 30A DC 1000V (Male & Female pair): ₱40/pair
+- Battery Breaker DC 250A: ₱1,200/pc
 
 📌 **Conduit:**
 - HDPE 25mm: ₱175/metro
@@ -803,8 +803,8 @@ Para sa bulk orders, makipag-ugnayan para sa espesyal na presyo! ☀️"""
         "answer_en": """💰 **Ultiphoton Official Price List:**
 
 ☀️ **Solar Panels (Talesun):**
-- 620W: ₱6,100 retail / ₱5,850 installer
-- 585W: ₱5,750 retail / ₱5,650 installer
+- 620W: ₱6,000 retail / ₱5,850 installer
+- 585W: ₱5,800 retail / ₱5,650 installer
 
 📌 **PV Mountings (SoEasy):**
 - Aluminum Railing 2.4m: ₱600
@@ -815,20 +815,20 @@ Para sa bulk orders, makipag-ugnayan para sa espesyal na presyo! ☀️"""
 - DC Breaker 20A 2P: ₱680
 - AC Breaker 40A/63A 2P: ₱750
 - AC Breaker 100A 2P: ₱1,300
-- DC SPD 1200V 40kA: ₱780
-- AC SPD 2P 400V: ₱580
-- AC SPD 4P 385V: ₱980
+- DC SPD 1200V 40kA: ₱550
+- AC SPD 2P 400V: ₱350
+- AC SPD 4P 385V: ₱565
 
 📌 **Connectors:**
-- MC4 30A 1000V pair: ₱80
+- MC4 30A 1000V pair: ₱40
 - Battery Breaker DC 250AT: ₱1,700
 
 Contact us for bulk orders & inverter pricing! 📞""",
         "answer_tl": """💰 **Opisyal na Listahan ng Presyo ng Ultiphoton:**
 
 ☀️ **Solar Panels (Talesun):**
-- 620W: ₱6,100 retail / ₱5,850 installer
-- 585W: ₱5,750 retail / ₱5,650 installer
+- 620W: ₱6,000 retail / ₱5,850 installer
+- 585W: ₱5,800 retail / ₱5,650 installer
 
 📌 **PV Mountings (SoEasy):**
 - Aluminum Railing 2.4m: ₱600
@@ -839,12 +839,12 @@ Contact us for bulk orders & inverter pricing! 📞""",
 - DC Breaker 20A 2P: ₱680
 - AC Breaker 40A/63A 2P: ₱750
 - AC Breaker 100A 2P: ₱1,300
-- DC SPD 1200V 40kA: ₱780
-- AC SPD 2P 400V: ₱580
-- AC SPD 4P 385V: ₱980
+- DC SPD 1200V 40kA: ₱550
+- AC SPD 2P 400V: ₱350
+- AC SPD 4P 385V: ₱565
 
 📌 **Connectors:**
-- MC4 30A 1000V pair: ₱80
+- MC4 30A 1000V pair: ₱40
 - Battery Breaker DC 250AT: ₱1,700
 
 Makipag-ugnayan para sa bulk orders at inverter pricing! 📞"""
@@ -913,18 +913,18 @@ Makipag-ugnayan para sa bulk orders at inverter pricing! 📞"""
     },
     "dc_spd": {
         "keywords": ["dc spd", "dc-spd", "dcspd", "1200v spd", "1200vdc", "magkano dc spd", "presyo ng dc spd"],
-        "answer_en": "DC SPD 1200VDC 40kA (Chint/Chyt): ₱780/pc ☀️",
-        "answer_tl": "DC SPD 1200VDC 40kA (Chint/Chyt): ₱780/pc ☀️"
+        "answer_en": "DC SPD 1200VDC 40kA (Chint/Chyt): ₱550/pc ☀️",
+        "answer_tl": "DC SPD 1200VDC 40kA (Chint/Chyt): ₱550/pc ☀️"
     },
     "ac_spd": {
         "keywords": ["ac spd", "ac-spd", "acspd", "400v spd", "385v spd", "magkano ac spd", "presyo ng ac spd"],
-        "answer_en": "AC SPD (Chint/Chyt):\n- 2P 400V: ₱580/pc\n- 4P 385V: ₱980/pc ☀️",
-        "answer_tl": "AC SPD (Chint/Chyt):\n- 2P 400V: ₱580/pc\n- 4P 385V: ₱980/pc ☀️"
+        "answer_en": "AC SPD (Chint/Chyt):\n- 2P 400V: ₱350/pc\n- 4P 385V: ₱565/pc ☀️",
+        "answer_tl": "AC SPD (Chint/Chyt):\n- 2P 400V: ₱350/pc\n- 4P 385V: ₱565/pc ☀️"
     },
     "mc4": {
         "keywords": ["mc4", "mc-4", "connector", "connectors", "male female pair", "magkano mc4", "presyo ng mc4"],
-        "answer_en": "MC4 30A DC 1000V Male & Female Pair (Chint/Chyt): ₱80/pair ☀️",
-        "answer_tl": "MC4 30A DC 1000V Male & Female Pair (Chint/Chyt): ₱80/pair ☀️"
+        "answer_en": "MC4 30A DC 1000V Male & Female Pair (Chint/Chyt): ₱40/pair ☀️",
+        "answer_tl": "MC4 30A DC 1000V Male & Female Pair (Chint/Chyt): ₱40/pair ☀️"
     },
     "battery_breaker": {
         "keywords": ["battery breaker", "battery-breaker", "250at", "dc 250at", "magkano battery breaker", "presyo ng battery breaker"],
@@ -1815,26 +1815,26 @@ def estimate_lalamove_from_message(message, language="en"):
 
 UNIT_PRICES = {
     # PV Mountings (SoEasy)
-    "railing":        {"price": 600,   "unit": "pc",   "aliases": ["railings", "aluminum railing", "alum railing", "aluminium railing", "2.4m rail", "2.4m railing", "rail 2.4m", "rail", "rails", "solar rail", "solar rails", "solar railing", "solar railings", "pv rail", "pv rails", "mounting rail", "mounting rails", "panel rail", "panel rails"]},
+    "railing":        {"price": 620,   "unit": "pc",   "aliases": ["railings", "aluminum railing", "alum railing", "aluminium railing", "2.4m rail", "2.4m railing", "rail 2.4m", "rail", "rails", "solar rail", "solar rails", "solar railing", "solar railings", "pv rail", "pv rails", "mounting rail", "mounting rails", "panel rail", "panel rails"]},
     "l-foot":         {"price": 95,    "unit": "pc",   "aliases": ["l foot", "lfoot", "l-feet", "l feet", "lfeet", "l-foots", "l clamp", "l-clamp", "lclamp", "l clamps", "l-clamps", "lft", "l ft", "l-ft", "lf"]},
     "mid clamp":      {"price": 85,    "unit": "pc",   "aliases": ["midclamp", "mid-clamp", "middle clamp", "mid clamps"]},
     "end clamp":      {"price": 85,    "unit": "pc",   "aliases": ["endclamp", "end-clamp", "end clamps", "end connector", "end connectors"]},
     "rail splicer":   {"price": 85,    "unit": "pc",   "aliases": ["rail splice", "splicer", "rail connector", "splicer connector", "splice connector", "splicing connector", "splice kit", "splicing kit", "rail jointer", "rail joint", "rail joiner", "jointer", "joiner", "rail coupling", "coupling", "rail splice kit", "splice"]},
     "pv grounding lug": {"price": 70, "unit": "pc",   "aliases": ["grounding lug", "grounding lugs", "ground lug", "ground lugs", "pv lug", "pv lugs", "grounding"]},
     # DC Breakers
-    "dc breaker":     {"price": 680,   "unit": "pc",   "aliases": ["dc circuit breaker", "dc cb", "dc breakers", "dc braker"]},
+    "dc breaker":     {"price": 580,   "unit": "pc",   "aliases": ["dc circuit breaker", "dc cb", "dc breakers", "dc braker"]},
     # AC Breakers
-    "ac breaker 40a": {"price": 750,   "unit": "pc",   "aliases": ["40a breaker", "40amp breaker", "40a ac breaker", "40 amp breaker"]},
-    "ac breaker 63a": {"price": 750,   "unit": "pc",   "aliases": ["63a breaker", "63amp breaker", "63a ac breaker", "63 amp breaker"]},
-    "ac breaker 100a":{"price": 1300,  "unit": "pc",   "aliases": ["100a breaker", "100amp breaker", "100a ac breaker", "100 amp breaker"]},
+    "ac breaker 40a": {"price": 550,   "unit": "pc",   "aliases": ["40a breaker", "40amp breaker", "40a ac breaker", "40 amp breaker"]},
+    "ac breaker 63a": {"price": 550,   "unit": "pc",   "aliases": ["63a breaker", "63amp breaker", "63a ac breaker", "63 amp breaker"]},
+    "ac breaker 100a":{"price": 1100,  "unit": "pc",   "aliases": ["100a breaker", "100amp breaker", "100a ac breaker", "100 amp breaker"]},
     # SPD
-    "dc spd":         {"price": 780,   "unit": "pc",   "aliases": ["dc surge", "dc surge protector", "dc spd 1200v"]},
-    "ac spd 2p":      {"price": 580,   "unit": "pc",   "aliases": ["ac spd 2pole", "ac surge 2p", "2p spd", "2 pole spd"]},
-    "ac spd 4p":      {"price": 980,   "unit": "pc",   "aliases": ["ac spd 4pole", "ac surge 4p", "4p spd", "4 pole spd"]},
+    "dc spd":         {"price": 550,   "unit": "pc",   "aliases": ["dc surge", "dc surge protector", "dc spd 1200v"]},
+    "ac spd 2p":      {"price": 350,   "unit": "pc",   "aliases": ["ac spd 2pole", "ac surge 2p", "2p spd", "2 pole spd"]},
+    "ac spd 4p":      {"price": 565,   "unit": "pc",   "aliases": ["ac spd 4pole", "ac surge 4p", "4p spd", "4 pole spd"]},
     # MC4
-    "mc4":            {"price": 80,    "unit": "pair", "aliases": ["mc4 connector", "mc4 connectors", "mc-4", "mc 4"]},
+    "mc4":            {"price": 40,    "unit": "pair", "aliases": ["mc4 connector", "mc4 connectors", "mc-4", "mc 4"]},
     # Battery Breaker
-    "battery breaker":{"price": 1700,  "unit": "pc",   "aliases": ["battery cb", "battery circuit breaker", "batt breaker", "battery braker"]},
+    "battery breaker":{"price": 1200,  "unit": "pc",   "aliases": ["battery cb", "battery circuit breaker", "batt breaker", "battery braker"]},
     # PV Cable
     "pv cable 4mm":   {"price": 70,    "unit": "meter","aliases": ["4mm cable", "4mm wire", "4mm pv cable", "4mm solar wire", "4mm solar cable"]},
     "pv cable 6mm":   {"price": 85,    "unit": "meter","aliases": ["6mm cable", "6mm wire", "6mm pv cable", "6mm solar wire", "6mm solar cable"]},
@@ -1843,7 +1843,7 @@ UNIT_PRICES = {
     # Solar Panels (Talesun)
     # NOTE: generic misspellings (no wattage) default to 620W price
     # installer_price is used when qty >= 10 in the cart calculator
-    "solar panel 620w": {"price": 6100, "installer_price": 5850, "unit": "pc", "aliases": [
+    "solar panel 620w": {"price": 6000, "installer_price": 5850, "unit": "pc", "aliases": [
         "620w panel", "620w", "620 watt", "620 watt panel", "620w solar", "620w solar panel",
         "talesun 620w", "talesun 620", "panel 620w", "panel 620", "620",
         # 620W misspellings
@@ -1857,7 +1857,7 @@ UNIT_PRICES = {
         "soler panel", "soler panels", "solar pane", "solar panes",
         "solar panels", "solar panel",
     ]},
-    "solar panel 585w": {"price": 5750, "installer_price": 5650, "unit": "pc", "aliases": [
+    "solar panel 585w": {"price": 5800, "installer_price": 5650, "unit": "pc", "aliases": [
         "585w panel", "585w", "585 watt", "585 watt panel", "585w solar", "585w solar panel",
         "talesun 585w", "talesun 585", "panel 585w", "panel 585", "585",
         # Close wattages that customers may type by mistake (rounds to 585W)
