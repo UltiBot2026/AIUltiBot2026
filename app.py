@@ -1976,8 +1976,16 @@ def parse_cart(message):
     # e.g. '14 pcs 2.4m rail' → '14 pcs rail'  (the alias '2.4m rail' handles matching)
     text = _re.sub(r'\b(\d+\.\d+)\s*m\s+', '', text)
 
-    # Strip leading non-numeric words (e.g. "magkano total", "how much", "bale eto order ko")
-    text = _re.sub(r'^[^\d,]+(?=\d)', '', text)
+    # Strip leading FILLER words only (e.g. "magkano total", "how much", "bale eto order ko")
+    # Do NOT strip if the leading text is a known item name (e.g. "L foot 36pcs")
+    _FILLER_PREFIX = _re.compile(
+        r'^(?:magkano|presyo|how much|how many|ilang|bale|eto|order ko|gusto ko|paki|pakicompute|'
+        r'compute|total|quote|quotation|estimate|sana|po|lang|nalang|na lang|daw|raw|'
+        r'pls|please|boss|bossing|ate|kuya|sir|maam|ma\'am|hi|hello|uy|oi|hey|good|morning|afternoon|evening|'
+        r'pwede|pwede ba|pakicheck|check|tanong|ask|inquire|inquiry)\b[^,]*?(?=\d)',
+        _re.IGNORECASE
+    )
+    text = _FILLER_PREFIX.sub('', text)
     # Strip trailing Filipino filler words (e.g. "po sana", "po lang", "po", "lang", "nalang")
     text = _re.sub(r'\b(po sana|po lang|po na|po|lang|nalang|na lang|sana|daw|raw)\b\s*$', '', text, flags=_re.IGNORECASE)
 
