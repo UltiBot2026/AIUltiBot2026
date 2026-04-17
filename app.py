@@ -442,8 +442,8 @@ FAQS = {
 - Installer price: ₱5,850/pc
 
 **585W Bifacial**
-- Retail: ₱5,800/pc
-- Installer price: ₱5,650/pc
+- Retail: ₱5,400/pc
+- Installer price: ₱5,250/pc
 
 Contact us for bulk orders and special pricing! 📞""",
         "answer_tl": """☀️ **Presyo ng Solar Panels (Talesun):**
@@ -453,8 +453,8 @@ Contact us for bulk orders and special pricing! 📞""",
 - Installer price: ₱5,850/pc
 
 **585W Bifacial**
-- Retail: ₱5,800/pc
-- Installer price: ₱5,650/pc
+- Retail: ₱5,400/pc
+- Installer price: ₱5,250/pc
 
 Makipag-ugnayan sa amin para sa bulk orders! 📞"""
     },
@@ -804,7 +804,7 @@ Para sa bulk orders, makipag-ugnayan para sa espesyal na presyo! ☀️"""
 
 ☀️ **Solar Panels (Talesun):**
 - 620W: ₱6,000 retail / ₱5,850 installer
-- 585W: ₱5,800 retail / ₱5,650 installer
+- 585W: ₱5,400 retail / ₱5,250 installer
 
 📌 **PV Mountings (SoEasy):**
 - Aluminum Railing 2.4m: ₱620
@@ -826,7 +826,7 @@ Contact us for bulk orders & inverter pricing! 📞""",
 
 ☀️ **Solar Panels (Talesun):**
 - 620W: ₱6,000 retail / ₱5,850 installer
-- 585W: ₱5,800 retail / ₱5,650 installer
+- 585W: ₱5,400 retail / ₱5,250 installer
 
 📌 **PV Mountings (SoEasy):**
 - Aluminum Railing 2.4m: ₱620
@@ -1853,7 +1853,7 @@ UNIT_PRICES = {
         "soler panel", "soler panels", "solar pane", "solar panes",
         "solar panels", "solar panel",
     ]},
-    "solar panel 585w": {"price": 5800, "installer_price": 5650, "unit": "pc", "aliases": [
+    "solar panel 585w": {"price": 5400, "installer_price": 5250, "unit": "pc", "aliases": [
         "585w panel", "585w", "585 watt", "585 watt panel", "585w solar", "585w solar panel",
         "talesun 585w", "talesun 585", "panel 585w", "panel 585", "585",
         # Close wattages that customers may type by mistake (rounds to 585W)
@@ -2641,8 +2641,8 @@ def detect_price_tier_reply(user_message):
 
 def ask_price_tier(panel_count, wattage, language):
     """Ask customer whether they want retail or installer pricing (for 10+ panels)."""
-    retail_price    = 6100 if wattage == 620 else 5750
-    installer_price = 5850 if wattage == 620 else 5650
+    retail_price    = 6000 if wattage == 620 else 5400
+    installer_price = 5850 if wattage == 620 else 5250
     panel_label     = f"Talesun {wattage}W"
     if language == "tl":
         return (
@@ -2663,10 +2663,10 @@ def format_panel_package_response(panel_count, wattage, language, price_tier='re
     """Calculate and format the full panel package price breakdown."""
     import math
     if price_tier == 'installer':
-        price_per_panel = 5850 if wattage == 620 else 5650
+        price_per_panel = 5850 if wattage == 620 else 5250
         tier_label = "Installer Price"
     else:
-        price_per_panel = 6100 if wattage == 620 else 5750
+        price_per_panel = 6000 if wattage == 620 else 5400
         tier_label = "Retail Price"
     panel_label = f"Talesun {wattage}W"
 
@@ -2731,16 +2731,16 @@ def ask_wattage_question(panel_count, language):
         return (
             f"☀️ Salamat po sa inyong interes sa {panel_count} solar panels!\n\n"
             f"👉 Anong wattage po ang gusto ninyo?\n\n"
-            f"🔵 **620W** — ₱6,100/pc (mas mataas na output)\n"
-            f"🟡 **585W** — ₱5,750/pc (mas ekonomikal)\n\n"
+            f"🔵 **620W** — ₱6,000/pc (mas mataas na output)\n"
+            f"🟡 **585W** — ₱5,400/pc (mas ekonomikal)\n\n"
             f"I-reply lang po ng **620** o **585** para makuha ang kabuuang presyo kasama ang mounting hardware! 😊"
         )
     else:
         return (
             f"☀️ Thank you for your interest in {panel_count} solar panels!\n\n"
             f"👉 Which wattage do you prefer?\n\n"
-            f"🔵 **620W** — ₱6,100/pc (higher output)\n"
-            f"🟡 **585W** — ₱5,750/pc (more economical)\n\n"
+            f"🔵 **620W** — ₱6,000/pc (higher output)\n"
+            f"🟡 **585W** — ₱5,400/pc (more economical)\n\n"
             f"Just reply **620** or **585** and I'll calculate the full package price including mounting hardware! 😊"
         )
 
