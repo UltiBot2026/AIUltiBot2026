@@ -607,7 +607,7 @@ Magpadala ng proof of payment! 🏦"""
 - AC SPD 4P 385V: ₱565/pc
 
 📌 **Connectors & Others:**
-- MC4 30A DC 1000V (Male & Female pair): ₱40/pair
+- MC4 30A DC 1000V (Male & Female pair): ₱65/pair
 - Battery Breaker DC 250A: ₱1,200/pc
 
 📌 **Conduit:**
@@ -638,7 +638,7 @@ Contact us for bulk orders! ⚡""",
 - AC SPD 4P 385V: ₱565/pc
 
 📌 **Connectors & Others:**
-- MC4 30A DC 1000V (Male & Female pair): ₱40/pair
+- MC4 30A DC 1000V (Male & Female pair): ₱65/pair
 - Battery Breaker DC 250A: ₱1,200/pc
 
 📌 **Conduit:**
@@ -842,7 +842,7 @@ Para sa bulk orders, makipag-ugnayan para sa espesyal na presyo! ☀️"""
 - AC SPD 2P 400V: ₱350
 - AC SPD 4P 385V: ₱565
 📌 **Connectors:**
-- MC4 30A 1000V pair: ₱40
+- MC4 30A 1000V pair: ₱65
 - Battery Breaker DC 250A: ₱1,200
 Contact us for bulk orders & inverter pricing! 📞""",
         "answer_tl": """💰 **Opisyal na Listahan ng Presyo ng Ultiphoton:**
@@ -864,7 +864,7 @@ Contact us for bulk orders & inverter pricing! 📞""",
 - AC SPD 2P 400V: ₱350
 - AC SPD 4P 385V: ₱565
 📌 **Connectors:**
-- MC4 30A 1000V pair: ₱40
+- MC4 30A 1000V pair: ₱65
 - Battery Breaker DC 250A: ₱1,200
 Makipag-ugnayan para sa bulk orders at inverter pricing! 📞"""
     },
@@ -942,8 +942,8 @@ Makipag-ugnayan para sa bulk orders at inverter pricing! 📞"""
     },
     "mc4": {
         "keywords": ["mc4", "mc-4", "connector", "connectors", "male female pair", "magkano mc4", "presyo ng mc4"],
-        "answer_en": "MC4 30A DC 1000V Male & Female Pair (Chint/Chyt): ₱40/pair ☀️",
-        "answer_tl": "MC4 30A DC 1000V Male & Female Pair (Chint/Chyt): ₱40/pair ☀️"
+        "answer_en": "MC4 30A DC 1000V Male & Female Pair (Chint/Chyt): ₱65/pair ☀️",
+        "answer_tl": "MC4 30A DC 1000V Male & Female Pair (Chint/Chyt): ₱65/pair ☀️"
     },
     "battery_breaker": {
         "keywords": ["battery breaker", "battery-breaker", "250at", "dc 250at", "magkano battery breaker", "presyo ng battery breaker"],
@@ -1851,7 +1851,7 @@ UNIT_PRICES = {
     "ac spd 2p":      {"price": 350,   "unit": "pc",   "aliases": ["ac spd 2pole", "ac surge 2p", "2p spd", "2 pole spd"]},
     "ac spd 4p":      {"price": 565,   "unit": "pc",   "aliases": ["ac spd 4pole", "ac surge 4p", "4p spd", "4 pole spd"]},
     # MC4
-    "mc4":            {"price": 40,    "unit": "pair", "aliases": ["mc4 connector", "mc4 connectors", "mc-4", "mc 4"]},
+    "mc4":            {"price": 65,    "unit": "pair", "aliases": ["mc4 connector", "mc4 connectors", "mc-4", "mc 4"]},
     # Battery Breaker
     "battery breaker":{"price": 1200,  "unit": "pc",   "aliases": ["battery cb", "battery circuit breaker", "batt breaker", "battery braker"]},
     # PV Cable
