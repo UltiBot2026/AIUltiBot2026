@@ -323,19 +323,28 @@ def build_pricelist_answer(lang="en"):
         lines.append("- 8 kW: ₱72,000")
         lines.append("- 10 kW: ₱83,000")
         lines.append("- 12 kW: ₱92,000")
+        lines.append("\n⚡ *Alpsolar Inverter:*")
+        lines.append("- 6 kW: ₱43,000")
     else:
         lines.append("\n⚡ *GoodWe Inverter:*")
         lines.append("- 8 kW: ₱72,000")
         lines.append("- 10 kW: ₱83,000")
         lines.append("- 12 kW: ₱92,000")
-
+        lines.append("\n⚡ *Alpsolar Inverter:*")
+        lines.append("- 6 kW: ₱43,000")
     # Batteries (hardcoded — not in Excel)
     if lang == "tl":
         lines.append("\n🔋 *GoodWe Battery:*")
         lines.append("- 280Ah: ₱118,000")
+        lines.append("\n🔋 *GENIXGREEN LiFePO4 Battery:*")
+        lines.append("- 10 KWH 51.2V 200AH: ₱78,000")
+        lines.append("- 16 KWH 51.2V 314AH: ₱97,000")
     else:
         lines.append("\n🔋 *GoodWe Battery:*")
         lines.append("- 280Ah: ₱118,000")
+        lines.append("\n🔋 *GENIXGREEN LiFePO4 Battery:*")
+        lines.append("- 10 KWH 51.2V 200AH: ₱78,000")
+        lines.append("- 16 KWH 51.2V 314AH: ₱97,000")
 
     if lang == "tl":
         lines.append("\nMakipag-ugnayan para sa bulk orders at espesyal na presyo! 📞")
@@ -638,65 +647,79 @@ Contact us for bulk orders! ⚡""",
 Makipag-ugnayan para sa bulk orders! ⚡"""
     },
     
-    "inverter_brands": {
-        "keywords": ["inverter", "brand", "deye", "solis", "goodwe", "srne", "sigenergy", "ano mga"],
+     "inverter_brands": {
+        "keywords": ["inverter", "brand", "deye", "solis", "goodwe", "srne", "sigenergy", "alpsolar", "genixgreen", "ano mga"],
         "answer_en": """⚡ **Inverter Brands Available:**
-
 ✅ **Deye** - 5 years warranty
 ✅ **Solis** - 5 years warranty
 ✅ **GoodWe** - 5 years warranty
 ✅ **SRNE** - 5 years warranty
 ✅ **Sigenergy** - 10 years warranty
+✅ **Alpsolar** - 5 years warranty
 
 📌 **GoodWe Inverter Pricing:**
 - 8 kW: ₱72,000
 - 10 kW: ₱83,000
 - 12 kW: ₱92,000
 
+📌 **Alpsolar Inverter Pricing:**
+- 6 kW: ₱43,000
+
 🔋 **GoodWe Battery:**
 - 280Ah: ₱118,000
 
+🔋 **GENIXGREEN LiFePO4 Battery (5 years warranty):**
+- 10 KWH 51.2V 200AH: ₱78,000
+- 16 KWH 51.2V 314AH: ₱97,000
+
 All brands are high-quality and reliable for Philippine climate! 🌞""",
         "answer_tl": """⚡ **Available Inverter Brands:**
-
 ✅ **Deye** - 5 taong warranty
 ✅ **Solis** - 5 taong warranty
 ✅ **GoodWe** - 5 taong warranty
 ✅ **SRNE** - 5 taong warranty
 ✅ **Sigenergy** - 10 taong warranty
+✅ **Alpsolar** - 5 taong warranty
 
 📌 **Presyo ng GoodWe Inverter:**
 - 8 kW: ₱72,000
 - 10 kW: ₱83,000
 - 12 kW: ₱92,000
 
+📌 **Presyo ng Alpsolar Inverter:**
+- 6 kW: ₱43,000
+
 🔋 **GoodWe Battery:**
 - 280Ah: ₱118,000
+
+🔋 **GENIXGREEN LiFePO4 Battery (5 taong warranty):**
+- 10 KWH 51.2V 200AH: ₱78,000
+- 16 KWH 51.2V 314AH: ₱97,000
 
 Lahat ay high-quality at reliable! 🌞"""
     },
     
     "warranty": {
         "keywords": ["warranty", "years", "guarantee", "coverage", "ilang"],
-        "answer_en": """✅ **Warranty Coverage:**
-
+           "answer_en": """✅ **Warranty Coverage:**
 **Solar Panels (Talesun):**
 10 years warranty
-
 **Inverters:**
-- Deye, Solis, SRNE, GoodWe: 5 years
+- Deye, Solis, SRNE, GoodWe, Alpsolar: 5 years
 - Sigenergy: 10 years
-
+**Batteries:**
+- GoodWe Battery: 5 years
+- GENIXGREEN LiFePO4: 5 years
 Quality guaranteed! ☀️""",
         "answer_tl": """✅ **Warranty Coverage:**
-
 **Solar Panels (Talesun):**
 10 taong warranty
-
 **Inverters:**
-- Deye, Solis, SRNE, GoodWe: 5 taon
+- Deye, Solis, SRNE, GoodWe, Alpsolar: 5 taon
 - Sigenergy: 10 taon
-
+**Batteries:**
+- GoodWe Battery: 5 taon
+- GENIXGREEN LiFePO4: 5 taon
 Garantisadong kalidad! ☀️"""
     },
     
@@ -1882,6 +1905,22 @@ UNIT_PRICES = {
         "goodwe battery", "goodwe 280ah", "280ah battery", "battery 280ah",
         "goodwe batt", "gw battery", "gw 280ah", "280ah goodwe",
         "goodwe lithium", "goodwe storage", "goodwe 280"
+    ]},
+    # Alpsolar Inverter
+    "alpsolar inverter 6kw": {"price": 43000, "unit": "pc", "aliases": [
+        "alpsolar 6kw", "alpsolar 6k", "6kw alpsolar", "alpsolar inverter",
+        "alps 6kw", "alps solar 6kw", "alpsolar"
+    ]},
+    # GENIXGREEN LiFePO4 Batteries
+    "genixgreen battery 10kwh": {"price": 78000, "unit": "pc", "aliases": [
+        "genixgreen 10kwh", "genixgreen 10kw", "10kwh battery", "10kwh genixgreen",
+        "genixgreen 200ah", "200ah genixgreen", "genixgreen lifepo4 10kwh",
+        "genix 10kwh", "genixgreen 10"
+    ]},
+    "genixgreen battery 16kwh": {"price": 97000, "unit": "pc", "aliases": [
+        "genixgreen 16kwh", "genixgreen 16kw", "16kwh battery", "16kwh genixgreen",
+        "genixgreen 314ah", "314ah genixgreen", "genixgreen lifepo4 16kwh",
+        "genix 16kwh", "genixgreen 16"
     ]},
 }
 
