@@ -471,26 +471,22 @@ Makipag-ugnayan sa amin para sa bulk orders! 📞"""
     "location": {
         "keywords": ["location", "located", "saan", "address", "office", "branch", "where", "lokasyon", "loc", "loc po", "saan kayo", "san kayo", "san po", "san po kayo", "nasaan", "nasaan kayo", "asan", "asan kayo", "store", "shop", "tindahan"],
         "answer_en": """📍 Our Locations:
-
 Main Office - UltiPhoton Solar Muntinlupa
 Filinvest, Muntinlupa City
 https://share.google/Qke5XC4NOla3Kq8ef
-
 Branch - UltiPhoton Solar Batangas
 Batangas City
 https://share.google/0IVMOYIrK7UCIlKFw
-
+📞 Contact: +63 975 016 2058 | +63 966 540 4085 (Call/Viber)
 Feel free to visit us! ☀️""",
         "answer_tl": """📍 Aming Mga Lokasyon:
-
 Main Office - UltiPhoton Solar Muntinlupa
 Filinvest, Muntinlupa City
 https://share.google/Qke5XC4NOla3Kq8ef
-
 Branch - UltiPhoton Solar Batangas
 Batangas City
 https://share.google/0IVMOYIrK7UCIlKFw
-
+📞 Makipag-ugnayan: +63 975 016 2058 | +63 966 540 4085 (Tawag/Viber)
 Bisitahin kami anumang oras! ☀️"""
     },
     
@@ -1540,7 +1536,22 @@ Makikita ninyo doon ang lahat ng impormasyon tungkol sa aming mga produkto at se
 📌 *Para sa opisyal na quotation, makipag-ugnayan sa amin!* 💚"""
     },
 
-    # ── General Talesun / Both Panel Specs ───────────────────────────────────
+    "contact_us": {
+        "keywords": ["call", "can i call", "phone", "phone number", "contact number", "contact", "reach", "reach out", "viber", "tumawag", "tawagan", "pwede tumawag", "pwede bang tumawag", "numero", "number", "ano number", "ano ang number", "how to contact", "paano makipag-ugnayan", "makipag-ugnayan", "hotline"],
+        "answer_en": """📞 **Contact Us:**
+📱 +63 975 016 2058 (Call/Viber)
+📱 +63 966 540 4085 (Call/Viber)
+💬 Or message us here on Facebook!
+🌐 Website: https://ultiphotonsolarpoweropc.com/
+We're happy to help! ☀️⚡💚""",
+        "answer_tl": """📞 **Makipag-ugnayan sa Amin:**
+📱 +63 975 016 2058 (Tawag/Viber)
+📱 +63 966 540 4085 (Tawag/Viber)
+💬 O mag-message dito sa Facebook!
+🌐 Website: https://ultiphotonsolarpoweropc.com/
+Nandito kami para tumulong! ☀️⚡💚"""
+    },
+
     "specs_general": {
         "keywords": [
             "spec sheet", "specs sheet", "specification sheet", "datasheet",
@@ -3031,9 +3042,10 @@ def get_ai_response(user_message, language):
         system_message = """You are a helpful AI assistant for Ultiphoton Solar Power OPC, a solar panel company in the Philippines.
 
 Company Information:
-- Main Office: Filinvest, Muntilupa City
+- Main Office: Filinvest, Muntinlupa City
 - Branch: Batangas
 - Warehouse: Cainta
+- Phone/Viber: +63 975 016 2058 | +63 966 540 4085
 - Products: Talesun Solar Panels (585W, 620W), Inverters (Deye, Solis, GoodWe, SRNE, Sigenergy)
 - Services: Installation, Maintenance, Consultation
 - Delivery: COD available in Batangas, Laguna, Quezon, South Luzon
