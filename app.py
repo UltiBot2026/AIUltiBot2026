@@ -1858,9 +1858,9 @@ UNIT_PRICES = {
     "ac breaker 63a": {"price": 550,   "unit": "pc",   "aliases": ["63a breaker", "63amp breaker", "63a ac breaker", "63 amp breaker"]},
     "ac breaker 100a":{"price": 1100,  "unit": "pc",   "aliases": ["100a breaker", "100amp breaker", "100a ac breaker", "100 amp breaker"]},
     # SPD
-    "dc spd":         {"price": 550,   "unit": "pc",   "aliases": ["dc surge", "dc surge protector", "dc spd 1200v"]},
-    "ac spd 2p":      {"price": 350,   "unit": "pc",   "aliases": ["ac spd 2pole", "ac surge 2p", "2p spd", "2 pole spd"]},
-    "ac spd 4p":      {"price": 565,   "unit": "pc",   "aliases": ["ac spd 4pole", "ac surge 4p", "4p spd", "4 pole spd"]},
+    "dc spd":         {"price": 550,   "unit": "pc",   "aliases": ["dc surge", "dc surge protector", "dc spd 1200v", "600v dc spd", "dc spd 600v", "1200vdc spd", "dc surge 1200v"]},
+    "ac spd 2p":      {"price": 350,   "unit": "pc",   "aliases": ["ac spd 2pole", "ac surge 2p", "2p spd", "2 pole spd", "ac spd", "2p ac spd", "2p 400v ac spd", "400v ac spd", "ac spd 400v", "ac surge protector 2p", "ac surge", "ac spd 2p 400v"]},
+    "ac spd 4p":      {"price": 565,   "unit": "pc",   "aliases": ["ac spd 4pole", "ac surge 4p", "4p spd", "4 pole spd", "4p ac spd", "4p 385v ac spd", "385v ac spd", "ac spd 385v", "ac surge protector 4p", "ac spd 4p 385v"]},
     # MC4
     "mc4":            {"price": 65,    "unit": "pair", "aliases": ["mc4 connector", "mc4 connectors", "mc-4", "mc 4"]},
     # Battery Breaker
