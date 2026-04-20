@@ -899,7 +899,7 @@ Makipag-ugnayan para sa bulk orders at inverter pricing! 📞"""
     },
     # --- Per-item accessory FAQs (specific items return only their own price) ---
     "railing": {
-        "keywords": ["railing", "railings", "aluminum railing", "rail", "rails", "magkano railing", "presyo ng railing", "railing price", "solar rail", "solar rails", "solar railing", "pv rail", "mounting rail", "panel rail"],
+        "keywords": ["railing", "railings", "aluminum railing", "solar railing", "magkano railing", "presyo ng railing", "railing price", "solar rails", "pv rail", "mounting rail", "panel rail"],
         "answer_en": "Aluminum Railing 2.4m (SoEasy): ₱620/pc ☀️",
         "answer_tl": "Aluminum Railing 2.4m (SoEasy): ₱620/pc ☀️"
     },
@@ -975,7 +975,7 @@ Makipag-ugnayan para sa bulk orders at inverter pricing! 📞"""
     },
     "pv_cable": {
         "keywords": [
-            "pv cable", "pv wire", "cable", "wire", "solar wire", "solar cable",
+            "pv cable", "pv wire", "solar wire", "solar cable",
             "4mm", "6mm", "4mm wire", "6mm wire", "4mm cable", "6mm cable",
             "meron cable", "meron wire", "may cable", "may wire",
             "magkano cable", "magkano wire", "presyo ng cable", "presyo ng wire",
@@ -2496,6 +2496,8 @@ def get_after_hours_note(language):
 # Per-item accessory FAQ keys — checked BEFORE the full accessories list
 # Order matters: more specific items first (e.g. dc_breaker before ac_breaker)
 PER_ITEM_ACCESSORY_KEYS = [
+    # New KAER accessories — MUST come before railing/pv_cable to avoid substring conflicts
+    "din_rail", "grounding_rod", "cable_tray",
     "rail_splicer", "railing",   # rail_splicer MUST come before railing (substring issue)
     "l_foot", "mid_clamp", "end_clamp",
     "grounding_lug", "dc_breaker", "ac_breaker", "dc_spd", "ac_spd",
