@@ -604,11 +604,14 @@ Magpadala ng proof of payment! 🏦"""
 
 📌 **Connectors & Others:**
 - MC4 30A DC 1000V (Male & Female pair): ₱65/pair
-- Battery Breaker DC 250A: ₱1,200/pc
-
+- Battery Breaker DC 250A: ₱1,280/pc
+📌 **Electrical Accessories (KAER):**
+- Steel DIN Rail: ₱110/pc
+- Grounding/Earthing Rod: ₱700/pc
+- Cable Tray 80x80: ₱530/pc
+- Cable Tray 60x60: ₱450/pc
 📌 **Conduit:**
 - HDPE 25mm: ₱175/meter
-
 Contact us for bulk orders! ⚡""",
         "answer_tl": """🔧 **Listahan ng Presyo ng Accessories & Materials:**
 
@@ -635,11 +638,14 @@ Contact us for bulk orders! ⚡""",
 
 📌 **Connectors & Others:**
 - MC4 30A DC 1000V (Male & Female pair): ₱65/pair
-- Battery Breaker DC 250A: ₱1,200/pc
-
+- Battery Breaker DC 250A: ₱1,280/pc
+📌 **Electrical Accessories (KAER):**
+- Steel DIN Rail: ₱110/pc
+- Grounding/Earthing Rod: ₱700/pc
+- Cable Tray 80x80: ₱530/pc
+- Cable Tray 60x60: ₱450/pc
 📌 **Conduit:**
 - HDPE 25mm: ₱175/metro
-
 Makipag-ugnayan para sa bulk orders! ⚡"""
     },
     
@@ -839,7 +845,10 @@ Para sa bulk orders, makipag-ugnayan para sa espesyal na presyo! ☀️"""
 - AC SPD 4P 385V: ₱565
 📌 **Connectors:**
 - MC4 30A 1000V pair: ₱65
-- Battery Breaker DC 250A: ₱1,200
+- Battery Breaker DC 250A: ₱1,280
+📌 **Electrical Accessories (KAER):**
+- Steel DIN Rail: ₱110 | Grounding Rod: ₱700
+- Cable Tray 80x80: ₱530 | Cable Tray 60x60: ₱450
 Contact us for bulk orders & inverter pricing! 📞""",
         "answer_tl": """💰 **Opisyal na Listahan ng Presyo ng Ultiphoton:**
 
@@ -861,7 +870,10 @@ Contact us for bulk orders & inverter pricing! 📞""",
 - AC SPD 4P 385V: ₱565
 📌 **Connectors:**
 - MC4 30A 1000V pair: ₱65
-- Battery Breaker DC 250A: ₱1,200
+- Battery Breaker DC 250A: ₱1,280
+📌 **Electrical Accessories (KAER):**
+- Steel DIN Rail: ₱110 | Grounding Rod: ₱700
+- Cable Tray 80x80: ₱530 | Cable Tray 60x60: ₱450
 Makipag-ugnayan para sa bulk orders at inverter pricing! 📞"""
     },
     "products_and_price": {
@@ -941,10 +953,25 @@ Makipag-ugnayan para sa bulk orders at inverter pricing! 📞"""
         "answer_en": "MC4 30A DC 1000V Male & Female Pair (Chint/Chyt): ₱65/pair ☀️",
         "answer_tl": "MC4 30A DC 1000V Male & Female Pair (Chint/Chyt): ₱65/pair ☀️"
     },
+    "din_rail": {
+        "keywords": ["din rail", "steel din rail", "din rails", "kaer din rail", "magkano din rail", "presyo ng din rail"],
+        "answer_en": "Steel DIN Rail (KAER): ₱110/pc ☀️",
+        "answer_tl": "Steel DIN Rail (KAER): ₱110/pc ☀️"
+    },
+    "grounding_rod": {
+        "keywords": ["grounding rod", "earthing rod", "ground rod", "earth rod", "earthing rod", "magkano grounding rod", "presyo ng grounding rod"],
+        "answer_en": "Grounding/Earthing Rod (KAER): ₱700/pc ☀️",
+        "answer_tl": "Grounding/Earthing Rod (KAER): ₱700/pc ☀️"
+    },
+    "cable_tray": {
+        "keywords": ["cable tray", "cable tray 80", "cable tray 60", "80x80 tray", "60x60 tray", "magkano cable tray", "presyo ng cable tray"],
+        "answer_en": "Cable Tray (KAER):\n- 80x80: ₱530/pc\n- 60x60: ₱450/pc ☀️",
+        "answer_tl": "Cable Tray (KAER):\n- 80x80: ₱530/pc\n- 60x60: ₱450/pc ☀️"
+    },
     "battery_breaker": {
         "keywords": ["battery breaker", "battery-breaker", "250at", "dc 250at", "magkano battery breaker", "presyo ng battery breaker"],
-        "answer_en": "Battery Breaker DC 250A (Chyt): ₱1,200/pc ☀️",
-        "answer_tl": "Battery Breaker DC 250A (Chyt): ₱1,200/pc ☀️"
+        "answer_en": "Battery Breaker DC 250A (Chyt): ₱1,280/pc ☀️",
+        "answer_tl": "Battery Breaker DC 250A (Chyt): ₱1,280/pc ☀️"
     },
     "pv_cable": {
         "keywords": [
@@ -1864,7 +1891,12 @@ UNIT_PRICES = {
     # MC4
     "mc4":            {"price": 65,    "unit": "pair", "aliases": ["mc4 connector", "mc4 connectors", "mc-4", "mc 4"]},
     # Battery Breaker
-    "battery breaker":{"price": 1200,  "unit": "pc",   "aliases": ["battery cb", "battery circuit breaker", "batt breaker", "battery braker"]},
+    "battery breaker":{"price": 1280,  "unit": "pc",   "aliases": ["battery cb", "battery circuit breaker", "batt breaker", "battery braker"]},
+    # Accessories (KAER)
+    "steel din rail":  {"price": 110,   "unit": "pc",   "aliases": ["din rail", "din rails", "steel din", "kaer din rail", "din"]},
+    "grounding rod":   {"price": 700,   "unit": "pc",   "aliases": ["earthing rod", "grounding rod", "ground rod", "earth rod", "earthing", "grounding stake"]},
+    "cable tray 80x80":{"price": 530,   "unit": "pc",   "aliases": ["cable tray 80", "80x80 cable tray", "cable tray 80mm", "cable tray large"]},
+    "cable tray 60x60":{"price": 450,   "unit": "pc",   "aliases": ["cable tray 60", "60x60 cable tray", "cable tray 60mm", "cable tray small", "cable tray"]},
     # PV Cable
     "pv cable 4mm":   {"price": 70,    "unit": "meter","aliases": ["4mm cable", "4mm wire", "4mm pv cable", "4mm solar wire", "4mm solar cable"]},
     "pv cable 6mm":   {"price": 85,    "unit": "meter","aliases": ["6mm cable", "6mm wire", "6mm pv cable", "6mm solar wire", "6mm solar cable"]},
