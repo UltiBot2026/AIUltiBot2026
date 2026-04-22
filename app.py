@@ -520,7 +520,7 @@ Kapag natanggap na namin ang inyong mga detalye, aayusin na namin ang Lalamove b
     
     "payment": {
         "keywords": ["payment", "pay", "bank", "transfer", "cash", "gcash", "paano", "bayad", "magbayad"],
-        "answer_en": """💳 **Payment Methods:**
+           "answer_en": """💳 **Payment Methods:**
 
 We accept **Bank Transfer ONLY** (No cash payments)
 
@@ -539,13 +539,16 @@ Account Name: JERWIN JEFFREY GAPUZ
 Savings Account: 065 6925 517
 
 **EastWest:**
-Account: 200064679316
+Account Name: JERWIN GAPUZ
+Account Number: 200064679316
 
 **RCBC:**
 Account Name: JERWIN GAPUZ
 Account Number: 7591602568
+
 **GCash:**
 0997-369-7123 (J. GAPUZ)
+
 Please transfer and provide proof of payment! 🏦""",
         "answer_tl": """💳 **Paraan ng Pagbabayad:**
 
@@ -566,13 +569,16 @@ Account Name: JERWIN JEFFREY GAPUZ
 Savings Account: 065 6925 517
 
 **EastWest:**
-Account: 200064679316
+Account Name: JERWIN GAPUZ
+Account Number: 200064679316
 
 **RCBC:**
 Account Name: JERWIN GAPUZ
 Account Number: 7591602568
+
 **GCash:**
 0997-369-7123 (J. GAPUZ)
+
 Magpadala ng proof of payment! 🏦"""
     },
     
