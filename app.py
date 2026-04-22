@@ -541,9 +541,11 @@ Savings Account: 065 6925 517
 **EastWest:**
 Account: 200064679316
 
+**RCBC:**
+Account Name: JERWIN GAPUZ
+Account Number: 7591602568
 **GCash:**
 0997-369-7123 (J. GAPUZ)
-
 Please transfer and provide proof of payment! 🏦""",
         "answer_tl": """💳 **Paraan ng Pagbabayad:**
 
@@ -566,9 +568,11 @@ Savings Account: 065 6925 517
 **EastWest:**
 Account: 200064679316
 
+**RCBC:**
+Account Name: JERWIN GAPUZ
+Account Number: 7591602568
 **GCash:**
 0997-369-7123 (J. GAPUZ)
-
 Magpadala ng proof of payment! 🏦"""
     },
     
