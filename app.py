@@ -620,6 +620,7 @@ Magpadala ng proof of payment! 🏦"""
 - Grounding/Earthing Rod: ₱700/pc
 - Cable Tray 80x80: ₱530/pc
 - Cable Tray 60x60: ₱450/pc
+- Metal Enclosure: ₱4,000/pc
 📌 **Conduit:**
 - HDPE 25mm: ₱175/meter
 Contact us for bulk orders! ⚡""",
@@ -654,6 +655,7 @@ Contact us for bulk orders! ⚡""",
 - Grounding/Earthing Rod: ₱700/pc
 - Cable Tray 80x80: ₱530/pc
 - Cable Tray 60x60: ₱450/pc
+- Metal Enclosure: ₱4,000/pc
 📌 **Conduit:**
 - HDPE 25mm: ₱175/metro
 Makipag-ugnayan para sa bulk orders! ⚡"""
@@ -859,6 +861,7 @@ Para sa bulk orders, makipag-ugnayan para sa espesyal na presyo! ☀️"""
 📌 **Electrical Accessories (KAER):**
 - Steel DIN Rail: ₱110 | Grounding Rod: ₱700
 - Cable Tray 80x80: ₱530 | Cable Tray 60x60: ₱450
+- Metal Enclosure: ₱4,000
 Contact us for bulk orders & inverter pricing! 📞""",
         "answer_tl": """💰 **Opisyal na Listahan ng Presyo ng Ultiphoton:**
 
@@ -884,6 +887,7 @@ Contact us for bulk orders & inverter pricing! 📞""",
 📌 **Electrical Accessories (KAER):**
 - Steel DIN Rail: ₱110 | Grounding Rod: ₱700
 - Cable Tray 80x80: ₱530 | Cable Tray 60x60: ₱450
+- Metal Enclosure: ₱4,000
 Makipag-ugnayan para sa bulk orders at inverter pricing! 📞"""
     },
     "products_and_price": {
@@ -1907,6 +1911,7 @@ UNIT_PRICES = {
     "grounding rod":   {"price": 700,   "unit": "pc",   "aliases": ["earthing rod", "grounding rod", "ground rod", "earth rod", "earthing", "grounding stake"]},
     "cable tray 80x80":{"price": 530,   "unit": "pc",   "aliases": ["cable tray 80", "80x80 cable tray", "cable tray 80mm", "cable tray large"]},
     "cable tray 60x60":{"price": 450,   "unit": "pc",   "aliases": ["cable tray 60", "60x60 cable tray", "cable tray 60mm", "cable tray small", "cable tray"]},
+    "metal enclosure":  {"price": 4000,  "unit": "pc",   "aliases": ["metal box", "enclosure", "electrical enclosure", "panel enclosure", "metal panel box", "metal casing", "metal housing", "metal cabinet"]},
     # PV Cable
     "pv cable 4mm":   {"price": 70,    "unit": "meter","aliases": ["4mm cable", "4mm wire", "4mm pv cable", "4mm solar wire", "4mm solar cable"]},
     "pv cable 6mm":   {"price": 85,    "unit": "meter","aliases": ["6mm cable", "6mm wire", "6mm pv cable", "6mm solar wire", "6mm solar cable"]},
@@ -2507,7 +2512,7 @@ def get_after_hours_note(language):
 # Order matters: more specific items first (e.g. dc_breaker before ac_breaker)
 PER_ITEM_ACCESSORY_KEYS = [
     # New KAER accessories — MUST come before railing/pv_cable to avoid substring conflicts
-    "din_rail", "grounding_rod", "cable_tray",
+    "din_rail", "grounding_rod", "cable_tray", "metal_enclosure",
     "rail_splicer", "railing",   # rail_splicer MUST come before railing (substring issue)
     "l_foot", "mid_clamp", "end_clamp",
     "grounding_lug", "dc_breaker", "ac_breaker", "dc_spd", "ac_spd",
