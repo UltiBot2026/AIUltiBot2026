@@ -620,7 +620,11 @@ Magpadala ng proof of payment! 🏦"""
 - Grounding/Earthing Rod: ₱700/pc
 - Cable Tray 80x80: ₱530/pc
 - Cable Tray 60x60: ₱450/pc
-- Metal Enclosure: ₱4,000/pc
+- Metal Enclosure 400x500x200: ₱3,800/pc
+- Metal Enclosure 300x250x140: ₱2,500/pc
+- Battery Cable 50mm: ₱700/meter
+- PVC Moulding Cable Tray: ₱600/pc
+- Fittings (End Cap/Elbow/LCap/T): ₱90/pc
 📌 **Conduit:**
 - HDPE 25mm: ₱175/meter
 Contact us for bulk orders! ⚡""",
@@ -655,7 +659,11 @@ Contact us for bulk orders! ⚡""",
 - Grounding/Earthing Rod: ₱700/pc
 - Cable Tray 80x80: ₱530/pc
 - Cable Tray 60x60: ₱450/pc
-- Metal Enclosure: ₱4,000/pc
+- Metal Enclosure 400x500x200: ₱3,800/pc
+- Metal Enclosure 300x250x140: ₱2,500/pc
+- Battery Cable 50mm: ₱700/metro
+- PVC Moulding Cable Tray: ₱600/pc
+- Fittings (End Cap/Elbow/LCap/T): ₱90/pc
 📌 **Conduit:**
 - HDPE 25mm: ₱175/metro
 Makipag-ugnayan para sa bulk orders! ⚡"""
@@ -861,7 +869,9 @@ Para sa bulk orders, makipag-ugnayan para sa espesyal na presyo! ☀️"""
 📌 **Electrical Accessories (KAER):**
 - Steel DIN Rail: ₱110 | Grounding Rod: ₱700
 - Cable Tray 80x80: ₱530 | Cable Tray 60x60: ₱450
-- Metal Enclosure: ₱4,000
+- Metal Enclosure 400x500x200: ₱3,800 | 300x250x140: ₱2,500
+- Battery Cable 50mm: ₱700/meter
+- PVC Moulding Cable Tray: ₱600 | Fittings: ₱90
 Contact us for bulk orders & inverter pricing! 📞""",
         "answer_tl": """💰 **Opisyal na Listahan ng Presyo ng Ultiphoton:**
 
@@ -887,7 +897,9 @@ Contact us for bulk orders & inverter pricing! 📞""",
 📌 **Electrical Accessories (KAER):**
 - Steel DIN Rail: ₱110 | Grounding Rod: ₱700
 - Cable Tray 80x80: ₱530 | Cable Tray 60x60: ₱450
-- Metal Enclosure: ₱4,000
+- Metal Enclosure 400x500x200: ₱3,800 | 300x250x140: ₱2,500
+- Battery Cable 50mm: ₱700/metro
+- PVC Moulding Cable Tray: ₱600 | Fittings: ₱90
 Makipag-ugnayan para sa bulk orders at inverter pricing! 📞"""
     },
     "products_and_price": {
@@ -981,6 +993,31 @@ Makipag-ugnayan para sa bulk orders at inverter pricing! 📞"""
         "keywords": ["cable tray", "cable tray 80", "cable tray 60", "80x80 tray", "60x60 tray", "magkano cable tray", "presyo ng cable tray"],
         "answer_en": "Cable Tray (KAER):\n- 80x80: ₱530/pc\n- 60x60: ₱450/pc ☀️",
         "answer_tl": "Cable Tray (KAER):\n- 80x80: ₱530/pc\n- 60x60: ₱450/pc ☀️"
+    },
+    "metal_enclosure_large": {
+        "keywords": ["400x500", "400 x 500", "metal enclosure large", "metal enclosure 400"],
+        "answer_en": "Metal Enclosure Box 400x500x200: ₱3,800/pc ☀️",
+        "answer_tl": "Metal Enclosure Box 400x500x200: ₱3,800/pc ☀️"
+    },
+    "metal_enclosure_small": {
+        "keywords": ["300x250", "300 x 250", "metal enclosure small", "metal enclosure 300", "metal enclosure", "metal box", "enclosure", "electrical enclosure", "panel enclosure", "metal cabinet"],
+        "answer_en": "Metal Enclosure Boxes:\n- 400x500x200: ₱3,800/pc\n- 300x250x140: ₱2,500/pc ☀️",
+        "answer_tl": "Metal Enclosure Boxes:\n- 400x500x200: ₱3,800/pc\n- 300x250x140: ₱2,500/pc ☀️"
+    },
+    "battery_cable": {
+        "keywords": ["battery cable", "50mm cable", "battery wire", "50mm wire", "battery cable 50mm", "50mm battery"],
+        "answer_en": "Battery Cable 50mm: ₱700/meter ☀️",
+        "answer_tl": "Battery Cable 50mm: ₱700/metro ☀️"
+    },
+    "pvc_moulding": {
+        "keywords": ["pvc moulding", "pvc cable tray", "pvc tray", "moulding cable tray", "cable moulding", "pvc raceway", "pvc duct"],
+        "answer_en": "PVC Moulding Cable Tray: ₱600/pc ☀️",
+        "answer_tl": "PVC Moulding Cable Tray: ₱600/pc ☀️"
+    },
+    "fittings": {
+        "keywords": ["end cap", "elbow", "lcap", "l cap", "t fitting", "cable tray fitting", "fitting", "fittings", "conduit fitting"],
+        "answer_en": "Fittings (End Cap / Elbow / LCap / T): ₱90/pc ☀️",
+        "answer_tl": "Fittings (End Cap / Elbow / LCap / T): ₱90/pc ☀️"
     },
     "battery_breaker": {
         "keywords": ["battery breaker", "battery-breaker", "250at", "dc 250at", "magkano battery breaker", "presyo ng battery breaker"],
@@ -1911,7 +1948,11 @@ UNIT_PRICES = {
     "grounding rod":   {"price": 700,   "unit": "pc",   "aliases": ["earthing rod", "grounding rod", "ground rod", "earth rod", "earthing", "grounding stake"]},
     "cable tray 80x80":{"price": 530,   "unit": "pc",   "aliases": ["cable tray 80", "80x80 cable tray", "cable tray 80mm", "cable tray large"]},
     "cable tray 60x60":{"price": 450,   "unit": "pc",   "aliases": ["cable tray 60", "60x60 cable tray", "cable tray 60mm", "cable tray small", "cable tray"]},
-    "metal enclosure":  {"price": 4000,  "unit": "pc",   "aliases": ["metal box", "enclosure", "electrical enclosure", "panel enclosure", "metal panel box", "metal casing", "metal housing", "metal cabinet"]},
+    "metal enclosure 400x500":{"price": 3800, "unit": "pc",   "aliases": ["400x500 metal enclosure", "400x500x200 metal enclosure", "metal enclosure box 400", "metal enclosure large", "metal enclosure 400", "enclosure 400x500", "metal box 400x500", "metal box large", "metal enclosure"]},
+    "metal enclosure 300x250":{"price": 2500, "unit": "pc",   "aliases": ["300x250 metal enclosure", "300x250x140 metal enclosure", "metal enclosure box 300", "metal enclosure small", "metal enclosure 300", "enclosure 300x250", "metal box 300x250", "metal box small"]},
+    "battery cable 50mm":     {"price": 700,  "unit": "meter","aliases": ["battery cable", "50mm battery cable", "battery wire 50mm", "50mm cable", "battery wire", "50mm wire", "battery cable 50"]},
+    "pvc moulding cable tray":{"price": 600,  "unit": "pc",   "aliases": ["pvc moulding", "pvc cable tray", "pvc tray", "moulding cable tray", "cable moulding", "pvc raceway", "pvc duct"]},
+    "fittings":               {"price": 90,   "unit": "pc",   "aliases": ["end cap", "elbow", "lcap", "l cap", "t fitting", "t-fitting", "cable tray fitting", "fitting", "conduit fitting", "end cap fitting", "elbow fitting"]},
     # PV Cable
     "pv cable 4mm":   {"price": 70,    "unit": "meter","aliases": ["4mm cable", "4mm wire", "4mm pv cable", "4mm solar wire", "4mm solar cable"]},
     "pv cable 6mm":   {"price": 85,    "unit": "meter","aliases": ["6mm cable", "6mm wire", "6mm pv cable", "6mm solar wire", "6mm solar cable"]},
@@ -2512,7 +2553,7 @@ def get_after_hours_note(language):
 # Order matters: more specific items first (e.g. dc_breaker before ac_breaker)
 PER_ITEM_ACCESSORY_KEYS = [
     # New KAER accessories — MUST come before railing/pv_cable to avoid substring conflicts
-    "din_rail", "grounding_rod", "cable_tray", "metal_enclosure",
+    "din_rail", "grounding_rod", "cable_tray", "metal_enclosure_large", "metal_enclosure_small", "battery_cable", "pvc_moulding", "fittings",
     "rail_splicer", "railing",   # rail_splicer MUST come before railing (substring issue)
     "l_foot", "mid_clamp", "end_clamp",
     "grounding_lug", "dc_breaker", "ac_breaker", "dc_spd", "ac_spd",
