@@ -592,7 +592,7 @@ Magpadala ng proof of payment! 🏦"""
         "answer_en": """🔧 **Accessories & Materials Price List:**
 
 📌 **PV Mountings (SoEasy Brand):**
-- Aluminum Railing 2.4m: ₱620/pc
+- Aluminum Railing 2.4m: ₱650/pc
 - L Foot: ₱95/pc
 - Mid Clamp: ₱85/pc
 - End Clamp: ₱85/pc
@@ -631,7 +631,7 @@ Contact us for bulk orders! ⚡""",
         "answer_tl": """🔧 **Listahan ng Presyo ng Accessories & Materials:**
 
 📌 **PV Mountings (SoEasy Brand):**
-- Aluminum Railing 2.4m: ₱620/pc
+- Aluminum Railing 2.4m: ₱650/pc
 - L Foot: ₱95/pc
 - Mid Clamp: ₱85/pc
 - End Clamp: ₱85/pc
@@ -852,7 +852,7 @@ Para sa bulk orders, makipag-ugnayan para sa espesyal na presyo! ☀️"""
 - 585W: ₱5,400 retail / ₱5,250 installer
 
 📌 **PV Mountings (SoEasy):**
-- Aluminum Railing 2.4m: ₱620
+- Aluminum Railing 2.4m: ₱650
 - L Foot: ₱95 | Mid/End Clamp: ₱85
 - Rail Splicer: ₱85 | Grounding Lug: ₱70
 
@@ -880,7 +880,7 @@ Contact us for bulk orders & inverter pricing! 📞""",
 - 585W: ₱5,400 retail / ₱5,250 installer
 
 📌 **PV Mountings (SoEasy):**
-- Aluminum Railing 2.4m: ₱620
+- Aluminum Railing 2.4m: ₱650
 - L Foot: ₱95 | Mid/End Clamp: ₱85
 - Rail Splicer: ₱85 | Grounding Lug: ₱70
 
@@ -926,8 +926,8 @@ Makipag-ugnayan para sa bulk orders at inverter pricing! 📞"""
     # --- Per-item accessory FAQs (specific items return only their own price) ---
     "railing": {
         "keywords": ["railing", "railings", "aluminum railing", "solar railing", "magkano railing", "presyo ng railing", "railing price", "solar rails", "pv rail", "mounting rail", "panel rail"],
-        "answer_en": "Aluminum Railing 2.4m (SoEasy): ₱620/pc ☀️",
-        "answer_tl": "Aluminum Railing 2.4m (SoEasy): ₱620/pc ☀️"
+        "answer_en": "Aluminum Railing 2.4m (SoEasy): ₱650/pc ☀️",
+        "answer_tl": "Aluminum Railing 2.4m (SoEasy): ₱650/pc ☀️"
     },
     "l_foot": {
         "keywords": ["l foot", "l-foot", "lfoot", "magkano l foot", "presyo ng l foot"],
@@ -1923,7 +1923,7 @@ def estimate_lalamove_from_message(message, language="en"):
 
 UNIT_PRICES = {
     # PV Mountings (SoEasy)
-    "railing":        {"price": 620,   "unit": "pc",   "aliases": ["railings", "aluminum railing", "alum railing", "aluminium railing", "2.4m rail", "2.4m railing", "rail 2.4m", "rail", "rails", "solar rail", "solar rails", "solar railing", "solar railings", "pv rail", "pv rails", "mounting rail", "mounting rails", "panel rail", "panel rails"]},
+    "railing":        {"price": 650,   "unit": "pc",   "aliases": ["railings", "aluminum railing", "alum railing", "aluminium railing", "2.4m rail", "2.4m railing", "rail 2.4m", "rail", "rails", "solar rail", "solar rails", "solar railing", "solar railings", "pv rail", "pv rails", "mounting rail", "mounting rails", "panel rail", "panel rails"]},
     "l-foot":         {"price": 95,    "unit": "pc",   "aliases": ["l foot", "lfoot", "l-feet", "l feet", "lfeet", "l-foots", "l clamp", "l-clamp", "lclamp", "l clamps", "l-clamps", "lft", "l ft", "l-ft", "lf"]},
     "mid clamp":      {"price": 85,    "unit": "pc",   "aliases": ["midclamp", "mid-clamp", "middle clamp", "mid clamps"]},
     "end clamp":      {"price": 85,    "unit": "pc",   "aliases": ["endclamp", "end-clamp", "end clamps", "end connector", "end connectors"]},
@@ -2836,7 +2836,7 @@ def format_panel_package_response(panel_count, wattage, language, price_tier='re
             f"📊 **Solar Panels:**\n"
             f"- {panel_count} pcs × {panel_label}: ₱{price_per_panel:,}/pc = ₱{panel_total:,}\n\n"
             f"🔧 **Mounting Hardware:**\n"
-            f"- Railing 2.4m: {railings} pcs × ₱620 = ₱{t_railing:,}\n"
+            f"- Railing 2.4m: {railings} pcs × ₱650 = ₱{t_railing:,}\n"
             f"- L-Foot: {l_foot} pcs × ₱95 = ₱{t_l_foot:,}\n"
             f"- Mid Clamp: {mid_clamp} pcs × ₱85 = ₱{t_mid_clamp:,}\n"
             f"- End Clamp: {end_clamp} pcs × ₱85 = ₱{t_end_clamp:,}\n"
@@ -2853,7 +2853,7 @@ def format_panel_package_response(panel_count, wattage, language, price_tier='re
             f"📊 **Solar Panels:**\n"
             f"- {panel_count} pcs × {panel_label}: ₱{price_per_panel:,}/pc = ₱{panel_total:,}\n\n"
             f"🔧 **Mounting Hardware:**\n"
-            f"- Railing 2.4m: {railings} pcs × ₱620 = ₱{t_railing:,}\n"
+            f"- Railing 2.4m: {railings} pcs × ₱650 = ₱{t_railing:,}\n"
             f"- L-Foot: {l_foot} pcs × ₱95 = ₱{t_l_foot:,}\n"
             f"- Mid Clamp: {mid_clamp} pcs × ₱85 = ₱{t_mid_clamp:,}\n"
             f"- End Clamp: {end_clamp} pcs × ₱85 = ₱{t_end_clamp:,}\n"
